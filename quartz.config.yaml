@@ -240,7 +240,7 @@ plugins:
       position: header
       priority: 5
   - source: ./components-local/hero
-    enabled: false
+    enabled: true
     layout:
       position: beforeBody
       priority: 1
