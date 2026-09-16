@@ -4,14 +4,11 @@ description: Mike Tarlton — Neuro-AI researcher building brain-inspired learni
 hero:
   eyebrow: NeuroAI Researcher
   name: Mike Tarlton
-  identity: I build brain-inspired learning systems — spiking neural networks and oscillator-based models of timing — for the next generation of low-energy, edge-ready machine intelligence.
+  identity: I build neurophysics-inspired learning systems, spiking neural networks and neuro-oscillatoy-dynamics models of timing, ready for the next generation of low-energy, edge-ready machine intelligence.
   status: Available for research positions
   primaryCta:
     label: Faculty Page
     href: https://www.oslomet.no/en/about/employee/michaelt/
-  secondaryCta:
-    label: Email
-    href: mailto:M@Tarlton.info
   secondaryCta:
     label: Email
     href: mailto:M@Tarlton.info
