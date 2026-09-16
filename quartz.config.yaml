@@ -241,6 +241,7 @@ plugins:
       priority: 5
   - source: ./components-local/hero
     enabled: true
+    # enabled: false
     layout:
       position: beforeBody
       priority: 1

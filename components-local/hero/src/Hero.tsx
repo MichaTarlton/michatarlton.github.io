@@ -3,7 +3,6 @@ import {
   QuartzComponentConstructor,
   QuartzComponentProps,
 } from "../../../quartz/components/types"
-import heroSim from "./heroSim"
 
 interface HeroCopy {
   eyebrow?: string
@@ -16,7 +15,7 @@ interface HeroCopy {
 
 /**
  * Landing hero — Blueprint §3–§4: name, one-sentence identity, status line,
- * both CTAs, and the autonomous spiking-network canvas.
+ * and both CTAs. The autonomous spiking-network canvas has been removed.
  * Copy is read from the index page's `hero:` frontmatter so it stays editable
  * in markdown-land. Renders only on the index page.
  */
@@ -54,16 +53,8 @@ const Hero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
           )}
         </div>
       </div>
-      <div class="hero-canvas-wrap">
-        <canvas id="hero-canvas" aria-hidden="true" />
-        <p class="hero-canvas-hint micro-label" aria-hidden="true">
-          a living spiking network — hover to excite it
-        </p>
-      </div>
     </section>
   )
 }
-
-Hero.afterDOMLoaded = heroSim
 
 export default (() => Hero) satisfies QuartzComponentConstructor
