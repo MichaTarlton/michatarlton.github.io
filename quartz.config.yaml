@@ -152,7 +152,7 @@ plugins:
   - source: "@quartz-community/search"
     enabled: true
     layout:
-      position: left
+      position: header
       priority: 20
       group: toolbar
       groupOptions:
@@ -189,13 +189,13 @@ plugins:
   - source: "@quartz-community/darkmode"
     enabled: true
     layout:
-      position: left
+      position: header
       priority: 30
       group: toolbar
   - source: "@quartz-community/reader-mode"
     enabled: true
     layout:
-      position: left
+      position: header
       priority: 35
       group: toolbar
   - source: "@quartz-community/breadcrumbs"
@@ -240,7 +240,7 @@ plugins:
       position: header
       priority: 5
   - source: ./components-local/hero
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 1
@@ -293,22 +293,18 @@ layout:
       gap: 0.5rem
   byPageType:
     "404":
+      template: full-width
       positions:
         beforeBody: []
         left: []
         right: []
-    content: {}
+    content:
+      template: full-width
     folder:
-      exclude:
-        - reader-mode
-        - explorer
-      positions:
-        right: []
+      template: full-width
     tag:
-      exclude:
-        - reader-mode
-        - explorer
-      positions:
-        right: []
-    canvas: {}
-    bases: {}
+      template: full-width
+    canvas:
+      template: full-width
+    bases:
+      template: full-width
