@@ -5,7 +5,7 @@ description: Mike Tarlton's curriculum vitae — Neuro-AI researcher, PhD candid
 
 <div class="cv-header">
   <p class="micro-label section-eyebrow">Curriculum Vitae</p>
-  <a class="cta cta-primary" href="/attachments/tarlton-cv.pdf" download>Download PDF</a>
+  <a class="cta cta-primary" href="/attachments/tarlton-cv.pdf" download data-router-ignore>Download PDF</a>
 </div>
 
 > [!abstract] About me
