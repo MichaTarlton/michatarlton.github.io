@@ -2,9 +2,9 @@
 title: Mike Tarlton
 description: Mike Tarlton — Neuro-AI researcher building brain-inspired learning systems for low-energy edge hardware. Available for research positions.
 hero:
-  eyebrow: NeuroAI Researcher
+  # eyebrow: NeuroAI Researcher
   name: Mike Tarlton
-  identity: I build neurophysics-inspired learning systems, spiking neural networks and neuro-oscillatoy-dynamics models of timing, ready for the next generation of low-energy, edge-ready machine intelligence.
+  identity: I build information-physics-inspired artificially thinking systems; spiking neural networks and neuro-oscillatory-dynamics-based models, preapring the next generation of hardware embodied machine intelligence.
   status: Available for research positions
   primaryCta:
     label: Faculty Page
@@ -15,7 +15,11 @@ hero:
 ---
 
 ## About Me
-I'm a NeuroAI researcher: I study how the brain keeps time, and how those mechanisms can teach machines to learn. My path runs from physics and mathematics at UNT, through systems neuroscience at the Kavli Institute (NTNU), to my PhD at Oslo Metropolitan University, where I design learning rules for deep spiking neural networks built on spike-timing plasticity. The aim is machine learning that is online, always-on, and radically low-energy — intelligence for neuromorphic hardware and the edge, not the datacenter. Before academia I worked as a machine-learning data scientist at Atlas Wearables (acquired by Peloton) and as a genetics data researcher at the University of Oslo.
+I'm a researcher in what I like to call NeuroAI: the intersection between neuroscientific modeling, complex-dynamical-systems physics, and information theory. Redesigning artificial neural networks from the first-principles of physics, while utilizing inspiration from the dynamic properties of human brains. I focus on temporal dynamics and timing related mechanisms in neural systems, as both are foundational to spike-timing communication, and critical to the next-generation of AI models: Spiking Neural Networks (SNNs). Neuromorphics, a class of ASICs and specialized hardware designed around physical SNN implementations, provide neural inference with extreme speed and energy efficiency, making them ideal for meeting the power-demand crisis for AI-compute, and for autonomous robotics hardware. 
+<!-- There is a small chicken-and-egg problem however: while training SNNs with conventional back-propgation methods is viable, the -->
+
+ My journey courses from studying computational physics and information mathematics at the University of North Texas, to systems neuroscience at the Kavli Institute (Norwegian University of Science and Technology), to my PhD at Oslo Metropolitan University, where I research design for deep reinforcement learning in spiking neural networks. My career experience spans multiple aspects of technology and computational research, both in industry and in academia, from machine-learning data science for dog and animal activty data at Atlas Wearables (acquired by Peloton) to genetics data research at the NORMENT lab at the University of Olso. I aim to redirect the current paradigm of AI from one that is static, inefficient, and non-recursive, to new one that is embodied and learning in-situ, self-reflecting about its world and itself, capable of breaking the limitations of feed-forward only networks. Intelligence for neuromorphic hardware and the next-generation of models. 
+ <!-- Before academia I worked as a machine-learning data scientist at Atlas Wearables (acquired by Peloton) and as a genetics data researcher at the University of Oslo. -->
 
 
 <section class="featured">
