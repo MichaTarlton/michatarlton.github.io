@@ -1,6 +1,7 @@
 // components-local/nav/src/Nav.tsx
 import { jsx } from "preact/jsx-runtime";
 var links = [
+  { label: "About", href: "/", section: "index" },
   { label: "Research", href: "/research/", section: "research" },
   { label: "CV", href: "/cv/", section: "cv" },
   { label: "Writing", href: "/writing/", section: "writing" },

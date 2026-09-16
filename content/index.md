@@ -14,6 +14,10 @@ hero:
     href: mailto:M@Tarlton.info
 ---
 
+## About Me
+I'm a NeuroAI researcher: I study how the brain keeps time, and how those mechanisms can teach machines to learn. My path runs from physics and mathematics at UNT, through systems neuroscience at the Kavli Institute (NTNU), to my PhD at Oslo Metropolitan University, where I design learning rules for deep spiking neural networks built on spike-timing plasticity. The aim is machine learning that is online, always-on, and radically low-energy — intelligence for neuromorphic hardware and the edge, not the datacenter. Before academia I worked as a machine-learning data scientist at Atlas Wearables (acquired by Peloton) and as a genetics data researcher at the University of Oslo.
+
+
 <section class="featured">
   <p class="micro-label section-eyebrow">Featured Research</p>
   <div class="card-grid">
@@ -67,7 +71,3 @@ hero:
     </a>
   </div>
 </section>
-
-## About Me
-
-I'm a NeuroAI researcher: I study how the brain keeps time, and how those mechanisms can teach machines to learn. My path runs from physics and mathematics at UNT, through systems neuroscience at the Kavli Institute (NTNU), to my PhD at Oslo Metropolitan University, where I design learning rules for deep spiking neural networks built on spike-timing plasticity. The aim is machine learning that is online, always-on, and radically low-energy — intelligence for neuromorphic hardware and the edge, not the datacenter. Before academia I worked as a machine-learning data scientist at Atlas Wearables (acquired by Peloton) and as a genetics data researcher at the University of Oslo.

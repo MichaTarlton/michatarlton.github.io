@@ -9,6 +9,7 @@ import {
  * Rendered in the `header` position (injected via quartz.ts layout overrides).
  */
 const links: { label: string; href: string; section: string }[] = [
+  { label: "About", href: "/", section: "index" },
   { label: "Research", href: "/research/", section: "research" },
   { label: "CV", href: "/cv/", section: "cv" },
   { label: "Writing", href: "/writing/", section: "writing" },
