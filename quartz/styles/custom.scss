@@ -56,7 +56,6 @@ a {
 
 // ── Page frame: centred container, header on one row ────────
 .page { max-width: 1160px; margin: 0 auto; padding: 0 var(--space-6); box-sizing: border-box; @media #{$mobile} { padding: 0 var(--space-4); } }
-html[data-variant="c"] body { background: transparent; }
 .page > #quartz-body {
   .page-header { margin: var(--space-6) 0 0; }
   header {
@@ -85,11 +84,6 @@ nav.site-nav { display: flex; gap: var(--space-5); align-items: baseline; }
 }
 
 // ── Shared landing pieces ───────────────────────────────────
-.landing { display: none; }
-html[data-variant="a"] .variant-a,
-html[data-variant="b"] .variant-b,
-html[data-variant="c"] .variant-c { display: block; }
-html:not([data-variant]) .variant-a { display: block; }
 
 .landing-proto .display {
   font-family: var(--headerFont);
@@ -160,6 +154,8 @@ html:not([data-variant]) .variant-a { display: block; }
   &.m-sapling { background: color-mix(in srgb, var(--accent-mark) 45%, transparent); }
   &.m-tree { background: var(--accent-mark); } }
 
+.facts { margin: var(--space-5) 0 0; display: grid; grid-template-columns: auto 1fr; gap: var(--space-1) var(--space-4); font-size: var(--text-sm); max-width: 24rem;
+  dt { @include micro-label; color: var(--text-muted); } dd { margin: 0; } }
 .contact { margin: var(--space-8) 0 var(--space-6); padding: var(--space-5); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); .contact-copy { margin: var(--space-2) 0 0; max-width: 56ch; } }
 
 .grid-paper {
@@ -185,42 +181,6 @@ html:not([data-variant]) .variant-a { display: block; }
     &:hover { box-shadow: var(--shadow-md); border-color: var(--link-color); }
     .a-card-fig { height: 72px; color: var(--link-color); margin-bottom: var(--space-3); svg { width: 100%; height: 100%; } }
     .q { font-size: var(--text-base); } }
-}
-
-// ── Variant B: Letter ───────────────────────────────────────
-.variant-b {
-  max-width: 62ch; margin: var(--space-7) auto 0;
-  .b-byline { display: flex; gap: var(--space-4); align-items: center; margin-bottom: var(--space-6); .display { font-size: var(--text-3xl); margin: var(--space-1) 0 0; } }
-  .b-letter { font-size: var(--text-lg); line-height: 1.55; margin: 0 0 var(--space-4); }
-  .drop-cap::first-letter { font-family: var(--headerFont); font-weight: 300; font-size: 3.6em; float: left; line-height: 0.8; margin: 0.08em 0.12em 0 0; color: var(--accent-mark); }
-  .b-thinking { font-size: var(--text-base); color: var(--text-secondary); margin: 0 0 var(--space-5); em { color: var(--accent-mark); } }
-  h2 { margin: var(--space-8) 0 var(--space-4); border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2); }
-  .b-rows { list-style: none; padding: 0; margin: 0; }
-  .b-row { display: grid; grid-template-columns: 2.5rem 1fr 120px; gap: var(--space-4); padding: var(--space-5) 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; transition: background .15s ease;
-    &:hover { background: var(--surface); .q { color: var(--link-color); } }
-    @media #{$mobile} { grid-template-columns: 2.5rem 1fr; .b-row-fig { display: none; } } }
-  .b-num { @include micro-label; color: var(--accent-mark); padding-top: 6px; }
-  .b-row-fig { color: var(--link-color); align-self: center; svg { width: 100%; } }
-  .b-recent-copy { font-size: var(--text-base); }
-}
-
-// ── Variant C: Notebook ─────────────────────────────────────
-.variant-c {
-  .c-page-field { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-  .c-grid { display: grid; grid-template-columns: 280px 1fr; gap: var(--space-8); margin-top: var(--space-6); @media #{$mobile} { grid-template-columns: 1fr; gap: var(--space-5); } }
-  .c-rail { position: sticky; top: var(--space-6); align-self: start; padding: var(--space-5); background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);
-    .display { font-size: var(--text-2xl); margin: var(--space-3) 0 var(--space-2); }
-    .photo { margin-bottom: var(--space-4); }
-    .ctas { flex-direction: column; align-items: stretch; .cta { justify-content: center; } }
-    @media #{$mobile} { position: static; } }
-  .c-oneliner { font-size: var(--text-sm); color: var(--text-secondary); margin: 0 0 var(--space-4); }
-  .c-facts { margin: var(--space-5) 0 0; display: grid; grid-template-columns: auto 1fr; gap: var(--space-1) var(--space-3); font-size: var(--text-sm); dt { @include micro-label; color: var(--text-muted); } dd { margin: 0; } }
-  .c-intro .lede { font-size: var(--text-xl); max-width: 40rem; }
-  .c-thinking { display: grid; gap: var(--space-1); margin: 0; }
-  .c-row { display: grid; grid-template-columns: 140px 1fr; gap: var(--space-5); padding: var(--space-5) 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit;
-    &:hover .q { color: var(--link-color); }
-    .c-row-fig { color: var(--link-color); align-self: center; svg { width: 100%; } }
-    @media #{$mobile} { grid-template-columns: 1fr; .c-row-fig { max-width: 160px; } } }
 }
 
 // ── Prototype switcher bar (not part of the design) ─────────

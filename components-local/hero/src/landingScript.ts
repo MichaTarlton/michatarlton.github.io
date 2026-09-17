@@ -25,8 +25,6 @@ export default `(function () {
     var v = current();
     var el = document.querySelector(".landing.variant-" + v);
     var name = el ? el.getAttribute("data-variant-name") : "";
-    var lab = document.querySelector(".proto-label");
-    if (lab) lab.textContent = v.toUpperCase() + (name ? " · " + name : "");
     var ms = document.querySelector(".proto-motion");
     if (ms) ms.textContent = "motion: " + motionState;
   }
@@ -40,10 +38,6 @@ export default `(function () {
     startField();
   }
 
-  function cycle(dir) {
-    var i = VARIANTS.indexOf(current());
-    setVariant(VARIANTS[(i + dir + VARIANTS.length) % VARIANTS.length]);
-  }
 
   var bar = document.querySelector(".proto-bar");
   if (bar && !bar.dataset.wired) {
@@ -54,8 +48,6 @@ export default `(function () {
       u.searchParams.set("motion", reducedMotion() ? "on" : "off");
       location.href = u.toString();
     });
-    bar.querySelector(".proto-prev").addEventListener("click", function () { cycle(-1); });
-    bar.querySelector(".proto-next").addEventListener("click", function () { cycle(1); });
     bar.querySelector(".proto-theme").addEventListener("click", function (e) {
       e.preventDefault();
       var dark = html.getAttribute("saved-theme") === "dark";
@@ -63,12 +55,6 @@ export default `(function () {
       if (dark) { u.searchParams.delete("dark"); } else { u.searchParams.set("dark", "1"); }
       localStorage.setItem("theme", dark ? "light" : "dark");
       location.href = u.toString();
-    });
-    document.addEventListener("keydown", function (e) {
-      var t = e.target;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-      if (e.key === "ArrowLeft") cycle(-1);
-      if (e.key === "ArrowRight") cycle(1);
     });
   }
   // ── Ambient vector field ─────────────────────────────────────

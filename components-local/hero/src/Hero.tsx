@@ -6,11 +6,11 @@ import {
 import landingScript from "./landingScript"
 
 /**
- * PROTOTYPE — landing page variants for the redesign map, ticket 05.
- * Three structurally different landings on the real `/` route, switched by
- * `?variant=a|b|c` (default a) and a floating bottom bar. Fold the winner into
- * a proper component and move this file to a throwaway branch when the ticket
- * resolves. Renders only on the index page.
+ * Landing page (Studio layout, approved in redesign ticket 05).
+ * The full set of layout variants lives on branch `prototype/landing-variants`.
+ * The hero band hosts the Hero Simulation; its subject is being prototyped in
+ * ticket 14 (`?viz=` axis) — until then the flow field stands in.
+ * Renders only on the index page.
  */
 
 interface HeroCopy {
@@ -113,6 +113,14 @@ const Status = ({ text }: { text: string }) =>
     </p>
   ) : null
 
+const Facts = () => (
+  <dl class="facts">
+    <dt>Based</dt><dd>Oslo, Norway</dd>
+    <dt>Affiliation</dt><dd>OsloMet</dd>
+    <dt>Email</dt><dd><a href="mailto:M@Tarlton.info">M@Tarlton.info</a></dd>
+  </dl>
+)
+
 const Contact = () => (
   <section class="contact">
     <p class="kicker">Contact</p>
@@ -126,8 +134,8 @@ const Contact = () => (
 )
 
 // ── Variant A: Studio ─────────────────────────────────────────
-const VariantA = ({ hero }: { hero: HeroCopy }) => (
-  <div class="landing variant-a" data-variant-name="Studio · field behind the type">
+const Landing = ({ hero }: { hero: HeroCopy }) => (
+  <div class="landing variant-a">
     <section class="a-hero">
       <div class="a-field" aria-hidden="true">
         <div class="grid-paper" />
@@ -141,6 +149,7 @@ const VariantA = ({ hero }: { hero: HeroCopy }) => (
           <p class="lede">{hero.identity}</p>
           <Status text={hero.status ?? ""} />
           <Ctas hero={hero} />
+          <Facts />
         </div>
       </div>
     </section>
@@ -188,136 +197,6 @@ const VariantA = ({ hero }: { hero: HeroCopy }) => (
   </div>
 )
 
-// ── Variant B: Letter ─────────────────────────────────────────
-const VariantB = ({ hero }: { hero: HeroCopy }) => (
-  <div class="landing variant-b" data-variant-name="Letter · editorial column, no canvas">
-    <section class="b-hero">
-      <div class="b-byline">
-        <Photo size="sm" />
-        <div>
-          <p class="kicker accent">NeuroAI researcher · Oslo</p>
-          <h1 class="display">{hero.name}</h1>
-        </div>
-      </div>
-      <p class="b-letter drop-cap">{hero.identity}</p>
-      {hero.thinking && (
-        <p class="b-thinking">
-          <em>Currently thinking about</em> {hero.thinking}.
-        </p>
-      )}
-      <Status text={hero.status ?? ""} />
-      <Ctas hero={hero} />
-    </section>
-
-    <section class="b-research">
-      <h2>Three questions I'm working on</h2>
-      <ol class="b-rows">
-        {research.map((r) => (
-          <li>
-            <a class="b-row" href={r.href}>
-              <span class="b-num">{r.n}</span>
-              <div class="b-row-body">
-                <p class="q">{r.q}</p>
-                <p class="blurb">{r.blurb}</p>
-                <p class="meta">
-                  {r.meta} <span class="pill">{r.status}</span>
-                </p>
-              </div>
-              <div class="b-row-fig">{r.fig}</div>
-            </a>
-          </li>
-        ))}
-      </ol>
-    </section>
-
-    <section class="b-recent">
-      <h2>Recently in the Cortex</h2>
-      <p class="b-recent-copy">
-        A working garden of notes behind a <a href="/wiki/">marked door</a>. Latest:{" "}
-        {recent.map((n, i) => (
-          <>
-            <a href="/wiki/">{n.t}</a>
-            {i < recent.length - 1 ? ", " : "."}
-          </>
-        ))}
-      </p>
-    </section>
-
-    <Contact />
-  </div>
-)
-
-// ── Variant C: Notebook ───────────────────────────────────────
-const VariantC = ({ hero }: { hero: HeroCopy }) => (
-  <div class="landing variant-c" data-variant-name="Notebook · sticky rail, page-wide field">
-    <canvas class="field-canvas c-page-field" data-field="page" aria-hidden="true" />
-    <div class="c-grid">
-      <aside class="c-rail">
-        <Photo size="lg" />
-        <p class="kicker accent">NeuroAI researcher</p>
-        <h1 class="display">{hero.name}</h1>
-        <p class="c-oneliner">
-          Spiking networks, neuro-dynamics, and time in the brain — groundwork for the next generation of machine intelligence.
-        </p>
-        <Status text={hero.status ?? ""} />
-        <Ctas hero={hero} />
-        <dl class="c-facts">
-          <dt>Based</dt><dd>Oslo, Norway</dd>
-          <dt>Affiliation</dt><dd>OsloMet</dd>
-          <dt>Email</dt><dd><a href="mailto:M@Tarlton.info">M@Tarlton.info</a></dd>
-        </dl>
-      </aside>
-
-      <main class="c-main">
-        <section class="c-intro">
-          <p class="lede">{hero.identity}</p>
-          {hero.thinking && (
-            <p class="c-thinking">
-              <span class="kicker accent">Currently thinking about</span>
-              <span class="thinking-copy">{hero.thinking}</span>
-            </p>
-          )}
-        </section>
-
-        <section class="c-research">
-          <div class="section-head">
-            <h2>Featured research</h2>
-            <a class="more" href="/research/">All →</a>
-          </div>
-          {research.map((r) => (
-            <a class="c-row" href={r.href}>
-              <div class="c-row-fig">{r.fig}</div>
-              <div>
-                <p class="meta">{r.n} · {r.meta}</p>
-                <p class="q">{r.q}</p>
-                <p class="blurb">{r.blurb}</p>
-              </div>
-            </a>
-          ))}
-        </section>
-
-        <section class="c-recent">
-          <div class="section-head">
-            <h2>Recently in the Cortex</h2>
-            <a class="more" href="/wiki/">Enter →</a>
-          </div>
-          <ul class="recent-list">
-            {recent.map((n) => (
-              <li>
-                <span class={`maturity m-${n.m}`} title={n.m} />
-                <a href="/wiki/">{n.t}</a>
-                <span class="date">{n.d}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <Contact />
-      </main>
-    </div>
-  </div>
-)
-
 const Hero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   if (fileData.slug !== "index") return null
   const hero = (fileData.frontmatter?.hero ?? {}) as HeroCopy
@@ -326,13 +205,9 @@ const Hero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
 
   return (
     <div class="landing-proto">
-      <VariantA hero={hero} />
-      <VariantB hero={hero} />
-      <VariantC hero={hero} />
-      <div class="proto-bar" role="toolbar" aria-label="Prototype variant switcher">
-        <button class="proto-prev" aria-label="Previous variant">←</button>
-        <span class="proto-label">…</span>
-        <button class="proto-next" aria-label="Next variant">→</button>
+      <Landing hero={hero} />
+      <div class="proto-bar" role="toolbar" aria-label="Prototype controls">
+        <span class="proto-label">Studio</span>
         <a class="proto-theme" href="#" title="Toggle light/dark">◐</a>
         <a class="proto-motion" href="#" title="Toggle motion override (?motion=on|off)">motion: …</a>
       </div>
@@ -346,8 +221,7 @@ Hero.beforeDOMLoaded = `(function(){
   if(location.pathname==="/"||location.pathname==="/index.html"){
     if(!p.has("dark")){localStorage.setItem("theme","light");document.documentElement.setAttribute("saved-theme","light");}
   }
-  var v=(p.get("variant")||"a").toLowerCase(); if(!/^[abc]$/.test(v)) v="a";
-  document.documentElement.setAttribute("data-variant",v);
+  document.documentElement.setAttribute("data-variant","a");
 })();`
 
 Hero.afterDOMLoaded = landingScript

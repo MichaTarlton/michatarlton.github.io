@@ -21,8 +21,6 @@ var landingScript_default = `(function () {
     var v = current();
     var el = document.querySelector(".landing.variant-" + v);
     var name = el ? el.getAttribute("data-variant-name") : "";
-    var lab = document.querySelector(".proto-label");
-    if (lab) lab.textContent = v.toUpperCase() + (name ? " \xB7 " + name : "");
     var ms = document.querySelector(".proto-motion");
     if (ms) ms.textContent = "motion: " + motionState;
   }
@@ -36,10 +34,6 @@ var landingScript_default = `(function () {
     startField();
   }
 
-  function cycle(dir) {
-    var i = VARIANTS.indexOf(current());
-    setVariant(VARIANTS[(i + dir + VARIANTS.length) % VARIANTS.length]);
-  }
 
   var bar = document.querySelector(".proto-bar");
   if (bar && !bar.dataset.wired) {
@@ -50,8 +44,6 @@ var landingScript_default = `(function () {
       u.searchParams.set("motion", reducedMotion() ? "on" : "off");
       location.href = u.toString();
     });
-    bar.querySelector(".proto-prev").addEventListener("click", function () { cycle(-1); });
-    bar.querySelector(".proto-next").addEventListener("click", function () { cycle(1); });
     bar.querySelector(".proto-theme").addEventListener("click", function (e) {
       e.preventDefault();
       var dark = html.getAttribute("saved-theme") === "dark";
@@ -59,12 +51,6 @@ var landingScript_default = `(function () {
       if (dark) { u.searchParams.delete("dark"); } else { u.searchParams.set("dark", "1"); }
       localStorage.setItem("theme", dark ? "light" : "dark");
       location.href = u.toString();
-    });
-    document.addEventListener("keydown", function (e) {
-      var t = e.target;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-      if (e.key === "ArrowLeft") cycle(-1);
-      if (e.key === "ArrowRight") cycle(1);
     });
   }
   // \u2500\u2500 Ambient vector field \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -151,7 +137,7 @@ var landingScript_default = `(function () {
 })();`;
 
 // components-local/hero/src/Hero.tsx
-import { Fragment, jsx, jsxs } from "preact/jsx-runtime";
+import { jsx, jsxs } from "preact/jsx-runtime";
 var research = [
   {
     n: "01",
@@ -225,6 +211,14 @@ var Status = ({ text }) => text ? /* @__PURE__ */ jsxs("p", { class: "status", c
   /* @__PURE__ */ jsx("span", { class: "status-dot", "aria-hidden": "true" }),
   text
 ] }) : null;
+var Facts = () => /* @__PURE__ */ jsxs("dl", { class: "facts", children: [
+  /* @__PURE__ */ jsx("dt", { children: "Based" }),
+  /* @__PURE__ */ jsx("dd", { children: "Oslo, Norway" }),
+  /* @__PURE__ */ jsx("dt", { children: "Affiliation" }),
+  /* @__PURE__ */ jsx("dd", { children: "OsloMet" }),
+  /* @__PURE__ */ jsx("dt", { children: "Email" }),
+  /* @__PURE__ */ jsx("dd", { children: /* @__PURE__ */ jsx("a", { href: "mailto:M@Tarlton.info", children: "M@Tarlton.info" }) })
+] });
 var Contact = () => /* @__PURE__ */ jsxs("section", { class: "contact", children: [
   /* @__PURE__ */ jsx("p", { class: "kicker", children: "Contact" }),
   /* @__PURE__ */ jsxs("p", { class: "contact-copy", children: [
@@ -239,7 +233,7 @@ var Contact = () => /* @__PURE__ */ jsxs("section", { class: "contact", children
     "."
   ] })
 ] });
-var VariantA = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing variant-a", "data-variant-name": "Studio \xB7 field behind the type", children: [
+var Landing = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing variant-a", children: [
   /* @__PURE__ */ jsxs("section", { class: "a-hero", children: [
     /* @__PURE__ */ jsxs("div", { class: "a-field", "aria-hidden": "true", children: [
       /* @__PURE__ */ jsx("div", { class: "grid-paper" }),
@@ -252,7 +246,8 @@ var VariantA = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varia
         /* @__PURE__ */ jsx("h1", { class: "display", children: hero.name }),
         /* @__PURE__ */ jsx("p", { class: "lede", children: hero.identity }),
         /* @__PURE__ */ jsx(Status, { text: hero.status ?? "" }),
-        /* @__PURE__ */ jsx(Ctas, { hero })
+        /* @__PURE__ */ jsx(Ctas, { hero }),
+        /* @__PURE__ */ jsx(Facts, {})
       ] })
     ] })
   ] }),
@@ -284,129 +279,15 @@ var VariantA = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varia
   ] }),
   /* @__PURE__ */ jsx(Contact, {})
 ] });
-var VariantB = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing variant-b", "data-variant-name": "Letter \xB7 editorial column, no canvas", children: [
-  /* @__PURE__ */ jsxs("section", { class: "b-hero", children: [
-    /* @__PURE__ */ jsxs("div", { class: "b-byline", children: [
-      /* @__PURE__ */ jsx(Photo, { size: "sm" }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "NeuroAI researcher \xB7 Oslo" }),
-        /* @__PURE__ */ jsx("h1", { class: "display", children: hero.name })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx("p", { class: "b-letter drop-cap", children: hero.identity }),
-    hero.thinking && /* @__PURE__ */ jsxs("p", { class: "b-thinking", children: [
-      /* @__PURE__ */ jsx("em", { children: "Currently thinking about" }),
-      " ",
-      hero.thinking,
-      "."
-    ] }),
-    /* @__PURE__ */ jsx(Status, { text: hero.status ?? "" }),
-    /* @__PURE__ */ jsx(Ctas, { hero })
-  ] }),
-  /* @__PURE__ */ jsxs("section", { class: "b-research", children: [
-    /* @__PURE__ */ jsx("h2", { children: "Three questions I'm working on" }),
-    /* @__PURE__ */ jsx("ol", { class: "b-rows", children: research.map((r) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs("a", { class: "b-row", href: r.href, children: [
-      /* @__PURE__ */ jsx("span", { class: "b-num", children: r.n }),
-      /* @__PURE__ */ jsxs("div", { class: "b-row-body", children: [
-        /* @__PURE__ */ jsx("p", { class: "q", children: r.q }),
-        /* @__PURE__ */ jsx("p", { class: "blurb", children: r.blurb }),
-        /* @__PURE__ */ jsxs("p", { class: "meta", children: [
-          r.meta,
-          " ",
-          /* @__PURE__ */ jsx("span", { class: "pill", children: r.status })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsx("div", { class: "b-row-fig", children: r.fig })
-    ] }) })) })
-  ] }),
-  /* @__PURE__ */ jsxs("section", { class: "b-recent", children: [
-    /* @__PURE__ */ jsx("h2", { children: "Recently in the Cortex" }),
-    /* @__PURE__ */ jsxs("p", { class: "b-recent-copy", children: [
-      "A working garden of notes behind a ",
-      /* @__PURE__ */ jsx("a", { href: "/wiki/", children: "marked door" }),
-      ". Latest:",
-      " ",
-      recent.map((n, i) => /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx("a", { href: "/wiki/", children: n.t }),
-        i < recent.length - 1 ? ", " : "."
-      ] }))
-    ] })
-  ] }),
-  /* @__PURE__ */ jsx(Contact, {})
-] });
-var VariantC = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing variant-c", "data-variant-name": "Notebook \xB7 sticky rail, page-wide field", children: [
-  /* @__PURE__ */ jsx("canvas", { class: "field-canvas c-page-field", "data-field": "page", "aria-hidden": "true" }),
-  /* @__PURE__ */ jsxs("div", { class: "c-grid", children: [
-    /* @__PURE__ */ jsxs("aside", { class: "c-rail", children: [
-      /* @__PURE__ */ jsx(Photo, { size: "lg" }),
-      /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "NeuroAI researcher" }),
-      /* @__PURE__ */ jsx("h1", { class: "display", children: hero.name }),
-      /* @__PURE__ */ jsx("p", { class: "c-oneliner", children: "Spiking networks, neuro-dynamics, and time in the brain \u2014 groundwork for the next generation of machine intelligence." }),
-      /* @__PURE__ */ jsx(Status, { text: hero.status ?? "" }),
-      /* @__PURE__ */ jsx(Ctas, { hero }),
-      /* @__PURE__ */ jsxs("dl", { class: "c-facts", children: [
-        /* @__PURE__ */ jsx("dt", { children: "Based" }),
-        /* @__PURE__ */ jsx("dd", { children: "Oslo, Norway" }),
-        /* @__PURE__ */ jsx("dt", { children: "Affiliation" }),
-        /* @__PURE__ */ jsx("dd", { children: "OsloMet" }),
-        /* @__PURE__ */ jsx("dt", { children: "Email" }),
-        /* @__PURE__ */ jsx("dd", { children: /* @__PURE__ */ jsx("a", { href: "mailto:M@Tarlton.info", children: "M@Tarlton.info" }) })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("main", { class: "c-main", children: [
-      /* @__PURE__ */ jsxs("section", { class: "c-intro", children: [
-        /* @__PURE__ */ jsx("p", { class: "lede", children: hero.identity }),
-        hero.thinking && /* @__PURE__ */ jsxs("p", { class: "c-thinking", children: [
-          /* @__PURE__ */ jsx("span", { class: "kicker accent", children: "Currently thinking about" }),
-          /* @__PURE__ */ jsx("span", { class: "thinking-copy", children: hero.thinking })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("section", { class: "c-research", children: [
-        /* @__PURE__ */ jsxs("div", { class: "section-head", children: [
-          /* @__PURE__ */ jsx("h2", { children: "Featured research" }),
-          /* @__PURE__ */ jsx("a", { class: "more", href: "/research/", children: "All \u2192" })
-        ] }),
-        research.map((r) => /* @__PURE__ */ jsxs("a", { class: "c-row", href: r.href, children: [
-          /* @__PURE__ */ jsx("div", { class: "c-row-fig", children: r.fig }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsxs("p", { class: "meta", children: [
-              r.n,
-              " \xB7 ",
-              r.meta
-            ] }),
-            /* @__PURE__ */ jsx("p", { class: "q", children: r.q }),
-            /* @__PURE__ */ jsx("p", { class: "blurb", children: r.blurb })
-          ] })
-        ] }))
-      ] }),
-      /* @__PURE__ */ jsxs("section", { class: "c-recent", children: [
-        /* @__PURE__ */ jsxs("div", { class: "section-head", children: [
-          /* @__PURE__ */ jsx("h2", { children: "Recently in the Cortex" }),
-          /* @__PURE__ */ jsx("a", { class: "more", href: "/wiki/", children: "Enter \u2192" })
-        ] }),
-        /* @__PURE__ */ jsx("ul", { class: "recent-list", children: recent.map((n) => /* @__PURE__ */ jsxs("li", { children: [
-          /* @__PURE__ */ jsx("span", { class: `maturity m-${n.m}`, title: n.m }),
-          /* @__PURE__ */ jsx("a", { href: "/wiki/", children: n.t }),
-          /* @__PURE__ */ jsx("span", { class: "date", children: n.d })
-        ] })) })
-      ] }),
-      /* @__PURE__ */ jsx(Contact, {})
-    ] })
-  ] })
-] });
 var Hero = ({ fileData }) => {
   if (fileData.slug !== "index") return null;
   const hero = fileData.frontmatter?.hero ?? {};
   hero.name ??= "Mike Tarlton";
   hero.identity ??= "Neuro-AI researcher building brain-inspired learning systems.";
   return /* @__PURE__ */ jsxs("div", { class: "landing-proto", children: [
-    /* @__PURE__ */ jsx(VariantA, { hero }),
-    /* @__PURE__ */ jsx(VariantB, { hero }),
-    /* @__PURE__ */ jsx(VariantC, { hero }),
-    /* @__PURE__ */ jsxs("div", { class: "proto-bar", role: "toolbar", "aria-label": "Prototype variant switcher", children: [
-      /* @__PURE__ */ jsx("button", { class: "proto-prev", "aria-label": "Previous variant", children: "\u2190" }),
-      /* @__PURE__ */ jsx("span", { class: "proto-label", children: "\u2026" }),
-      /* @__PURE__ */ jsx("button", { class: "proto-next", "aria-label": "Next variant", children: "\u2192" }),
+    /* @__PURE__ */ jsx(Landing, { hero }),
+    /* @__PURE__ */ jsxs("div", { class: "proto-bar", role: "toolbar", "aria-label": "Prototype controls", children: [
+      /* @__PURE__ */ jsx("span", { class: "proto-label", children: "Studio" }),
       /* @__PURE__ */ jsx("a", { class: "proto-theme", href: "#", title: "Toggle light/dark", children: "\u25D0" }),
       /* @__PURE__ */ jsx("a", { class: "proto-motion", href: "#", title: "Toggle motion override (?motion=on|off)", children: "motion: \u2026" })
     ] })
@@ -418,8 +299,7 @@ Hero.beforeDOMLoaded = `(function(){
   if(location.pathname==="/"||location.pathname==="/index.html"){
     if(!p.has("dark")){localStorage.setItem("theme","light");document.documentElement.setAttribute("saved-theme","light");}
   }
-  var v=(p.get("variant")||"a").toLowerCase(); if(!/^[abc]$/.test(v)) v="a";
-  document.documentElement.setAttribute("data-variant",v);
+  document.documentElement.setAttribute("data-variant","a");
 })();`;
 Hero.afterDOMLoaded = landingScript_default;
 var Hero_default = (() => Hero);
