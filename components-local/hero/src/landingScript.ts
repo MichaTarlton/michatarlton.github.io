@@ -6,8 +6,15 @@
 export default `(function () {
   var VARIANTS = ["a", "b", "c"];
   var html = document.documentElement;
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var raf = 0;
+  var motionState = "idle";
+  function motionParam() { return new URLSearchParams(location.search).get("motion"); }
+  function reducedMotion() {
+    var m = motionParam();
+    if (m === "on") return false;
+    if (m === "off") return true;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
 
   function current() {
     var v = html.getAttribute("data-variant") || "a";
@@ -20,6 +27,8 @@ export default `(function () {
     var name = el ? el.getAttribute("data-variant-name") : "";
     var lab = document.querySelector(".proto-label");
     if (lab) lab.textContent = v.toUpperCase() + (name ? " · " + name : "");
+    var ms = document.querySelector(".proto-motion");
+    if (ms) ms.textContent = "motion: " + motionState;
   }
 
   function setVariant(v) {
@@ -37,7 +46,14 @@ export default `(function () {
   }
 
   var bar = document.querySelector(".proto-bar");
-  if (bar) {
+  if (bar && !bar.dataset.wired) {
+    bar.dataset.wired = "1";
+    bar.querySelector(".proto-motion").addEventListener("click", function (e) {
+      e.preventDefault();
+      var u = new URL(location.href);
+      u.searchParams.set("motion", reducedMotion() ? "on" : "off");
+      location.href = u.toString();
+    });
     bar.querySelector(".proto-prev").addEventListener("click", function () { cycle(-1); });
     bar.querySelector(".proto-next").addEventListener("click", function () { cycle(1); });
     bar.querySelector(".proto-theme").addEventListener("click", function (e) {
@@ -55,14 +71,15 @@ export default `(function () {
       if (e.key === "ArrowRight") cycle(1);
     });
   }
-  label();
-
   // ── Ambient vector field ─────────────────────────────────────
   function startField() {
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
     var v = current();
     var canvas = document.querySelector(".landing.variant-" + v + " canvas.field-canvas");
-    if (!canvas || reduced) return;
+    if (!canvas) { motionState = "no canvas in variant " + v.toUpperCase(); label(); return; }
+    if (reducedMotion()) { motionState = "OFF (prefers-reduced-motion" + (motionParam() ? ", ?motion=" + motionParam() : " from OS") + ") — click to force on"; label(); return; }
+    motionState = "running" + (motionParam() === "on" ? " (forced)" : "");
+    label();
     var mode = canvas.getAttribute("data-field"); // hero | page
     var ctx = canvas.getContext("2d");
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -132,5 +149,7 @@ export default `(function () {
     readColors(); resize(); init();
     raf = requestAnimationFrame(frame);
   }
-  startField();
+  function boot() { label(); startField(); }
+  boot();
+  document.addEventListener("nav", boot); // Quartz SPA: re-init on every navigation
 })();`

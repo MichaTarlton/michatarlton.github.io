@@ -334,6 +334,7 @@ const Hero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
         <span class="proto-label">…</span>
         <button class="proto-next" aria-label="Next variant">→</button>
         <a class="proto-theme" href="#" title="Toggle light/dark">◐</a>
+        <a class="proto-motion" href="#" title="Toggle motion override (?motion=on|off)">motion: …</a>
       </div>
     </div>
   )

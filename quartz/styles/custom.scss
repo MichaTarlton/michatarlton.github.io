@@ -233,6 +233,7 @@ html:not([data-variant]) .variant-a { display: block; }
   button, a { background: #333; color: #fff; border: 0; border-radius: 999px; width: 28px; height: 28px; cursor: pointer; text-decoration: none; display: grid; place-items: center; font-size: 14px; }
   button:hover, a:hover { background: #555; color: #fff; }
   .proto-label { white-space: nowrap; }
+  .proto-motion { width: auto; padding: 0 10px; white-space: nowrap; font-size: 11px; color: #ffd27a; }
 }
 
 // ── Prose (non-landing pages) ───────────────────────────────

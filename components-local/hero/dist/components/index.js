@@ -2,8 +2,15 @@
 var landingScript_default = `(function () {
   var VARIANTS = ["a", "b", "c"];
   var html = document.documentElement;
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var raf = 0;
+  var motionState = "idle";
+  function motionParam() { return new URLSearchParams(location.search).get("motion"); }
+  function reducedMotion() {
+    var m = motionParam();
+    if (m === "on") return false;
+    if (m === "off") return true;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
 
   function current() {
     var v = html.getAttribute("data-variant") || "a";
@@ -16,6 +23,8 @@ var landingScript_default = `(function () {
     var name = el ? el.getAttribute("data-variant-name") : "";
     var lab = document.querySelector(".proto-label");
     if (lab) lab.textContent = v.toUpperCase() + (name ? " \xB7 " + name : "");
+    var ms = document.querySelector(".proto-motion");
+    if (ms) ms.textContent = "motion: " + motionState;
   }
 
   function setVariant(v) {
@@ -33,7 +42,14 @@ var landingScript_default = `(function () {
   }
 
   var bar = document.querySelector(".proto-bar");
-  if (bar) {
+  if (bar && !bar.dataset.wired) {
+    bar.dataset.wired = "1";
+    bar.querySelector(".proto-motion").addEventListener("click", function (e) {
+      e.preventDefault();
+      var u = new URL(location.href);
+      u.searchParams.set("motion", reducedMotion() ? "on" : "off");
+      location.href = u.toString();
+    });
     bar.querySelector(".proto-prev").addEventListener("click", function () { cycle(-1); });
     bar.querySelector(".proto-next").addEventListener("click", function () { cycle(1); });
     bar.querySelector(".proto-theme").addEventListener("click", function (e) {
@@ -51,14 +67,15 @@ var landingScript_default = `(function () {
       if (e.key === "ArrowRight") cycle(1);
     });
   }
-  label();
-
   // \u2500\u2500 Ambient vector field \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   function startField() {
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
     var v = current();
     var canvas = document.querySelector(".landing.variant-" + v + " canvas.field-canvas");
-    if (!canvas || reduced) return;
+    if (!canvas) { motionState = "no canvas in variant " + v.toUpperCase(); label(); return; }
+    if (reducedMotion()) { motionState = "OFF (prefers-reduced-motion" + (motionParam() ? ", ?motion=" + motionParam() : " from OS") + ") \u2014 click to force on"; label(); return; }
+    motionState = "running" + (motionParam() === "on" ? " (forced)" : "");
+    label();
     var mode = canvas.getAttribute("data-field"); // hero | page
     var ctx = canvas.getContext("2d");
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -128,7 +145,9 @@ var landingScript_default = `(function () {
     readColors(); resize(); init();
     raf = requestAnimationFrame(frame);
   }
-  startField();
+  function boot() { label(); startField(); }
+  boot();
+  document.addEventListener("nav", boot); // Quartz SPA: re-init on every navigation
 })();`;
 
 // components-local/hero/src/Hero.tsx
@@ -388,7 +407,8 @@ var Hero = ({ fileData }) => {
       /* @__PURE__ */ jsx("button", { class: "proto-prev", "aria-label": "Previous variant", children: "\u2190" }),
       /* @__PURE__ */ jsx("span", { class: "proto-label", children: "\u2026" }),
       /* @__PURE__ */ jsx("button", { class: "proto-next", "aria-label": "Next variant", children: "\u2192" }),
-      /* @__PURE__ */ jsx("a", { class: "proto-theme", href: "#", title: "Toggle light/dark", children: "\u25D0" })
+      /* @__PURE__ */ jsx("a", { class: "proto-theme", href: "#", title: "Toggle light/dark", children: "\u25D0" }),
+      /* @__PURE__ */ jsx("a", { class: "proto-motion", href: "#", title: "Toggle motion override (?motion=on|off)", children: "motion: \u2026" })
     ] })
   ] });
 };
