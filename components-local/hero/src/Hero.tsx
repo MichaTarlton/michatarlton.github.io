@@ -27,11 +27,12 @@ const Hero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   const identity =
     hero.identity ?? "Neuro-AI researcher building brain-inspired learning systems."
   const status = hero.status ?? ""
+  const eyebrow = hero.eyebrow ?? ""
 
   return (
     <section class="hero">
       <div class="hero-text">
-        <p class="micro-label hero-eyebrow">{hero.eyebrow ?? "NeuroAI Researcher"}</p>
+        {eyebrow && <p class="micro-label hero-eyebrow">{eyebrow}</p>}
         <h1 class="hero-name">{name}</h1>
         <p class="hero-identity">{identity}</p>
         {status && (

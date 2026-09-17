@@ -6,8 +6,9 @@ var Hero = ({ fileData }) => {
   const name = hero.name ?? "Mike Tarlton";
   const identity = hero.identity ?? "Neuro-AI researcher building brain-inspired learning systems.";
   const status = hero.status ?? "";
+  const eyebrow = hero.eyebrow ?? "";
   return /* @__PURE__ */ jsx("section", { class: "hero", children: /* @__PURE__ */ jsxs("div", { class: "hero-text", children: [
-    /* @__PURE__ */ jsx("p", { class: "micro-label hero-eyebrow", children: hero.eyebrow ?? "NeuroAI Researcher" }),
+    eyebrow && /* @__PURE__ */ jsx("p", { class: "micro-label hero-eyebrow", children: eyebrow }),
     /* @__PURE__ */ jsx("h1", { class: "hero-name", children: name }),
     /* @__PURE__ */ jsx("p", { class: "hero-identity", children: identity }),
     status && /* @__PURE__ */ jsxs("p", { class: "hero-status", children: [

@@ -2,9 +2,8 @@
 title: Mike Tarlton
 description: Mike Tarlton — Neuro-AI researcher building brain-inspired learning systems for low-energy edge hardware. Available for research positions.
 hero:
-  # eyebrow: NeuroAI Researcher
   name: Mike Tarlton
-  identity: I build information-physics-inspired artificially thinking systems; spiking neural networks and neuro-dynamics models, groundwork for the next generation of machine intelligence.
+  identity: I build physics-driven artificially thinking systems; spiking neural networks and neuro-dynamics models, groundwork for the next generation of machine intelligence.
   status: Available for research positions
   primaryCta:
     label: Faculty Page
