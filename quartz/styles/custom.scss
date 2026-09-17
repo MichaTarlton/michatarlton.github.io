@@ -1,17 +1,12 @@
 @use "./variables.scss" as *;
+@use "./theme-a" as *; // A Blueprint on Straw; swap to theme-b or theme-c by one line
 
 // ─────────────────────────────────────────────────────────────
-// tarlton.info design language — Blueprint §4
-// serif body · mono micro-labels · slate-blue accent · crafted scroll
-//
-// Backup variants (recorded 2026-09-14, NOT built):
-//   (a) sans-body version of this system
-//   (c) dark-default pixperk-style variant
+// tarlton.info redesign — Blueprint on Straw
+// Fraunces display · Instrument Sans body · IBM Plex Mono labels
 // ─────────────────────────────────────────────────────────────
 
 // ── Motion discipline ───────────────────────────────────────
-// Micro-interactions only; nothing animates layout.
-// Reduced-motion users get a fully static site.
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -23,13 +18,61 @@
   }
 }
 
+// ── Base body ───────────────────────────────────────────────
+body {
+  line-height: 1.6;
+  font-size: var(--text-base);
+}
+
+// Use Instrument Sans for UI/body; Fraunces is reserved for display.
+article {
+  max-width: 68ch;
+
+  > p,
+  > ul,
+  > ol {
+    line-height: 1.65;
+  }
+}
+
+// Override Quartz link color behavior: one Link Colour everywhere.
+a {
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--link-color) 30%, transparent);
+  text-underline-offset: 0.15em;
+  color: var(--link-color);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+
+  &:hover {
+    color: var(--link-color-hover);
+    text-decoration-color: color-mix(in srgb, var(--link-color) 60%, transparent);
+  }
+
+  &.internal {
+    color: var(--link-color);
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--link-color) 25%, transparent);
+
+    &:hover {
+      color: var(--link-color-hover);
+    }
+
+    &.broken {
+      opacity: 0.5;
+    }
+  }
+}
+
 // ── Mono micro-labels ───────────────────────────────────────
-// The typographic fashion layer: tiny uppercase tracked labels.
 @mixin micro-label {
   font-family: var(--codeFont);
-  font-size: 0.68rem;
+  font-size: var(--text-xs);
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -37,7 +80,6 @@
   @include micro-label;
 }
 
-// Dates / reading time and breadcrumbs become quiet mono metadata.
 .content-meta,
 .breadcrumb-element {
   font-family: var(--codeFont);
@@ -50,94 +92,148 @@
 nav.site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.4rem;
+  gap: 0.25rem 1.5rem;
   align-items: baseline;
-  padding-bottom: 0.8rem;
-  margin: -0.5rem 0 0.5rem;
-  border-bottom: 1px solid var(--lightgray);
+  padding: var(--space-3) 0 var(--space-4);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--space-5);
 }
 
 .site-nav-link {
   @include micro-label;
-  color: var(--darkgray);
+  color: var(--text-secondary);
   text-decoration: none;
-  padding-bottom: 3px;
+  padding-bottom: var(--space-1);
   border-bottom: 1px solid transparent;
-  transition:
-    color 160ms ease,
-    border-color 160ms ease;
+  transition: color 0.15s ease, border-color 0.15s ease;
 
   &:hover,
   &.active {
-    color: var(--secondary);
-    border-bottom-color: var(--secondary);
+    color: var(--link-color);
+    border-bottom-color: var(--accent-mark);
   }
-}
-
-// ── Serif reading experience ────────────────────────────────
-body {
-  line-height: 1.65;
-}
-
-article > p,
-article > ul,
-article > ol {
-  line-height: 1.7;
-}
-
-h1,
-h2,
-h3 {
-  letter-spacing: -0.01em;
 }
 
 // ── Hero (landing) ──────────────────────────────────────────
 .hero {
+  position: relative;
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-6);
   align-items: center;
-  margin: 0.5rem 0 2.75rem;
+  margin: 0 0 var(--space-8);
+  min-height: clamp(340px, 46vh, 520px);
 
   @media #{$mobile} {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: var(--space-5);
+    min-height: auto;
+  }
+}
+
+.hero-graph {
+  position: relative;
+  height: 100%;
+  min-height: 280px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+
+  @media #{$mobile} {
+    min-height: 180px;
+  }
+}
+
+.hero-graph-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(58, 74, 143, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(58, 74, 143, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at 55% 45%, black 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 55% 45%, black 0%, transparent 75%);
+}
+
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hero-text {
+  padding: var(--space-5) 0;
+
+  @media #{$mobile} {
+    padding: 0;
   }
 }
 
 .hero-eyebrow {
-  color: var(--secondary);
-  margin: 0;
+  color: var(--accent-mark);
+  margin: 0 0 var(--space-3);
 }
 
 .hero-name {
-  margin: 0.35rem 0 0.6rem;
-  font-size: 2.75rem;
+  margin: 0 0 var(--space-4);
+  font-family: var(--headerFont);
+  font-size: var(--text-4xl);
+  font-weight: 300;
   line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 
   @media #{$mobile} {
-    font-size: 2.1rem;
+    font-size: var(--text-3xl);
   }
 }
 
 .hero-identity {
-  font-size: 1.12rem;
-  line-height: 1.55;
-  color: var(--darkgray);
-  max-width: 32rem;
-  margin: 0 0 1rem;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 36rem;
+  margin: 0 0 var(--space-4);
+}
+
+.hero-thinking {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border-left: 2px solid var(--accent-mark);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.thinking-accent {
+  display: none;
+}
+
+.thinking-label {
+  @include micro-label;
+  color: var(--accent-mark);
+}
+
+.thinking-copy {
+  font-style: italic;
+  color: var(--text-primary);
 }
 
 .hero-status {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  margin: 0 0 1.35rem;
-  font-family: var(--codeFont);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--darkgray);
+  gap: var(--space-2);
+  margin: 0 0 var(--space-5);
+  @include micro-label;
+  color: var(--text-secondary);
 }
 
 .status-dot {
@@ -151,81 +247,64 @@ h3 {
 .hero-ctas {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .cta {
   @include micro-label;
-  font-size: 0.72rem;
-  padding: 0.65rem 1.15rem;
-  border-radius: 7px;
-  border: 1px solid var(--secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--rule);
   text-decoration: none;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .cta-primary {
-  background: var(--secondary);
+  background: var(--link-color);
+  border-color: var(--link-color);
   color: var(--light);
 
   &:hover {
-    background: var(--tertiary);
-    border-color: var(--tertiary);
+    background: color-mix(in srgb, var(--link-color) 88%, black 12%);
+    border-color: color-mix(in srgb, var(--link-color) 88%, black 12%);
+    color: var(--light);
   }
 }
 
 .cta-secondary {
-  color: var(--secondary);
+  background: var(--surface);
+  border-color: var(--rule);
+  color: var(--text-primary);
 
   &:hover {
-    background: var(--highlight);
+    border-color: var(--link-color);
+    color: var(--link-color);
   }
-}
-
-.hero-canvas-wrap {
-  position: relative;
-  height: 270px;
-  border: 1px solid var(--lightgray);
-  border-radius: 12px;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--lightgray) 22%, transparent);
-
-  @media #{$mobile} {
-    height: 190px;
-  }
-}
-
-#hero-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  touch-action: none;
-}
-
-.hero-canvas-hint {
-  position: absolute;
-  right: 0.7rem;
-  bottom: 0.55rem;
-  margin: 0;
-  font-size: 0.6rem;
-  color: var(--gray);
-  pointer-events: none;
 }
 
 // ── Featured Research cards ─────────────────────────────────
 .section-eyebrow {
-  color: var(--gray);
-  margin: 0 0 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 var(--space-4);
+}
+
+.featured,
+.recent-notes,
+.contact-close {
+  margin-bottom: var(--space-8);
 }
 
 .card-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2.25rem;
+  gap: var(--space-4);
+
+  @media #{$tablet} {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @media #{$mobile} {
     grid-template-columns: 1fr;
@@ -235,29 +314,27 @@ h3 {
 .card {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--lightgray);
-  border-radius: 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
   overflow: hidden;
   text-decoration: none;
-  color: var(--dark);
-  background: var(--light);
-  transition:
-    border-color 160ms ease,
-    transform 160ms ease;
+  color: var(--text-primary);
+  background: var(--surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
   &:hover {
-    border-color: var(--secondary);
-    transform: translateY(-2px);
+    border-color: var(--link-color);
+    box-shadow: var(--shadow-md);
   }
 }
 
 .card-figure {
-  height: 96px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, var(--lightgray) 30%, transparent);
-  color: var(--secondary);
+  background: color-mix(in srgb, var(--rule) 45%, transparent);
+  color: var(--link-color);
 
   & svg {
     width: 72%;
@@ -266,28 +343,49 @@ h3 {
 }
 
 .card-body {
-  padding: 0.95rem 1.05rem 1.15rem;
+  padding: var(--space-4);
 }
 
 .card-question {
-  margin: 0 0 0.55rem;
-  font-weight: 600;
-  font-size: 1.02rem;
-  line-height: 1.42;
-  color: var(--dark);
+  margin: 0 0 var(--space-2);
+  font-family: var(--headerFont);
+  font-weight: 400;
+  font-style: italic;
+  font-size: var(--text-base);
+  line-height: 1.4;
+  color: var(--text-primary);
 }
 
 .card-title {
   @include micro-label;
-  margin: 0 0 0.55rem;
-  color: var(--secondary);
+  margin: 0 0 var(--space-2);
+  color: var(--link-color);
 }
 
 .card-blurb {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   line-height: 1.55;
-  color: var(--darkgray);
+  color: var(--text-secondary);
+}
+
+// ── Prose overrides ─────────────────────────────────────────
+article h2 {
+  font-family: var(--headerFont);
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: var(--space-2);
+  margin-top: var(--space-7);
+}
+
+article h3 {
+  font-family: var(--headerFont);
+  font-weight: 500;
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+  margin-top: var(--space-6);
 }
 
 // ── CV page ─────────────────────────────────────────────────
@@ -295,9 +393,9 @@ h3 {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 
   & .section-eyebrow {
     margin: 0;
@@ -305,18 +403,31 @@ h3 {
 }
 
 .cv-header + .callout {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
 }
 
 // ── Footer ──────────────────────────────────────────────────
 footer {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-5);
+
   & a {
     @include micro-label;
-    color: var(--darkgray);
-    transition: color 160ms ease;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
 
     &:hover {
-      color: var(--secondary);
+      color: var(--link-color);
     }
+  }
+}
+
+// ── Dark-mode token sanity ──────────────────────────────────
+:root[saved-theme="dark"] {
+  .hero-graph-grid {
+    background-image:
+      linear-gradient(to right, rgba(154, 168, 230, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(154, 168, 230, 0.08) 1px, transparent 1px);
   }
 }

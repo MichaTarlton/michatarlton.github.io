@@ -1,5 +1,10 @@
-// components-local/hero/src/heroVectorField.ts
-var heroVectorField_default = `(function () {
+/**
+ * Hero vector-field canvas.
+ * A low-opacity field drawn *on top of* the graph-grid hero background.
+ * Constrained to the hero container; reduced-motion users see only the grid.
+ * Query flag `?motion=off` disables the canvas as a manual override.
+ */
+export default `(function () {
   var canvas = document.getElementById("hero-canvas");
   if (!canvas || !canvas.getContext) return;
 
@@ -128,44 +133,4 @@ var heroVectorField_default = `(function () {
   resize();
   init();
   requestAnimationFrame(frame);
-})();`;
-
-// components-local/hero/src/Hero.tsx
-import { jsx, jsxs } from "preact/jsx-runtime";
-var Hero = ({ fileData }) => {
-  if (fileData.slug !== "index") return null;
-  const hero = fileData.frontmatter?.hero ?? {};
-  const name = hero.name ?? "Mike Tarlton";
-  const identity = hero.identity ?? "Neuro-AI researcher building brain-inspired learning systems.";
-  const status = hero.status ?? "";
-  const thinking = hero.thinking ?? "";
-  return /* @__PURE__ */ jsxs("section", { class: "hero", children: [
-    /* @__PURE__ */ jsxs("div", { class: "hero-graph", "aria-hidden": "true", children: [
-      /* @__PURE__ */ jsx("div", { class: "hero-graph-grid" }),
-      /* @__PURE__ */ jsx("canvas", { id: "hero-canvas", class: "hero-canvas" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { class: "hero-text", children: [
-      /* @__PURE__ */ jsx("p", { class: "micro-label hero-eyebrow", children: "NeuroAI Researcher" }),
-      /* @__PURE__ */ jsx("h1", { class: "hero-name", children: name }),
-      /* @__PURE__ */ jsx("p", { class: "hero-identity", children: identity }),
-      thinking && /* @__PURE__ */ jsxs("p", { class: "hero-thinking", children: [
-        /* @__PURE__ */ jsx("span", { class: "thinking-accent", "aria-hidden": "true" }),
-        /* @__PURE__ */ jsx("span", { class: "thinking-label", children: "Currently thinking about" }),
-        /* @__PURE__ */ jsx("span", { class: "thinking-copy", children: thinking })
-      ] }),
-      status && /* @__PURE__ */ jsxs("p", { class: "hero-status", children: [
-        /* @__PURE__ */ jsx("span", { class: "status-dot", "aria-hidden": "true" }),
-        status
-      ] }),
-      /* @__PURE__ */ jsxs("div", { class: "hero-ctas", children: [
-        hero.primaryCta && /* @__PURE__ */ jsx("a", { class: "cta cta-primary", href: hero.primaryCta.href, children: hero.primaryCta.label }),
-        hero.secondaryCta && /* @__PURE__ */ jsx("a", { class: "cta cta-secondary", href: hero.secondaryCta.href, children: hero.secondaryCta.label })
-      ] })
-    ] })
-  ] });
-};
-Hero.afterDOMLoaded = heroVectorField_default;
-var Hero_default = (() => Hero);
-export {
-  Hero_default as Hero
-};
+})();`
