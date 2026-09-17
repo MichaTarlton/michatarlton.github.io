@@ -53,9 +53,9 @@ I'm a researcher in what I like to call NeuroAI: the intersection between neuros
         </svg>
       </div>
       <div class="card-body">
-        <p class="card-question">How do you choose the right model when inferring networks from spiking data?</p>
+        <p class="card-question">How does the physics of information shape architectures?</p>
         <p class="card-title">MSc Thesis · Kavli Institute, NTNU</p>
-        <p class="card-blurb">A novel information-based Bayesian criterion for inferring Ising-model networks from neural spiking activity — designed, simulated, and evaluated on HPC clusters.</p>
+        <p class="card-blurb">Inferring recurrent network architecures from neural spiking activity. Physics-based model training from information maximization Bayesian criteria.</p>
       </div>
     </a>
     <a class="card" href="/research/phd-overview/">
@@ -67,7 +67,7 @@ I'm a researcher in what I like to call NeuroAI: the intersection between neuros
         </svg>
       </div>
       <div class="card-body">
-        <p class="card-question">How does time itself emerge from the plasticity of single neurons?</p>
+        <p class="card-question">Emerging dynamics of time from the plasticity of single neurons.</p>
         <p class="card-title">PhD Research · OsloMet</p>
         <p class="card-blurb">Designing learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics — for online, always-on, low-energy learning.</p>
       </div>
