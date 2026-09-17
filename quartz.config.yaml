@@ -110,13 +110,10 @@ plugins:
     enabled: false
     order: 92
   - source: "@quartz-community/quartz-fonts"
-    enabled: true
+    enabled: false # overrides theme fonts with Quartz defaults; core Head already loads the theme fonts
     options:
       useThemeFonts: true
       fontOrigin: googleFonts
-      header: Newsreader
-      body: Newsreader
-      code: JetBrains Mono
   - source: "@quartz-themes/core"
     enabled: false
     options:
