@@ -320,3 +320,17 @@ footer {
     }
   }
 }
+
+// ── REDESIGN PREVIEW MARKER (temporary; remove once Mike confirms he sees it) ──
+body::before {
+  content: "REDESIGN PREVIEW BRANCH — if you can read this, the preview pipeline works";
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: #ff4d00;
+  color: #fff;
+  font: 700 0.9rem/2.2 sans-serif;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
