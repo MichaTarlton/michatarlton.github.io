@@ -85,7 +85,8 @@ nav.site-nav { display: flex; gap: var(--space-5); align-items: baseline; }
 
 // ── Shared landing pieces ───────────────────────────────────
 
-.landing-proto .display {
+.landing-proto .display,
+.research .display {
   font-family: var(--headerFont);
   font-weight: 300;
   font-size: var(--text-4xl);
@@ -95,6 +96,7 @@ nav.site-nav { display: flex; gap: var(--space-5); align-items: baseline; }
   font-variation-settings: "SOFT" 100, "opsz" 144;
   @media #{$mobile} { font-size: var(--text-3xl); }
 }
+.research .display { font-size: var(--text-3xl); }
 .lede {
   font-family: var(--headerFont);
   font-style: italic;
@@ -181,6 +183,105 @@ nav.site-nav { display: flex; gap: var(--space-5); align-items: baseline; }
     &:hover { box-shadow: var(--shadow-md); border-color: var(--link-color); }
     .a-card-fig { height: 72px; color: var(--link-color); margin-bottom: var(--space-3); svg { width: 100%; height: 100%; } }
     .q { font-size: var(--text-base); } }
+}
+
+// ── Research hub + project prototype (ticket 08) ─────────────
+// Hub A "Ledger" (essay-led stack), Hub B "Two-up" (section bands)
+// Project A "Header band", Project B "Figure cover" — switch via ?variant=.
+[data-variant="a"] .research.variant-a { display: block; }
+[data-variant="b"] .research.variant-b { display: block; }
+.research { display: none; }
+
+.research {
+  .r-lede {
+    font-family: var(--headerFont); font-style: italic; font-weight: 300;
+    font-size: var(--text-lg); line-height: 1.5; color: var(--text-primary);
+    max-width: 46ch; margin: 0 0 var(--space-4); padding-left: var(--space-4);
+    border-left: 2px solid var(--accent-mark);
+    font-variation-settings: "WONK" 1, "SOFT" 60;
+  }
+  .r-lede-short { font-size: var(--text-base); }
+
+  .r-section-head { margin: var(--space-5) 0 var(--space-4); border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2);
+    .kicker { margin-bottom: var(--space-1); }
+    .r-route { margin: 0; max-width: 52ch; color: var(--text-secondary); font-size: var(--text-sm); line-height: 1.5; } }
+
+  .r-stack { display: grid; gap: var(--space-4); }
+  .r-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); @media #{$mobile} { grid-template-columns: 1fr; } }
+
+  .r-card {
+    display: block; text-decoration: none; padding: var(--space-4);
+    border: 1px solid var(--rule); border-radius: var(--radius-md);
+    background: var(--surface); box-shadow: var(--shadow-sm);
+    transition: box-shadow .15s ease, border-color .15s ease;
+    &:hover { box-shadow: var(--shadow-md); border-color: var(--link-color); }
+    .r-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
+    .r-n { @include micro-label; color: var(--text-muted); }
+    .q { font-size: var(--text-base); margin: var(--space-3) 0 var(--space-1); }
+    .r-meta { margin-bottom: var(--space-2); }
+    .r-blurb { margin: 0; }
+  }
+
+  .r-fig {
+    border-radius: var(--radius-sm); overflow: hidden; aspect-ratio: 5 / 2;
+    background-color: var(--surface);
+    background-image:
+      linear-gradient(to right, rgba(58, 74, 143, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(58, 74, 143, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--link-color);
+    svg { width: 100%; height: 100%; display: block; }
+  }
+  .r-fig-wide { margin: var(--space-5) 0 var(--space-2); }
+  .r-fig-cap { @include micro-label; color: var(--text-muted); display: block; margin-top: var(--space-2); }
+
+  .r-meta { @include micro-label; color: var(--link-color); margin: 0; }
+  .r-blurb { font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.55; }
+
+  .r-badge {
+    @include micro-label; color: var(--accent-mark);
+    padding: 1px 9px; border: 1px solid color-mix(in srgb, var(--accent-mark) 55%, transparent);
+    border-radius: var(--radius-pill); white-space: nowrap;
+  }
+  .r-badge-solid { border-color: transparent; color: #fff; background: var(--accent-mark); }
+
+  .r-also {
+    margin-top: var(--space-7);
+    ul { list-style: none; margin: 0; padding: 0;
+      li { padding: var(--space-2) 0; border-bottom: 1px dashed var(--rule); display: grid; gap: var(--space-1);
+        a { text-decoration-thickness: 1px; } .r-also-meta { @include micro-label; color: var(--text-muted); } } }
+    .r-door { @include micro-label; display: inline-block; margin-top: var(--space-4); text-decoration: none; color: var(--link-color);
+      &:hover { text-decoration: underline; } }
+  }
+
+  .r-band { position: relative; margin: var(--space-6) 0 0; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface); overflow: hidden; box-shadow: var(--shadow-sm);
+    .r-band-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(58, 74, 143, 0.11) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(58, 74, 143, 0.11) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: linear-gradient(to bottom, black 0, transparent 44%);
+      -webkit-mask-image: linear-gradient(to bottom, black 0, transparent 44%);
+    }
+    .r-band-inner { position: relative; padding: var(--space-6); @media #{$mobile} { padding: var(--space-5) var(--space-4); } }
+
+  // ── Project page header ────────────────────────────────────
+  .r-breadcrumb { @include micro-label; color: var(--text-muted); margin: 0 0 var(--space-2); }
+  .r-head { .r-q { font-family: var(--headerFont); font-style: italic; font-weight: 300; font-size: var(--text-lg); color: var(--text-secondary); margin: 0 0 var(--space-3); font-variation-settings: "WONK" 1, "SOFT" 60; } }
+  .r-meta-row { @include micro-label; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);
+    .r-dot { opacity: .5; } }
+  .r-outputs { margin: var(--space-5) 0 0; .kicker { margin-bottom: var(--space-2); } .r-pills { display: flex; flex-wrap: wrap; gap: var(--space-2);
+    .pill { margin-left: 0; padding: 3px 12px; font-size: var(--text-xs); color: var(--link-color); text-decoration: none;
+      &:hover { border-color: var(--link-color); box-shadow: var(--shadow-sm); } } } }
+  .r-summary { max-width: 68ch; font-size: var(--text-base); line-height: 1.65; margin: var(--space-5) 0 0; }
+
+  .r-cover { position: relative; margin: var(--space-5) 0 0; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--surface); overflow: hidden; box-shadow: var(--shadow-sm);
+    .r-cover-inner { position: relative; padding: var(--space-6); @media #{$mobile} { padding: var(--space-5) var(--space-4); } }
+    .r-fig { margin: var(--space-5) 0 var(--space-2); }
+  }
+  .r-sheet { margin-top: var(--space-6); }
+}
 }
 
 // ── Prototype switcher bar (not part of the design) ─────────

@@ -18,16 +18,24 @@ const builtinConditions: Record<string, ConditionPredicate> = {
   },
 }
 
-const customConditions = new Map<string, ConditionPredicate>()
+// Custom conditions are kept on a process-global registry so that locally
+// bundled component plugins (components-local/*/dist, inlined by esbuild) can
+// register conditions that the core loader (bundled separately by `quartz
+// build`) resolves — the two bundles otherwise share no module instance.
+const globals = globalThis as { __quartzCustomConditions?: Map<string, ConditionPredicate> }
+
+function sharedRegistry(): Map<string, ConditionPredicate> {
+  return (globals.__quartzCustomConditions ??= new Map())
+}
 
 export function registerCondition(name: string, predicate: ConditionPredicate): void {
-  customConditions.set(name, predicate)
+  sharedRegistry().set(name, predicate)
 }
 
 export function getCondition(name: string): ConditionPredicate | undefined {
-  return customConditions.get(name) ?? builtinConditions[name]
+  return sharedRegistry().get(name) ?? builtinConditions[name]
 }
 
 export function getAllConditionNames(): string[] {
-  return [...Object.keys(builtinConditions), ...customConditions.keys()]
+  return [...Object.keys(builtinConditions), ...sharedRegistry().keys()]
 }

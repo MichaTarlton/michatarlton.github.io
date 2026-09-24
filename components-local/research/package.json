@@ -1,0 +1,29 @@
+{
+  "name": "tarlton-research",
+  "version": "0.1.0",
+  "description": "Research hub + project-page header prototype (ticket 08) for tarlton.info",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./components": {
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "research",
+    "displayName": "Research",
+    "category": "component",
+    "version": "0.1.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultEnabled": true,
+    "components": {
+      "ResearchPage": {
+        "displayName": "ResearchPage",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 1
+      }
+    }
+  }
+}
