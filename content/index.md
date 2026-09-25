@@ -4,7 +4,6 @@ description: Mike Tarlton — Neuro-AI researcher building brain-inspired learni
 hero:
   name: Mike Tarlton
   identity: I build artificially thinking systems inspired by physics and neuroscience; spiking neural networks and neuro-dynamics models, groundwork for the next generation of machine intelligence.
-  thinking: how timing in neurons could make machine learning cheaper at the edge
   status: Available for research positions
   primaryCta:
     label: Read featured research

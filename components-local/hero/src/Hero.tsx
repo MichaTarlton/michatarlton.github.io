@@ -17,7 +17,6 @@ interface HeroCopy {
   name?: string
   identity?: string
   status?: string
-  thinking?: string
   primaryCta?: { label: string; href: string }
   secondaryCta?: { label: string; href: string }
   photo?: string
@@ -164,13 +163,6 @@ const Landing = ({ hero }: { hero: HeroCopy }) => (
         </div>
       </div>
     </section>
-
-    {hero.thinking && (
-      <section class="a-thinking">
-        <span class="kicker accent">Currently thinking about</span>
-        <p class="thinking-copy">{hero.thinking}</p>
-      </section>
-    )}
 
     <section class="a-research">
       <div class="section-head">

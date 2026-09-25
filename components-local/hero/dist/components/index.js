@@ -266,10 +266,6 @@ var Landing = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varian
       ] })
     ] })
   ] }),
-  hero.thinking && /* @__PURE__ */ jsxs("section", { class: "a-thinking", children: [
-    /* @__PURE__ */ jsx("span", { class: "kicker accent", children: "Currently thinking about" }),
-    /* @__PURE__ */ jsx("p", { class: "thinking-copy", children: hero.thinking })
-  ] }),
   /* @__PURE__ */ jsxs("section", { class: "a-research", children: [
     /* @__PURE__ */ jsxs("div", { class: "section-head", children: [
       /* @__PURE__ */ jsx("h2", { children: "Featured research" }),
