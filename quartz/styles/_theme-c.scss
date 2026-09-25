@@ -1,0 +1,53 @@
+// Theme C: Heather (backup, one import away)
+:root {
+  --surface: #faf7f5;
+  --surface-dark: #2f292b;
+  --accent-mark: #8a6a9e;
+  --link-color: #6b4c7f;
+  --link-color-hover: #523a61;
+  --text-primary: #3b3436;
+  --text-secondary: #6f6568;
+  --text-muted: #9a8f92;
+  --rule: #e3d9d6;
+  --shadow-color: 59 52 54;
+  --shadow-sm: 0 1px 2px rgba(var(--shadow-color), 0.08);
+  --shadow-md: 0 4px 16px -6px rgba(var(--shadow-color), 0.14);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --text-xs: 0.68rem;
+  --text-sm: 0.8rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.56rem;
+  --text-2xl: 1.95rem;
+  --text-3xl: 2.44rem;
+  --text-4xl: 3.05rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 999px;
+}
+
+:root[saved-theme="dark"] {
+  --surface: #2f292b;
+  --surface-dark: #252021;
+  --accent-mark: #c9a9df;
+  --link-color: #c9a9df;
+  --link-color-hover: #dec9ec;
+  --text-primary: #f4eeef;
+  --text-secondary: #c9bfc2;
+  --text-muted: #968b8e;
+  --rule: #4e4547;
+  --shadow-color: 0 0 20;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px -6px rgba(0, 0, 0, 0.35);
+}

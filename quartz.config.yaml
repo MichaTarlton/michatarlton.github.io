@@ -17,30 +17,39 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Newsreader
-      body: Newsreader
-      code: JetBrains Mono
+      header:
+        name: Fraunces
+        weights: [300, 400]
+        includeItalic: true
+      body:
+        name: Instrument Sans
+        weights: [400, 500, 600]
+        includeItalic: true
+      code:
+        name: IBM Plex Mono
+        weights: [400, 500]
+        includeItalic: false
     colors:
       lightMode:
-        light: "#faf8f8"
-        lightgray: "#e5e5e5"
-        gray: "#b8b8b8"
-        darkgray: "#4e4e4e"
-        dark: "#2b2b2b"
-        secondary: "#284b63"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#fff23688"
+        light: "#f6f0e4"
+        lightgray: "#d9d0bd"
+        gray: "#8e8a7d"
+        darkgray: "#5e6075"
+        dark: "#22243a"
+        secondary: "#3a4a8f"
+        tertiary: "#8f5c08"
+        highlight: rgba(58, 74, 143, 0.1)
+        textHighlight: "#e0c88f55"
       darkMode:
-        light: "#161618"
-        lightgray: "#393639"
-        gray: "#646464"
-        darkgray: "#d4d4d4"
-        dark: "#ebebec"
-        secondary: "#7b97aa"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#b3aa0288"
+        light: "#1b1c26"
+        lightgray: "#3a3b4a"
+        gray: "#6e6f7d"
+        darkgray: "#a9a6b3"
+        dark: "#e8e3d6"
+        secondary: "#9aa8e6"
+        tertiary: "#e0a94a"
+        highlight: rgba(154, 168, 230, 0.12)
+        textHighlight: "#6b5a2e55"
 plugins:
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -101,13 +110,10 @@ plugins:
     enabled: false
     order: 92
   - source: "@quartz-community/quartz-fonts"
-    enabled: true
+    enabled: false # overrides theme fonts with Quartz defaults; core Head already loads the theme fonts
     options:
       useThemeFonts: true
       fontOrigin: googleFonts
-      header: Newsreader
-      body: Newsreader
-      code: JetBrains Mono
   - source: "@quartz-themes/core"
     enabled: false
     options:
@@ -168,19 +174,19 @@ plugins:
     layout:
       position: beforeBody
       priority: 10
-      condition: not-index
+      condition: not-index-not-research
   - source: "@quartz-community/content-meta"
     enabled: true
     layout:
       position: beforeBody
       priority: 20
-      condition: not-index
+      condition: not-index-not-research
   - source: "@quartz-community/tag-list"
     enabled: true
     layout:
       position: beforeBody
       priority: 30
-      condition: not-index
+      condition: not-index-not-research
   - source: "@quartz-community/page-title"
     enabled: true
     layout:
@@ -203,7 +209,7 @@ plugins:
     layout:
       position: beforeBody
       priority: 5
-      condition: not-index
+      condition: not-index-not-research
   - source: "@quartz-community/comments"
     enabled: false
     options:
@@ -245,6 +251,12 @@ plugins:
     layout:
       position: beforeBody
       priority: 1
+  - source: ./components-local/research
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 1
+      condition: is-research
   - source: ./components-local/redirects
     enabled: true
   - source: "@quartz-community/bases-page"
@@ -267,7 +279,7 @@ plugins:
       position: beforeBody
       priority: 15
       display: all
-      condition: not-index
+      condition: not-index-not-research
   - source: "@quartz-community/unlisted-pages"
     enabled: true
     options: {}

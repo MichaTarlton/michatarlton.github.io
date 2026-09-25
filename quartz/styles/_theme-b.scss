@@ -1,0 +1,53 @@
+// Theme B: Lichen (backup, one import away)
+:root {
+  --surface: #fcfaf4;
+  --surface-dark: #2f2c25;
+  --accent-mark: #a06d12;
+  --link-color: #1f6d74;
+  --link-color-hover: #165057;
+  --text-primary: #2b2521;
+  --text-secondary: #5a534a;
+  --text-muted: #8a8276;
+  --rule: #dad4c8;
+  --shadow-color: 43 37 33;
+  --shadow-sm: 0 1px 2px rgba(var(--shadow-color), 0.08);
+  --shadow-md: 0 8px 24px -8px rgba(var(--shadow-color), 0.16);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --text-xs: 0.68rem;
+  --text-sm: 0.8rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.56rem;
+  --text-2xl: 1.95rem;
+  --text-3xl: 2.44rem;
+  --text-4xl: 3.05rem;
+
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+}
+
+:root[saved-theme="dark"] {
+  --surface: #2f2c25;
+  --surface-dark: #26221d;
+  --accent-mark: #d4a94a;
+  --link-color: #7bbdc2;
+  --link-color-hover: #a3d3d6;
+  --text-primary: #f3efe5;
+  --text-secondary: #c9c3b6;
+  --text-muted: #9c968a;
+  --rule: #4e483f;
+  --shadow-color: 0 0 20;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.35);
+}
