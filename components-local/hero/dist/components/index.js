@@ -204,7 +204,16 @@ var recent = [
   { t: "Neuromorphic edge hardware", d: "Sep 3", m: "seedling" },
   { t: "Spike-timing-dependent plasticity", d: "Aug 28", m: "sapling" }
 ];
-var Photo = ({ size }) => /* @__PURE__ */ jsx("div", { class: `photo photo-${size}`, "aria-label": "Photo placeholder", children: /* @__PURE__ */ jsx("span", { children: "MT" }) });
+var Photo = ({ size, hero }) => hero.photo ? /* @__PURE__ */ jsx(
+  "img",
+  {
+    class: `photo photo-${size}`,
+    src: hero.photo,
+    alt: hero.photoAlt ?? hero.name ?? "Portrait",
+    width: size === "lg" ? 132 : 64,
+    height: size === "lg" ? 132 : 64
+  }
+) : /* @__PURE__ */ jsx("div", { class: `photo photo-${size}`, "aria-label": "Photo placeholder", children: /* @__PURE__ */ jsx("span", { children: "MT" }) });
 var Ctas = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "ctas", children: [
   hero.primaryCta && /* @__PURE__ */ jsx("a", { class: "cta cta-primary", href: hero.primaryCta.href, children: hero.primaryCta.label }),
   hero.secondaryCta && /* @__PURE__ */ jsx("a", { class: "cta cta-secondary", href: hero.secondaryCta.href, children: hero.secondaryCta.label }),
@@ -243,7 +252,7 @@ var Landing = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varian
       /* @__PURE__ */ jsx("canvas", { class: "field-canvas", "data-field": "hero" })
     ] }),
     /* @__PURE__ */ jsxs("div", { class: "a-hero-inner", children: [
-      /* @__PURE__ */ jsx(Photo, { size: "lg" }),
+      /* @__PURE__ */ jsx(Photo, { size: "lg", hero }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "NeuroAI researcher \xB7 Oslo" }),
         /* @__PURE__ */ jsx("h1", { class: "display", children: hero.name }),

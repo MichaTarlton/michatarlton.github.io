@@ -122,6 +122,7 @@ nav.site-nav { display: flex; gap: var(--space-5); align-items: baseline; }
   &.photo-lg { width: 132px; height: 132px; font-size: var(--text-2xl); }
   &.photo-sm { width: 64px; height: 64px; font-size: var(--text-lg); }
 }
+img.photo { object-fit: cover; display: block; background: var(--surface); }
 .status { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-5); @include micro-label; color: var(--text-secondary); }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-mark); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-mark) 22%, transparent); }
 .ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); }

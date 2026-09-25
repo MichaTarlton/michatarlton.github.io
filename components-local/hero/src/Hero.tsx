@@ -20,6 +20,8 @@ interface HeroCopy {
   thinking?: string
   primaryCta?: { label: string; href: string }
   secondaryCta?: { label: string; href: string }
+  photo?: string
+  photoAlt?: string
 }
 
 // Placeholder content — real material lands in ticket 06.
@@ -87,11 +89,20 @@ const recent = [
   { t: "Spike-timing-dependent plasticity", d: "Aug 28", m: "sapling" },
 ]
 
-const Photo = ({ size }: { size: "sm" | "lg" }) => (
-  <div class={`photo photo-${size}`} aria-label="Photo placeholder">
-    <span>MT</span>
-  </div>
-)
+const Photo = ({ size, hero }: { size: "sm" | "lg"; hero: HeroCopy }) =>
+  hero.photo ? (
+    <img
+      class={`photo photo-${size}`}
+      src={hero.photo}
+      alt={hero.photoAlt ?? hero.name ?? "Portrait"}
+      width={size === "lg" ? 132 : 64}
+      height={size === "lg" ? 132 : 64}
+    />
+  ) : (
+    <div class={`photo photo-${size}`} aria-label="Photo placeholder">
+      <span>MT</span>
+    </div>
+  )
 
 const Ctas = ({ hero }: { hero: HeroCopy }) => (
   <div class="ctas">
@@ -142,7 +153,7 @@ const Landing = ({ hero }: { hero: HeroCopy }) => (
         <canvas class="field-canvas" data-field="hero" />
       </div>
       <div class="a-hero-inner">
-        <Photo size="lg" />
+        <Photo size="lg" hero={hero} />
         <div>
           <p class="kicker accent">NeuroAI researcher · Oslo</p>
           <h1 class="display">{hero.name}</h1>
