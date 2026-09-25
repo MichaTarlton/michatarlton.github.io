@@ -40,6 +40,9 @@ export default `(function () {
 
 
   var bar = document.querySelector(".proto-bar");
+  // Bar is hidden by default since the cutover fold (ticket 17); reveal only
+  // for explicit prototyping via ?proto=1.
+  if (bar && new URLSearchParams(location.search).has("proto")) bar.removeAttribute("hidden");
   // Only the landing's bar carries .proto-motion; on research pages the hero bar
   // is absent and the research bar has no motion button. Guard so a missing
   // button can't throw and abort the rest of the shared postscript bundle.

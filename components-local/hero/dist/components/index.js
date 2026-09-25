@@ -36,6 +36,9 @@ var landingScript_default = `(function () {
 
 
   var bar = document.querySelector(".proto-bar");
+  // Bar is hidden by default since the cutover fold (ticket 17); reveal only
+  // for explicit prototyping via ?proto=1.
+  if (bar && new URLSearchParams(location.search).has("proto")) bar.removeAttribute("hidden");
   // Only the landing's bar carries .proto-motion; on research pages the hero bar
   // is absent and the research bar has no motion button. Guard so a missing
   // button can't throw and abort the rest of the shared postscript bundle.
@@ -298,7 +301,7 @@ var Hero = ({ fileData }) => {
   hero.identity ??= "Neuro-AI researcher building brain-inspired learning systems.";
   return /* @__PURE__ */ jsxs("div", { class: "landing-proto", children: [
     /* @__PURE__ */ jsx(Landing, { hero }),
-    /* @__PURE__ */ jsxs("div", { class: "proto-bar", role: "toolbar", "aria-label": "Prototype controls", children: [
+    /* @__PURE__ */ jsxs("div", { class: "proto-bar", role: "toolbar", "aria-label": "Prototype controls", hidden: true, children: [
       /* @__PURE__ */ jsx("span", { class: "proto-label", children: "Studio" }),
       /* @__PURE__ */ jsx("a", { class: "proto-theme", href: "#", title: "Toggle light/dark", children: "\u25D0" }),
       /* @__PURE__ */ jsx("a", { class: "proto-motion", href: "#", title: "Toggle motion override (?motion=on|off)", children: "motion: \u2026" })

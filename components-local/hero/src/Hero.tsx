@@ -217,7 +217,7 @@ const Hero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   return (
     <div class="landing-proto">
       <Landing hero={hero} />
-      <div class="proto-bar" role="toolbar" aria-label="Prototype controls">
+      <div class="proto-bar" role="toolbar" aria-label="Prototype controls" hidden>
         <span class="proto-label">Studio</span>
         <a class="proto-theme" href="#" title="Toggle light/dark">◐</a>
         <a class="proto-motion" href="#" title="Toggle motion override (?motion=on|off)">motion: …</a>
