@@ -7,80 +7,8 @@ function registerCondition(name, predicate) {
   sharedRegistry().set(name, predicate);
 }
 
-// components-local/research/src/researchScript.ts
-var researchScript_default = `(function () {
-  var VARIANTS = ["a", "b"];
-  var html = document.documentElement;
-
-  function current() {
-    var v = html.getAttribute("data-variant") || "a";
-    return VARIANTS.indexOf(v) >= 0 ? v : "a";
-  }
-
-  function label() {
-    var v = current();
-    var el = document.querySelector('.research.variant-' + v);
-    var name = el ? el.getAttribute("data-variant-name") || "" : "";
-    var lb = document.querySelector(".proto-label");
-    if (lb) lb.textContent = v.toUpperCase() + (name ? " \xB7 " + name : "");
-  }
-
-  function setVariant(v) {
-    html.setAttribute("data-variant", v);
-    var u = new URL(location.href);
-    u.searchParams.set("variant", v);
-    history.replaceState(null, "", u.toString());
-    label();
-  }
-
-  var V = null;
-
-  function boot() {
-    var p = new URLSearchParams(location.search);
-    var v = p.get("variant");
-    if (v !== "a" && v !== "b") v = "a";
-    html.setAttribute("data-variant", v);
-    label();
-    wire();
-  }
-
-  function wire() {
-    var bar = document.querySelector(".proto-bar");
-    if (!bar || bar.dataset.wired) return;
-    bar.dataset.wired = "1";
-    bar.querySelectorAll(".pv").forEach(function (b) {
-      b.addEventListener("click", function () {
-        var i = VARIANTS.indexOf(current());
-        var n = (i + Number(b.dataset.dir) + VARIANTS.length) % VARIANTS.length;
-        setVariant(VARIANTS[n]);
-      });
-    });
-    bar.querySelector(".proto-theme").addEventListener("click", function (e) {
-      e.preventDefault();
-      var dark = html.getAttribute("saved-theme") === "dark";
-      var u = new URL(location.href);
-      if (dark) { u.searchParams.delete("dark"); } else { u.searchParams.set("dark", "1"); }
-      localStorage.setItem("theme", dark ? "light" : "dark");
-      location.href = u.toString();
-    });
-  }
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    var t = document.activeElement;
-    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-    var i = VARIANTS.indexOf(current());
-    var dir = e.key === "ArrowRight" ? 1 : -1;
-    var n = (i + dir + VARIANTS.length) % VARIANTS.length;
-    setVariant(VARIANTS[n]);
-  });
-
-  boot();
-  document.addEventListener("nav", boot); // Quartz SPA: re-resolve on every navigation
-})();`;
-
 // components-local/research/src/ResearchPage.tsx
-import { Fragment, jsx, jsxs } from "preact/jsx-runtime";
+import { jsx, jsxs } from "preact/jsx-runtime";
 function isResearchSlug(slug) {
   return slug === "research/index" || slug.startsWith("research/");
 }
@@ -272,11 +200,6 @@ var SectionCard = ({ p }) => /* @__PURE__ */ jsxs("a", { class: "r-card", href: 
   /* @__PURE__ */ jsx("p", { class: "r-meta", children: p.meta }),
   /* @__PURE__ */ jsx("p", { class: "r-blurb", children: p.blurb })
 ] });
-var Lede = () => /* @__PURE__ */ jsx("p", { class: "r-lede", children: "The work on this page is grouped by the questions it tries to answer, not by the papers it produced. I work where neuroscience meets machine learning: taking how the brain keeps time and uses it to learn, and transposing it into rules for machines that learn online, always on." });
-var SectionHead = ({ kicker, line }) => /* @__PURE__ */ jsxs("div", { class: "r-section-head", children: [
-  /* @__PURE__ */ jsx("p", { class: "kicker accent", children: kicker }),
-  /* @__PURE__ */ jsx("p", { class: "r-route", children: line })
-] });
 var AlsoList = () => /* @__PURE__ */ jsxs("section", { class: "r-also", children: [
   /* @__PURE__ */ jsx("div", { class: "section-head", children: /* @__PURE__ */ jsx("h2", { children: "Also" }) }),
   /* @__PURE__ */ jsx("ul", { children: also.map((a) => /* @__PURE__ */ jsxs("li", { children: [
@@ -288,36 +211,7 @@ var AlsoList = () => /* @__PURE__ */ jsxs("section", { class: "r-also", children
     /* @__PURE__ */ jsx("span", { "aria-hidden": "true", children: "\u2192" })
   ] })
 ] });
-var HubA = () => /* @__PURE__ */ jsxs("div", { class: "research variant-a hub-a", "data-variant-name": "Ledger", children: [
-  /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "Research" }),
-  /* @__PURE__ */ jsx("h1", { class: "display", children: "Research" }),
-  /* @__PURE__ */ jsx(Lede, {}),
-  /* @__PURE__ */ jsxs("section", { class: "r-group", children: [
-    /* @__PURE__ */ jsx(
-      SectionHead,
-      {
-        kicker: "01 \xB7 Time",
-        line: "The brain tracks intervals and rhythms at every scale; I study how that timing machinery can become learning rules for machines."
-      }
-    ),
-    /* @__PURE__ */ jsxs("div", { class: "r-stack", children: [
-      /* @__PURE__ */ jsx(SectionCard, { p: projects[0] }),
-      /* @__PURE__ */ jsx(SectionCard, { p: projects[1] })
-    ] })
-  ] }),
-  /* @__PURE__ */ jsxs("section", { class: "r-group", children: [
-    /* @__PURE__ */ jsx(
-      SectionHead,
-      {
-        kicker: "02 \xB7 Model selection",
-        line: "Inferring a network from its activity means choosing a model; my master's work tested a principled criterion for that choice."
-      }
-    ),
-    /* @__PURE__ */ jsx("div", { class: "r-stack", children: /* @__PURE__ */ jsx(SectionCard, { p: projects[2] }) })
-  ] }),
-  /* @__PURE__ */ jsx(AlsoList, {})
-] });
-var HubB = () => /* @__PURE__ */ jsxs("div", { class: "research variant-b hub-b", "data-variant-name": "Two-up", children: [
+var Hub = () => /* @__PURE__ */ jsxs("div", { class: "research hub", children: [
   /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "Research" }),
   /* @__PURE__ */ jsx("h1", { class: "display", children: "Research" }),
   /* @__PURE__ */ jsx("p", { class: "r-lede r-lede-short", children: "The work below is grouped by the questions it answers, not the papers it produced." }),
@@ -342,32 +236,7 @@ var HubB = () => /* @__PURE__ */ jsxs("div", { class: "research variant-b hub-b"
   ] }),
   /* @__PURE__ */ jsx(AlsoList, {})
 ] });
-var ProjectA = ({ p }) => /* @__PURE__ */ jsxs("div", { class: "research variant-a page-a", "data-variant-name": "Header band", children: [
-  /* @__PURE__ */ jsxs("p", { class: "r-breadcrumb", children: [
-    "Research \xB7 ",
-    p.n
-  ] }),
-  /* @__PURE__ */ jsxs("header", { class: "r-head", children: [
-    /* @__PURE__ */ jsx("h1", { class: "display", children: p.name }),
-    /* @__PURE__ */ jsx("p", { class: "r-q", children: p.q }),
-    /* @__PURE__ */ jsxs("div", { class: "r-meta-row", children: [
-      /* @__PURE__ */ jsx("span", { children: p.venue }),
-      /* @__PURE__ */ jsx("span", { class: "r-dot", "aria-hidden": "true", children: "\xB7" }),
-      /* @__PURE__ */ jsx("span", { children: p.year }),
-      /* @__PURE__ */ jsx("span", { class: `r-badge${p.status === "Published" ? " r-badge-solid" : ""}`, children: p.status })
-    ] })
-  ] }),
-  /* @__PURE__ */ jsxs("div", { class: "r-fig r-fig-wide", children: [
-    p.fig,
-    /* @__PURE__ */ jsx("span", { class: "r-fig-cap", children: "Page Figure \u2014 static frame. Real per-page figures land in a later ticket." })
-  ] }),
-  /* @__PURE__ */ jsxs("div", { class: "r-outputs", children: [
-    /* @__PURE__ */ jsx("p", { class: "kicker", children: "Outputs" }),
-    /* @__PURE__ */ jsx("div", { class: "r-pills", children: p.outputs.map((o) => /* @__PURE__ */ jsx("a", { class: "pill pill-link", href: o.href, children: o.label }, o.label)) })
-  ] }),
-  /* @__PURE__ */ jsx("p", { class: "r-summary", children: p.summary })
-] });
-var ProjectB = ({ p }) => /* @__PURE__ */ jsxs("div", { class: "research variant-b page-b", "data-variant-name": "Figure cover", children: [
+var Project = ({ p }) => /* @__PURE__ */ jsxs("div", { class: "research page", children: [
   /* @__PURE__ */ jsxs("div", { class: "r-cover", children: [
     /* @__PURE__ */ jsx("div", { class: "r-band-grid", "aria-hidden": "true" }),
     /* @__PURE__ */ jsxs("div", { class: "r-cover-inner", children: [
@@ -397,48 +266,22 @@ var ProjectB = ({ p }) => /* @__PURE__ */ jsxs("div", { class: "research variant
     /* @__PURE__ */ jsx("p", { class: "r-summary", children: p.summary })
   ] })
 ] });
-var Bar = () => /* @__PURE__ */ jsxs("div", { class: "proto-bar", role: "toolbar", "aria-label": "Prototype controls", children: [
-  /* @__PURE__ */ jsx("button", { class: "pv", "data-dir": "-1", "aria-label": "Previous variant", children: "\u2039" }),
-  /* @__PURE__ */ jsx("span", { class: "proto-label", children: "\u2026" }),
-  /* @__PURE__ */ jsx("button", { class: "pv", "data-dir": "1", "aria-label": "Next variant", children: "\u203A" }),
-  /* @__PURE__ */ jsx("a", { class: "proto-theme", href: "#", title: "Toggle light/dark", "aria-label": "Toggle light/dark", children: "\u25D0" })
-] });
 var ResearchPage = ({ fileData }) => {
   const slug = fileData.slug ?? "";
   if (!isResearchSlug(slug)) return null;
-  let body = null;
-  if (slug === "research/index") {
-    body = /* @__PURE__ */ jsxs(Fragment, { children: [
-      /* @__PURE__ */ jsx(HubA, {}),
-      /* @__PURE__ */ jsx(HubB, {})
-    ] });
-  } else {
-    const p = projects.find((proj) => slug.startsWith(`research/${proj.slug}`));
-    if (p) {
-      body = /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx(ProjectA, { p }),
-        /* @__PURE__ */ jsx(ProjectB, { p })
-      ] });
-    }
-  }
-  if (!body)
-    return /* @__PURE__ */ jsxs("div", { class: "research variant-a", children: [
-      /* @__PURE__ */ jsx("p", { class: "r-breadcrumb", children: "Research" }),
-      /* @__PURE__ */ jsx("h1", { class: "display", children: fmtName(fmtSlug(slug.replace("research/", "").replace("/index", ""))) })
-    ] });
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    body,
-    /* @__PURE__ */ jsx(Bar, {})
+  if (slug === "research/index") return /* @__PURE__ */ jsx(Hub, {});
+  const p = projects.find((proj) => slug.startsWith(`research/${proj.slug}`));
+  if (p) return /* @__PURE__ */ jsx(Project, { p });
+  return /* @__PURE__ */ jsxs("div", { class: "research", children: [
+    /* @__PURE__ */ jsx("p", { class: "r-breadcrumb", children: "Research" }),
+    /* @__PURE__ */ jsx("h1", { class: "display", children: fmtName(fmtSlug(slug.replace("research/", "").replace("/index", ""))) })
   ] });
 };
 ResearchPage.beforeDOMLoaded = `(function(){
-  // PROTOTYPE: light is the design; force light on research pages unless ?dark.
+  // Light is the design; force light on research pages unless ?dark.
   var p=new URLSearchParams(location.search);
   if(!p.has("dark")){localStorage.setItem("theme","light");document.documentElement.setAttribute("saved-theme","light");}
-  var v=p.get("variant"); if(v!=="a"&&v!=="b"){v="a";var u=new URL(location.href);u.searchParams.set("variant",v);history.replaceState(null,"",u.toString());}
-  document.documentElement.setAttribute("data-variant",v);
 })();`;
-ResearchPage.afterDOMLoaded = researchScript_default;
 var ResearchPage_default = (() => ResearchPage);
 
 // components-local/research/src/index.ts

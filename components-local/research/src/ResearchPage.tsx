@@ -3,18 +3,14 @@ import {
   QuartzComponentConstructor,
   QuartzComponentProps,
 } from "../../../quartz/components/types"
-import researchScript from "./researchScript"
 
 /**
- * Research hub + project-page prototype (ticket 08), on the chosen system.
- * Follows the ratified model of ticket 07 (entity model, card anatomy, project
- * header order, status vocabulary). Two presentation variants per page type,
- * switchable with `?variant=` / the prototype bar:
- *   Hub A "Ledger"  — essay-led, single-column card list
- *   Hub B "Two-up"  — section bands, 2-col card grid, one-line intro
- *   Page A "Header band"  — type then full-width Page Figure (07 literal)
- *   Page B "Figure cover" — type sits on the Page Figure slab
- * Real Figure art is ticket 16; static subject-matched placeholders here.
+ * Research hub + project pages, on the chosen system. Follows the ratified
+ * model of ticket 07 (entity model, card anatomy, project header order,
+ * status vocabulary). Mike approved variant B on 2026-09-25 (ticket 08):
+ *   Hub  "Two-up"       — section bands, 2-col card grid, one-line intro
+ *   Page "Figure cover" — type sits on the Page Figure slab
+ * Real Figure art is a post-live ticket; static subject-matched placeholders here.
  * The full paper body renders below via Quartz prose.
  */
 
@@ -283,36 +279,8 @@ const AlsoList = () => (
   </section>
 )
 
-const HubA = () => (
-  <div class="research variant-a hub-a" data-variant-name="Ledger">
-    <p class="kicker accent">Research</p>
-    <h1 class="display">Research</h1>
-    <Lede />
-    <section class="r-group">
-      <SectionHead
-        kicker="01 · Time"
-        line="The brain tracks intervals and rhythms at every scale; I study how that timing machinery can become learning rules for machines."
-      />
-      <div class="r-stack">
-        <SectionCard p={projects[0]} />
-        <SectionCard p={projects[1]} />
-      </div>
-    </section>
-    <section class="r-group">
-      <SectionHead
-        kicker="02 · Model selection"
-        line="Inferring a network from its activity means choosing a model; my master's work tested a principled criterion for that choice."
-      />
-      <div class="r-stack">
-        <SectionCard p={projects[2]} />
-      </div>
-    </section>
-    <AlsoList />
-  </div>
-)
-
-const HubB = () => (
-  <div class="research variant-b hub-b" data-variant-name="Two-up">
+const Hub = () => (
+  <div class="research hub">
     <p class="kicker accent">Research</p>
     <h1 class="display">Research</h1>
     <p class="r-lede r-lede-short">
@@ -344,43 +312,8 @@ const HubB = () => (
 )
 
 // ── Project page ──────────────────────────────────────────────
-const ProjectA = ({ p }: { p: Project }) => (
-  <div class="research variant-a page-a" data-variant-name="Header band">
-    <p class="r-breadcrumb">Research · {p.n}</p>
-    <header class="r-head">
-      <h1 class="display">{p.name}</h1>
-      <p class="r-q">{p.q}</p>
-      <div class="r-meta-row">
-        <span>{p.venue}</span>
-        <span class="r-dot" aria-hidden="true">
-          ·
-        </span>
-        <span>{p.year}</span>
-        <span class={`r-badge${p.status === "Published" ? " r-badge-solid" : ""}`}>{p.status}</span>
-      </div>
-    </header>
-    <div class="r-fig r-fig-wide">
-      {p.fig}
-      <span class="r-fig-cap">
-        Page Figure — static frame. Real per-page figures land in a later ticket.
-      </span>
-    </div>
-    <div class="r-outputs">
-      <p class="kicker">Outputs</p>
-      <div class="r-pills">
-        {p.outputs.map((o) => (
-          <a class="pill pill-link" href={o.href} key={o.label}>
-            {o.label}
-          </a>
-        ))}
-      </div>
-    </div>
-    <p class="r-summary">{p.summary}</p>
-  </div>
-)
-
-const ProjectB = ({ p }: { p: Project }) => (
-  <div class="research variant-b page-b" data-variant-name="Figure cover">
+const Project = ({ p }: { p: Project }) => (
+  <div class="research page">
     <div class="r-cover">
       <div class="r-band-grid" aria-hidden="true" />
       <div class="r-cover-inner">
@@ -421,71 +354,29 @@ const ProjectB = ({ p }: { p: Project }) => (
   </div>
 )
 
-const Bar = () => (
-  <div class="proto-bar" role="toolbar" aria-label="Prototype controls">
-    <button class="pv" data-dir="-1" aria-label="Previous variant">
-      ‹
-    </button>
-    <span class="proto-label">…</span>
-    <button class="pv" data-dir="1" aria-label="Next variant">
-      ›
-    </button>
-    <a class="proto-theme" href="#" title="Toggle light/dark" aria-label="Toggle light/dark">
-      ◐
-    </a>
-  </div>
-)
-
 const ResearchPage: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   const slug = fileData.slug ?? ""
   if (!isResearchSlug(slug)) return null
 
-  let body: JSX.Element | null = null
-  if (slug === "research/index") {
-    body = (
-      <>
-        <HubA />
-        <HubB />
-      </>
-    )
-  } else {
-    const p = projects.find((proj) => slug.startsWith(`research/${proj.slug}`))
-    if (p) {
-      body = (
-        <>
-          <ProjectA p={p} />
-          <ProjectB p={p} />
-        </>
-      )
-    }
-  }
+  if (slug === "research/index") return <Hub />
 
-  if (!body)
-    return (
-      <div class="research variant-a">
+  const p = projects.find((proj) => slug.startsWith(`research/${proj.slug}`))
+  if (p) return <Project p={p} />
+
+  return (
+    <div class="research">
         <p class="r-breadcrumb">Research</p>
         <h1 class="display">
           {fmtName(fmtSlug(slug.replace("research/", "").replace("/index", "")))}
         </h1>
-      </div>
-    )
-
-  return (
-    <>
-      {body}
-      <Bar />
-    </>
+    </div>
   )
 }
 
 ResearchPage.beforeDOMLoaded = `(function(){
-  // PROTOTYPE: light is the design; force light on research pages unless ?dark.
+  // Light is the design; force light on research pages unless ?dark.
   var p=new URLSearchParams(location.search);
   if(!p.has("dark")){localStorage.setItem("theme","light");document.documentElement.setAttribute("saved-theme","light");}
-  var v=p.get("variant"); if(v!=="a"&&v!=="b"){v="a";var u=new URL(location.href);u.searchParams.set("variant",v);history.replaceState(null,"",u.toString());}
-  document.documentElement.setAttribute("data-variant",v);
 })();`
-
-ResearchPage.afterDOMLoaded = researchScript
 
 export default (() => ResearchPage) satisfies QuartzComponentConstructor
