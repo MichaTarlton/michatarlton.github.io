@@ -40,7 +40,10 @@ export default `(function () {
 
 
   var bar = document.querySelector(".proto-bar");
-  if (bar && !bar.dataset.wired) {
+  // Only the landing's bar carries .proto-motion; on research pages the hero bar
+  // is absent and the research bar has no motion button. Guard so a missing
+  // button can't throw and abort the rest of the shared postscript bundle.
+  if (bar && bar.querySelector(".proto-motion") && !bar.dataset.wired) {
     bar.dataset.wired = "1";
     bar.querySelector(".proto-motion").addEventListener("click", function (e) {
       e.preventDefault();
