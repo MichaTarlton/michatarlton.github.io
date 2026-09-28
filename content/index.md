@@ -9,8 +9,8 @@ hero:
     label: Read featured research
     href: /research/ner-2025/
   secondaryCta:
-    label: Get in touch
-    href: mailto:M@Tarlton.info
+    label: Faculty Page
+    href: https://www.oslomet.no/en/about/employee/michaelt/
   photo: /attachments/portrait.jpg
   photoAlt: Mike Tarlton, portrait photo
 ---
