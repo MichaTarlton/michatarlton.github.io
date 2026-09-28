@@ -264,16 +264,18 @@ plugins:
     options: {}
     order: 50
   - source: "@quartz-community/note-properties"
-    # Disabled 2026-09-25: the Properties box read as exposed frontmatter on Hub
-    # pages (CV especially). Revisit post-live if wiki notes want it back.
-    enabled: false
+    # 2026-09-25: keep ENABLED — this plugin owns remark-frontmatter for the whole
+    # site (parses the --- block into file.data.frontmatter). Disabling it broke
+    # every title ("Untitled") and the hero frontmatter. hidePropertiesView: true
+    # hides the Properties box instead.
+    enabled: true
     options:
       includeAll: false
       includedProperties:
         - description
         - tags
       excludedProperties: []
-      hidePropertiesView: false
+      hidePropertiesView: true
       delimiters: ---
       language: yaml
     order: 5
