@@ -6,11 +6,11 @@ hero:
   identity: I build artificially thinking systems inspired by physics and neuroscience; spiking neural networks and neuro-dynamics models, groundwork for the next generation of machine intelligence.
   status: Available for research positions
   primaryCta:
-    label: Read featured research
-    href: /research/ner-2025/
-  secondaryCta:
     label: Faculty Page
-    href: https://www.oslomet.no/en/about/employee/michaelt/
+    href: https://www.oslomet.no/en/about/employee/michaelt
+  secondaryCta:
+    label: Get in touch
+    href: mailto:M@Tarlton.info
   photo: /attachments/portrait.jpg
   photoAlt: Mike Tarlton, portrait photo
 ---
