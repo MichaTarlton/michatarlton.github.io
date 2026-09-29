@@ -7,13 +7,13 @@ hero:
   thinking: how timing in neurons could make machine learning cheaper at the edge
   status: Available for research positions
   primaryCta:
-    label: Read featured research
-    href: /research/ner-2025/
+    label: Faculty Page
+    href: https://www.oslomet.no/en/about/employee/michaelt/
   secondaryCta:
-    label: Get in touch
+    label: Email
     href: mailto:M@Tarlton.info
   photo: /attachments/portrait.jpg
-  photoAlt: Mike Tarlton, portrait photo
+  photoAlt: Mike hard at work
 ---
 
 <!-- Landing body is rendered by components-local/hero during the ticket-05 prototype. -->
