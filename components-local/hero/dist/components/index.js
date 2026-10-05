@@ -295,14 +295,7 @@ var Hero = ({ fileData }) => {
   const hero = fileData.frontmatter?.hero ?? {};
   hero.name ??= "Mike Tarlton";
   hero.identity ??= "Neuro-AI researcher building brain-inspired learning systems.";
-  return /* @__PURE__ */ jsxs("div", { class: "landing-proto", children: [
-    /* @__PURE__ */ jsx(Landing, { hero }),
-    /* @__PURE__ */ jsxs("div", { class: "proto-bar", role: "toolbar", "aria-label": "Prototype controls", hidden: true, children: [
-      /* @__PURE__ */ jsx("span", { class: "proto-label", children: "Studio" }),
-      /* @__PURE__ */ jsx("a", { class: "proto-theme", href: "#", title: "Toggle light/dark", children: "\u25D0" }),
-      /* @__PURE__ */ jsx("a", { class: "proto-motion", href: "#", title: "Toggle motion override (?motion=on|off)", children: "motion: \u2026" })
-    ] })
-  ] });
+  return /* @__PURE__ */ jsx("div", { class: "landing-proto", children: /* @__PURE__ */ jsx(Landing, { hero }) });
 };
 Hero.beforeDOMLoaded = `(function(){
   // PROTOTYPE: light is the design; force light on the landing unless ?dark.

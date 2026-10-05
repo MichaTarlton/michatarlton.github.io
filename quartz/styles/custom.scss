@@ -275,19 +275,6 @@ img.photo { object-fit: cover; display: block; background: var(--surface); }
 }
 }
 
-// ── Prototype switcher bar (not part of the design) ─────────
-.proto-bar {
-  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 1000;
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; border-radius: 999px;
-  background: #111; color: #fff; font: 12px/1 ui-monospace, monospace;
-  box-shadow: 0 8px 24px rgba(0,0,0,.35);
-  button, a { background: #333; color: #fff; border: 0; border-radius: 999px; width: 28px; height: 28px; cursor: pointer; text-decoration: none; display: grid; place-items: center; font-size: 14px; }
-  button:hover, a:hover { background: #555; color: #fff; }
-  .proto-label { white-space: nowrap; }
-  .proto-motion { width: auto; padding: 0 10px; white-space: nowrap; font-size: 11px; color: #ffd27a; }
-}
-
 // ── Prose (non-landing pages) ───────────────────────────────
 article { max-width: 68ch; h2 { border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2); margin-top: var(--space-7); } }
 .content-meta, .breadcrumb-element { font-family: var(--codeFont); font-size: 0.72rem; letter-spacing: 0.06em; opacity: 0.72; }
