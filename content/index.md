@@ -1,16 +1,13 @@
 ---
 title: Mike Tarlton
-description: Mike Tarlton — Neuro-AI researcher building brain-inspired learning systems for low-energy edge hardware. Available for research positions.
+description: Mike Tarlton, Neuro-AI researcher building brain-inspired learning systems for low-energy edge hardware. Available for research positions.
 hero:
   name: Mike Tarlton
   identity: I build artificially thinking systems inspired by physics and neuroscience; spiking neural networks and neuro-dynamics models, groundwork for the next generation of machine intelligence.
-  status: Available for research positions
+  status: PhD candidate at OsloMet, open to research positions
   primaryCta:
-    label: Faculty Page
+    label: Faculty page
     href: https://www.oslomet.no/en/about/employee/michaelt
-  secondaryCta:
-    label: Get in touch
-    href: mailto:M@Tarlton.info
   photo: /attachments/portrait.jpg
   photoAlt: Mike Tarlton, portrait photo
 ---

@@ -149,7 +149,7 @@ var research = [
     n: "01",
     href: "/research/ner-2025/",
     q: "Can the brain's way of keeping time make machine learning cheaper at the edge?",
-    meta: "SBF-Automata \xB7 IEEE NER 2025",
+    meta: "SBF-Automata, IEEE NER 2025",
     blurb: "A reinforcement-learning architecture transposed from the striatal beat-frequency model: online periodicity learning encoded directly in synaptic weights, built for neuromorphic edge hardware.",
     status: "Published",
     fig: /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 200 80", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", children: [
@@ -169,8 +169,8 @@ var research = [
     n: "02",
     href: "/research/phd-overview/",
     q: "How does time itself emerge from the plasticity of single neurons?",
-    meta: "PhD Research \xB7 OsloMet",
-    blurb: "Designing learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics \u2014 for online, always-on, low-energy learning.",
+    meta: "PhD research, OsloMet",
+    blurb: "Designing learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics, for online, always-on, low-energy learning.",
     status: "In progress",
     fig: /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 200 80", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", children: [
       /* @__PURE__ */ jsx("path", { d: "M0 34 Q 25 8 50 34 T 100 34 T 150 34 T 200 34" }),
@@ -182,8 +182,8 @@ var research = [
     n: "03",
     href: "/research/masters-thesis/",
     q: "How do you choose the right model when inferring networks from spiking data?",
-    meta: "MSc Thesis \xB7 Kavli Institute, NTNU",
-    blurb: "An information-based Bayesian criterion for inferring Ising-model networks from neural spiking activity \u2014 designed, simulated, and evaluated on HPC clusters.",
+    meta: "MSc thesis, Kavli Institute at NTNU",
+    blurb: "An information-based Bayesian criterion for inferring Ising-model networks from neural spiking activity, designed, simulated, and evaluated on HPC clusters.",
     status: "Thesis",
     fig: /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 200 80", fill: "currentColor", children: [
       /* @__PURE__ */ jsx("path", { d: "M28 18 l6 10 h-12 z" }),
@@ -220,22 +220,14 @@ var Photo = ({ size, hero }) => hero.photo ? /* @__PURE__ */ jsx(
 var Ctas = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "ctas", children: [
   hero.primaryCta && /* @__PURE__ */ jsx("a", { class: "cta cta-primary", href: hero.primaryCta.href, children: hero.primaryCta.label }),
   hero.secondaryCta && /* @__PURE__ */ jsx("a", { class: "cta cta-secondary", href: hero.secondaryCta.href, children: hero.secondaryCta.label }),
-  /* @__PURE__ */ jsx("a", { class: "cta cta-ghost", href: "/cv/", children: "CV" })
+  /* @__PURE__ */ jsx("a", { class: "cta cta-secondary", href: "/cv/", children: "CV" })
 ] });
 var Status = ({ text }) => text ? /* @__PURE__ */ jsxs("p", { class: "status", children: [
   /* @__PURE__ */ jsx("span", { class: "status-dot", "aria-hidden": "true" }),
   text
 ] }) : null;
-var Facts = () => /* @__PURE__ */ jsxs("dl", { class: "facts", children: [
-  /* @__PURE__ */ jsx("dt", { children: "Based" }),
-  /* @__PURE__ */ jsx("dd", { children: "Oslo, Norway" }),
-  /* @__PURE__ */ jsx("dt", { children: "Affiliation" }),
-  /* @__PURE__ */ jsx("dd", { children: "OsloMet" }),
-  /* @__PURE__ */ jsx("dt", { children: "Email" }),
-  /* @__PURE__ */ jsx("dd", { children: /* @__PURE__ */ jsx("a", { href: "mailto:M@Tarlton.info", children: "M@Tarlton.info" }) })
-] });
 var Contact = () => /* @__PURE__ */ jsxs("section", { class: "contact", children: [
-  /* @__PURE__ */ jsx("p", { class: "kicker", children: "Contact" }),
+  /* @__PURE__ */ jsx("h2", { children: "Contact" }),
   /* @__PURE__ */ jsxs("p", { class: "contact-copy", children: [
     "I'm looking for research positions in neuro-AI, neuromorphic computing and brain-inspired learning. ",
     /* @__PURE__ */ jsx("a", { href: "mailto:M@Tarlton.info", children: "Email me" }),
@@ -257,12 +249,10 @@ var Landing = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varian
     /* @__PURE__ */ jsxs("div", { class: "a-hero-inner", children: [
       /* @__PURE__ */ jsx(Photo, { size: "lg", hero }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "NeuroAI researcher \xB7 Oslo" }),
+        /* @__PURE__ */ jsx(Status, { text: hero.status ?? "" }),
         /* @__PURE__ */ jsx("h1", { class: "display", children: hero.name }),
         /* @__PURE__ */ jsx("p", { class: "lede", children: hero.identity }),
-        /* @__PURE__ */ jsx(Status, { text: hero.status ?? "" }),
-        /* @__PURE__ */ jsx(Ctas, { hero }),
-        /* @__PURE__ */ jsx(Facts, {})
+        /* @__PURE__ */ jsx(Ctas, { hero })
       ] })
     ] })
   ] }),

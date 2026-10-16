@@ -29,7 +29,7 @@ const research = [
     n: "01",
     href: "/research/ner-2025/",
     q: "Can the brain's way of keeping time make machine learning cheaper at the edge?",
-    meta: "SBF-Automata · IEEE NER 2025",
+    meta: "SBF-Automata, IEEE NER 2025",
     blurb:
       "A reinforcement-learning architecture transposed from the striatal beat-frequency model: online periodicity learning encoded directly in synaptic weights, built for neuromorphic edge hardware.",
     status: "Published",
@@ -52,9 +52,9 @@ const research = [
     n: "02",
     href: "/research/phd-overview/",
     q: "How does time itself emerge from the plasticity of single neurons?",
-    meta: "PhD Research · OsloMet",
+    meta: "PhD research, OsloMet",
     blurb:
-      "Designing learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics — for online, always-on, low-energy learning.",
+      "Designing learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics, for online, always-on, low-energy learning.",
     status: "In progress",
     fig: (
       <svg viewBox="0 0 200 80" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -68,9 +68,9 @@ const research = [
     n: "03",
     href: "/research/masters-thesis/",
     q: "How do you choose the right model when inferring networks from spiking data?",
-    meta: "MSc Thesis · Kavli Institute, NTNU",
+    meta: "MSc thesis, Kavli Institute at NTNU",
     blurb:
-      "An information-based Bayesian criterion for inferring Ising-model networks from neural spiking activity — designed, simulated, and evaluated on HPC clusters.",
+      "An information-based Bayesian criterion for inferring Ising-model networks from neural spiking activity, designed, simulated, and evaluated on HPC clusters.",
     status: "Thesis",
     fig: (
       <svg viewBox="0 0 200 80" fill="currentColor">
@@ -111,7 +111,7 @@ const Ctas = ({ hero }: { hero: HeroCopy }) => (
     {hero.secondaryCta && (
       <a class="cta cta-secondary" href={hero.secondaryCta.href}>{hero.secondaryCta.label}</a>
     )}
-    <a class="cta cta-ghost" href="/cv/">CV</a>
+    <a class="cta cta-secondary" href="/cv/">CV</a>
   </div>
 )
 
@@ -123,17 +123,9 @@ const Status = ({ text }: { text: string }) =>
     </p>
   ) : null
 
-const Facts = () => (
-  <dl class="facts">
-    <dt>Based</dt><dd>Oslo, Norway</dd>
-    <dt>Affiliation</dt><dd>OsloMet</dd>
-    <dt>Email</dt><dd><a href="mailto:M@Tarlton.info">M@Tarlton.info</a></dd>
-  </dl>
-)
-
 const Contact = () => (
   <section class="contact">
-    <p class="kicker">Contact</p>
+    <h2>Contact</h2>
     <p class="contact-copy">
       I'm looking for research positions in neuro-AI, neuromorphic computing and
       brain-inspired learning. <a href="mailto:M@Tarlton.info">Email me</a>, or find me on{" "}
@@ -154,12 +146,10 @@ const Landing = ({ hero }: { hero: HeroCopy }) => (
       <div class="a-hero-inner">
         <Photo size="lg" hero={hero} />
         <div>
-          <p class="kicker accent">NeuroAI researcher · Oslo</p>
+          <Status text={hero.status ?? ""} />
           <h1 class="display">{hero.name}</h1>
           <p class="lede">{hero.identity}</p>
-          <Status text={hero.status ?? ""} />
           <Ctas hero={hero} />
-          <Facts />
         </div>
       </div>
     </section>

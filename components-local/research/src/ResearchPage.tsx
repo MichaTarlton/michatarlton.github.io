@@ -24,12 +24,10 @@ interface Output {
 }
 
 interface Project {
-  n: string
   slug: string
   name: string
   status: string
   venue: string
-  year: string
   q: string
   meta: string
   blurb: string
@@ -87,7 +85,7 @@ function rasterFigure(rhythms: number[], tcap: number): JSX.Element {
         font-size="5"
         font-family="var(--codeFont)"
       >
-        T_C
+        T<tspan font-size="3.5" dy="1.2">C</tspan>
       </text>
     </svg>
   )
@@ -152,18 +150,16 @@ function latticeFigure(): JSX.Element {
 
 const projects: Project[] = [
   {
-    n: "01",
     slug: "ner-2025",
     name: "SBF-Automata",
     status: "Published",
-    venue: "Principal author · Spotlight poster · IEEE NER 2025 · San Diego",
-    year: "2025",
+    venue: "Principal author, spotlight poster at IEEE NER 2025 in San Diego",
     q: "Can the brain's way of keeping time make machine learning cheaper at the edge?",
-    meta: "SBF-Automata · IEEE NER 2025",
+    meta: "SBF-Automata, IEEE NER 2025",
     blurb:
-      "I transposed the striatal beat-frequency model into a reinforcement-learning automaton that learns intervals online, encoded directly in its weights, and showed it works at the edge in O(N) localized updates — no central clock, no global error signal.",
+      "I transposed the striatal beat-frequency model into a reinforcement-learning automaton that learns intervals online, encoded directly in its weights, and showed it works at the edge in O(N) localized updates, with no central clock and no global error signal.",
     summary:
-      "Periodicity finding is a workload the brain does for free and machines do expensively. I built a reinforcement-learning automaton from the striatal beat-frequency model of interval timing: a bank of oscillating units whose weights learn which periodicities predict reward, updating locally and online. Against FFT, autocorrelation and Autoperiod, SBF-A matched or beat them in speed, stability and accuracy — in O(N) per update, suited to neuromorphic edge hardware.",
+      "Periodicity finding is a workload the brain does for free and machines do expensively. I built a reinforcement-learning automaton from the striatal beat-frequency model of interval timing: a bank of oscillating units whose weights learn which periodicities predict reward, updating locally and online. Against FFT, autocorrelation and Autoperiod, SBF-A matched or beat them in speed, stability and accuracy, in O(N) per update, suited to neuromorphic edge hardware.",
     outputs: [
       {
         label: "Paper PDF",
@@ -173,18 +169,16 @@ const projects: Project[] = [
     fig: rasterFigure([3, 6, 12, 24, 36, 48], 24),
   },
   {
-    n: "02",
     slug: "phd-overview",
     name: "PhD Research Overview",
     status: "In progress",
-    venue: "PhD candidate · Artificial intelligence · Oslo Metropolitan University",
-    year: "2022–",
+    venue: "PhD candidate in artificial intelligence at Oslo Metropolitan University, since 2022",
     q: "How does time itself emerge from the plasticity of single neurons?",
-    meta: "PhD Research · OsloMet",
+    meta: "PhD research, OsloMet",
     blurb:
-      "My doctoral programme designs learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics — for online, always-on, low-energy learning machines.",
+      "My doctoral programme designs learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics, for online, always-on, low-energy learning machines.",
     summary:
-      "Biological brains compute with time — spike intervals, synchrony, oscillations — and artificial networks largely ignore it. My PhD asks whether the brain's time-based mechanisms can become practical learning rules: spike-timing plasticity as a learning signal, oscillator-based computation, and temporal structure that emerges from the plasticity of individual neurons. The goal is machine learning that is online, always-on, and radically low-energy.",
+      "Biological brains compute with time (spike intervals, synchrony, oscillations), and artificial networks largely ignore it. My PhD asks whether the brain's time-based mechanisms can become practical learning rules: spike-timing plasticity as a learning signal, oscillator-based computation, and temporal structure that emerges from the plasticity of individual neurons. The goal is machine learning that is online, always-on, and radically low-energy.",
     outputs: [
       { label: "Poster", href: "/research/ner-2025/" },
       { label: "Essay", href: "/wiki/" },
@@ -192,18 +186,16 @@ const projects: Project[] = [
     fig: attractorFigure(),
   },
   {
-    n: "03",
     slug: "masters-thesis",
-    name: "MSc Thesis — Model Selection for Ising Inference",
+    name: "MSc Thesis: Model Selection for Ising Inference",
     status: "Published",
-    venue: "M.Sc. neuroscience · Kavli Institute, NTNU · Roudi group",
-    year: "2021",
+    venue: "MSc in neuroscience, Roudi group, Kavli Institute at NTNU, 2021",
     q: "How do you choose the right model when inferring networks from spiking data?",
-    meta: "MSc Thesis · Kavli Institute, NTNU",
+    meta: "MSc thesis, Kavli Institute at NTNU",
     blurb:
-      "I derived and tested an information-based Bayesian criterion for choosing among Ising-model networks when inferring connectivity from neural spiking — designed, simulated, and evaluated on HPC clusters.",
+      "I derived and tested an information-based Bayesian criterion for choosing among Ising-model networks when inferring connectivity from neural spiking, with the simulations and evaluation run on HPC clusters.",
     summary:
-      "Record a population of neurons and you can ask how its cells are connected — but every answer depends on the model you choose to infer with: too simple misses structure, too complex fits noise. My thesis evaluated a novel information-based Bayesian criterion for exactly this choice, across candidate Ising-model topologies, simulated at scale on NTNU's IDUN cluster.",
+      "Record a population of neurons and you can ask how its cells are connected, but every answer depends on the model you choose to infer with: too simple misses structure, too complex fits noise. My thesis evaluated a novel information-based Bayesian criterion for exactly this choice, across candidate Ising-model topologies, simulated at scale on NTNU's IDUN cluster.",
     outputs: [
       {
         label: "Thesis PDF",
@@ -217,13 +209,13 @@ const projects: Project[] = [
 const also = [
   {
     label: "Oscillatory Timing Models in RL-Automata (AAMAS 2024)",
-    meta: "Poster · PDF",
+    meta: "Poster (PDF)",
     href: "/attachments/aamas-2024-oscillatory-timing-models.pdf",
   },
   {
     label:
       "Experiencing a Slice of the Sky: Immersive Rendering and Sonification of Antarctic Astronomy Data",
-    meta: "Mixed-media installation · xREZ Art + Science Lab, UNT",
+    meta: "Mixed-media installation, xREZ Art + Science Lab, UNT",
     href: "https://doi.org/10.2352/ISSN.2470-1173.2018.03.ERVR-449",
   },
 ]
@@ -235,7 +227,6 @@ const fmtSlug = (s: string) => s.replace(/-/g, " ")
 const SectionCard = ({ p }: { p: Project }) => (
   <a class="r-card" href={`/research/${p.slug}/`}>
     <div class="r-card-top">
-      <span class="r-n">{p.n}</span>
       <span class={`r-badge${p.status === "Published" ? " r-badge-solid" : ""}`}>{p.status}</span>
     </div>
     <div class="r-fig">{p.fig}</div>
@@ -281,15 +272,12 @@ const AlsoList = () => (
 
 const Hub = () => (
   <div class="research hub">
-    <p class="kicker accent">Research</p>
     <h1 class="display">Research</h1>
     <p class="r-lede r-lede-short">
       The work below is grouped by the questions it answers, not the papers it produced.
     </p>
     <section class="r-band">
-      <div class="r-band-grid" aria-hidden="true" />
       <div class="r-band-inner">
-        <p class="kicker accent">01 · Time</p>
         <h2 class="q">Time, learned by machines</h2>
         <div class="r-grid">
           <SectionCard p={projects[0]} />
@@ -298,9 +286,7 @@ const Hub = () => (
       </div>
     </section>
     <section class="r-band">
-      <div class="r-band-grid" aria-hidden="true" />
       <div class="r-band-inner">
-        <p class="kicker accent">02 · Model selection</p>
         <h2 class="q">Reading structure out of data</h2>
         <div class="r-grid">
           <SectionCard p={projects[2]} />
@@ -315,27 +301,19 @@ const Hub = () => (
 const Project = ({ p }: { p: Project }) => (
   <div class="research page">
     <div class="r-cover">
-      <div class="r-band-grid" aria-hidden="true" />
       <div class="r-cover-inner">
-        <p class="r-breadcrumb">Research · {p.n}</p>
+        <a class="r-breadcrumb" href="/research/">Research</a>
         <header class="r-head">
           <h1 class="display">{p.name}</h1>
           <p class="r-q">{p.q}</p>
           <div class="r-meta-row">
             <span>{p.venue}</span>
-            <span class="r-dot" aria-hidden="true">
-              ·
-            </span>
-            <span>{p.year}</span>
             <span class={`r-badge${p.status === "Published" ? " r-badge-solid" : ""}`}>
               {p.status}
             </span>
           </div>
         </header>
         <div class="r-fig">{p.fig}</div>
-        <span class="r-fig-cap">
-          Page Figure — static frame. Real per-page figures land in a later ticket.
-        </span>
       </div>
     </div>
     <div class="r-sheet">

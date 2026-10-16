@@ -1,6 +1,6 @@
 ---
-title: SBF-Automata — IEEE NER 2025
-description: Investigation of a novel SBF-Automata architecture for periodicity-finding solutions at edge systems — spotlight poster at IEEE NER 2025, San Diego.
+title: "SBF-Automata: IEEE NER 2025"
+description: Investigation of a novel SBF-Automata architecture for periodicity-finding solutions at edge systems. Spotlight poster at IEEE NER 2025, San Diego.
 draft: false
 ---
 

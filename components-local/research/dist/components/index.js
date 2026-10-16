@@ -52,7 +52,7 @@ function rasterFigure(rhythms, tcap) {
     rows,
     edges,
     /* @__PURE__ */ jsx("line", { x1: tcol, y1: "6", x2: tcol, y2: "78", "stroke-dasharray": "2 3", opacity: "0.4" }),
-    /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsxs(
       "text",
       {
         x: tcol + 2,
@@ -61,7 +61,10 @@ function rasterFigure(rhythms, tcap) {
         stroke: "none",
         "font-size": "5",
         "font-family": "var(--codeFont)",
-        children: "T_C"
+        children: [
+          "T",
+          /* @__PURE__ */ jsx("tspan", { "font-size": "3.5", dy: "1.2", children: "C" })
+        ]
       }
     )
   ] });
@@ -121,16 +124,14 @@ function latticeFigure() {
 }
 var projects = [
   {
-    n: "01",
     slug: "ner-2025",
     name: "SBF-Automata",
     status: "Published",
-    venue: "Principal author \xB7 Spotlight poster \xB7 IEEE NER 2025 \xB7 San Diego",
-    year: "2025",
+    venue: "Principal author, spotlight poster at IEEE NER 2025 in San Diego",
     q: "Can the brain's way of keeping time make machine learning cheaper at the edge?",
-    meta: "SBF-Automata \xB7 IEEE NER 2025",
-    blurb: "I transposed the striatal beat-frequency model into a reinforcement-learning automaton that learns intervals online, encoded directly in its weights, and showed it works at the edge in O(N) localized updates \u2014 no central clock, no global error signal.",
-    summary: "Periodicity finding is a workload the brain does for free and machines do expensively. I built a reinforcement-learning automaton from the striatal beat-frequency model of interval timing: a bank of oscillating units whose weights learn which periodicities predict reward, updating locally and online. Against FFT, autocorrelation and Autoperiod, SBF-A matched or beat them in speed, stability and accuracy \u2014 in O(N) per update, suited to neuromorphic edge hardware.",
+    meta: "SBF-Automata, IEEE NER 2025",
+    blurb: "I transposed the striatal beat-frequency model into a reinforcement-learning automaton that learns intervals online, encoded directly in its weights, and showed it works at the edge in O(N) localized updates, with no central clock and no global error signal.",
+    summary: "Periodicity finding is a workload the brain does for free and machines do expensively. I built a reinforcement-learning automaton from the striatal beat-frequency model of interval timing: a bank of oscillating units whose weights learn which periodicities predict reward, updating locally and online. Against FFT, autocorrelation and Autoperiod, SBF-A matched or beat them in speed, stability and accuracy, in O(N) per update, suited to neuromorphic edge hardware.",
     outputs: [
       {
         label: "Paper PDF",
@@ -140,16 +141,14 @@ var projects = [
     fig: rasterFigure([3, 6, 12, 24, 36, 48], 24)
   },
   {
-    n: "02",
     slug: "phd-overview",
     name: "PhD Research Overview",
     status: "In progress",
-    venue: "PhD candidate \xB7 Artificial intelligence \xB7 Oslo Metropolitan University",
-    year: "2022\u2013",
+    venue: "PhD candidate in artificial intelligence at Oslo Metropolitan University, since 2022",
     q: "How does time itself emerge from the plasticity of single neurons?",
-    meta: "PhD Research \xB7 OsloMet",
-    blurb: "My doctoral programme designs learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics \u2014 for online, always-on, low-energy learning machines.",
-    summary: "Biological brains compute with time \u2014 spike intervals, synchrony, oscillations \u2014 and artificial networks largely ignore it. My PhD asks whether the brain's time-based mechanisms can become practical learning rules: spike-timing plasticity as a learning signal, oscillator-based computation, and temporal structure that emerges from the plasticity of individual neurons. The goal is machine learning that is online, always-on, and radically low-energy.",
+    meta: "PhD research, OsloMet",
+    blurb: "My doctoral programme designs learning rules for deep spiking neural networks in which spike-timing plasticity gives rise to temporal dynamics, for online, always-on, low-energy learning machines.",
+    summary: "Biological brains compute with time (spike intervals, synchrony, oscillations), and artificial networks largely ignore it. My PhD asks whether the brain's time-based mechanisms can become practical learning rules: spike-timing plasticity as a learning signal, oscillator-based computation, and temporal structure that emerges from the plasticity of individual neurons. The goal is machine learning that is online, always-on, and radically low-energy.",
     outputs: [
       { label: "Poster", href: "/research/ner-2025/" },
       { label: "Essay", href: "/wiki/" }
@@ -157,16 +156,14 @@ var projects = [
     fig: attractorFigure()
   },
   {
-    n: "03",
     slug: "masters-thesis",
-    name: "MSc Thesis \u2014 Model Selection for Ising Inference",
+    name: "MSc Thesis: Model Selection for Ising Inference",
     status: "Published",
-    venue: "M.Sc. neuroscience \xB7 Kavli Institute, NTNU \xB7 Roudi group",
-    year: "2021",
+    venue: "MSc in neuroscience, Roudi group, Kavli Institute at NTNU, 2021",
     q: "How do you choose the right model when inferring networks from spiking data?",
-    meta: "MSc Thesis \xB7 Kavli Institute, NTNU",
-    blurb: "I derived and tested an information-based Bayesian criterion for choosing among Ising-model networks when inferring connectivity from neural spiking \u2014 designed, simulated, and evaluated on HPC clusters.",
-    summary: "Record a population of neurons and you can ask how its cells are connected \u2014 but every answer depends on the model you choose to infer with: too simple misses structure, too complex fits noise. My thesis evaluated a novel information-based Bayesian criterion for exactly this choice, across candidate Ising-model topologies, simulated at scale on NTNU's IDUN cluster.",
+    meta: "MSc thesis, Kavli Institute at NTNU",
+    blurb: "I derived and tested an information-based Bayesian criterion for choosing among Ising-model networks when inferring connectivity from neural spiking, with the simulations and evaluation run on HPC clusters.",
+    summary: "Record a population of neurons and you can ask how its cells are connected, but every answer depends on the model you choose to infer with: too simple misses structure, too complex fits noise. My thesis evaluated a novel information-based Bayesian criterion for exactly this choice, across candidate Ising-model topologies, simulated at scale on NTNU's IDUN cluster.",
     outputs: [
       {
         label: "Thesis PDF",
@@ -179,22 +176,19 @@ var projects = [
 var also = [
   {
     label: "Oscillatory Timing Models in RL-Automata (AAMAS 2024)",
-    meta: "Poster \xB7 PDF",
+    meta: "Poster (PDF)",
     href: "/attachments/aamas-2024-oscillatory-timing-models.pdf"
   },
   {
     label: "Experiencing a Slice of the Sky: Immersive Rendering and Sonification of Antarctic Astronomy Data",
-    meta: "Mixed-media installation \xB7 xREZ Art + Science Lab, UNT",
+    meta: "Mixed-media installation, xREZ Art + Science Lab, UNT",
     href: "https://doi.org/10.2352/ISSN.2470-1173.2018.03.ERVR-449"
   }
 ];
 var fmtName = (s) => s.slice(0, 1) + s.slice(1).toLowerCase();
 var fmtSlug = (s) => s.replace(/-/g, " ");
 var SectionCard = ({ p }) => /* @__PURE__ */ jsxs("a", { class: "r-card", href: `/research/${p.slug}/`, children: [
-  /* @__PURE__ */ jsxs("div", { class: "r-card-top", children: [
-    /* @__PURE__ */ jsx("span", { class: "r-n", children: p.n }),
-    /* @__PURE__ */ jsx("span", { class: `r-badge${p.status === "Published" ? " r-badge-solid" : ""}`, children: p.status })
-  ] }),
+  /* @__PURE__ */ jsx("div", { class: "r-card-top", children: /* @__PURE__ */ jsx("span", { class: `r-badge${p.status === "Published" ? " r-badge-solid" : ""}`, children: p.status }) }),
   /* @__PURE__ */ jsx("div", { class: "r-fig", children: p.fig }),
   /* @__PURE__ */ jsx("h3", { class: "q", children: p.q }),
   /* @__PURE__ */ jsx("p", { class: "r-meta", children: p.meta }),
@@ -212,52 +206,34 @@ var AlsoList = () => /* @__PURE__ */ jsxs("section", { class: "r-also", children
   ] })
 ] });
 var Hub = () => /* @__PURE__ */ jsxs("div", { class: "research hub", children: [
-  /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "Research" }),
   /* @__PURE__ */ jsx("h1", { class: "display", children: "Research" }),
   /* @__PURE__ */ jsx("p", { class: "r-lede r-lede-short", children: "The work below is grouped by the questions it answers, not the papers it produced." }),
-  /* @__PURE__ */ jsxs("section", { class: "r-band", children: [
-    /* @__PURE__ */ jsx("div", { class: "r-band-grid", "aria-hidden": "true" }),
-    /* @__PURE__ */ jsxs("div", { class: "r-band-inner", children: [
-      /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "01 \xB7 Time" }),
-      /* @__PURE__ */ jsx("h2", { class: "q", children: "Time, learned by machines" }),
-      /* @__PURE__ */ jsxs("div", { class: "r-grid", children: [
-        /* @__PURE__ */ jsx(SectionCard, { p: projects[0] }),
-        /* @__PURE__ */ jsx(SectionCard, { p: projects[1] })
-      ] })
+  /* @__PURE__ */ jsx("section", { class: "r-band", children: /* @__PURE__ */ jsxs("div", { class: "r-band-inner", children: [
+    /* @__PURE__ */ jsx("h2", { class: "q", children: "Time, learned by machines" }),
+    /* @__PURE__ */ jsxs("div", { class: "r-grid", children: [
+      /* @__PURE__ */ jsx(SectionCard, { p: projects[0] }),
+      /* @__PURE__ */ jsx(SectionCard, { p: projects[1] })
     ] })
-  ] }),
-  /* @__PURE__ */ jsxs("section", { class: "r-band", children: [
-    /* @__PURE__ */ jsx("div", { class: "r-band-grid", "aria-hidden": "true" }),
-    /* @__PURE__ */ jsxs("div", { class: "r-band-inner", children: [
-      /* @__PURE__ */ jsx("p", { class: "kicker accent", children: "02 \xB7 Model selection" }),
-      /* @__PURE__ */ jsx("h2", { class: "q", children: "Reading structure out of data" }),
-      /* @__PURE__ */ jsx("div", { class: "r-grid", children: /* @__PURE__ */ jsx(SectionCard, { p: projects[2] }) })
-    ] })
-  ] }),
+  ] }) }),
+  /* @__PURE__ */ jsx("section", { class: "r-band", children: /* @__PURE__ */ jsxs("div", { class: "r-band-inner", children: [
+    /* @__PURE__ */ jsx("h2", { class: "q", children: "Reading structure out of data" }),
+    /* @__PURE__ */ jsx("div", { class: "r-grid", children: /* @__PURE__ */ jsx(SectionCard, { p: projects[2] }) })
+  ] }) }),
   /* @__PURE__ */ jsx(AlsoList, {})
 ] });
 var Project = ({ p }) => /* @__PURE__ */ jsxs("div", { class: "research page", children: [
-  /* @__PURE__ */ jsxs("div", { class: "r-cover", children: [
-    /* @__PURE__ */ jsx("div", { class: "r-band-grid", "aria-hidden": "true" }),
-    /* @__PURE__ */ jsxs("div", { class: "r-cover-inner", children: [
-      /* @__PURE__ */ jsxs("p", { class: "r-breadcrumb", children: [
-        "Research \xB7 ",
-        p.n
-      ] }),
-      /* @__PURE__ */ jsxs("header", { class: "r-head", children: [
-        /* @__PURE__ */ jsx("h1", { class: "display", children: p.name }),
-        /* @__PURE__ */ jsx("p", { class: "r-q", children: p.q }),
-        /* @__PURE__ */ jsxs("div", { class: "r-meta-row", children: [
-          /* @__PURE__ */ jsx("span", { children: p.venue }),
-          /* @__PURE__ */ jsx("span", { class: "r-dot", "aria-hidden": "true", children: "\xB7" }),
-          /* @__PURE__ */ jsx("span", { children: p.year }),
-          /* @__PURE__ */ jsx("span", { class: `r-badge${p.status === "Published" ? " r-badge-solid" : ""}`, children: p.status })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsx("div", { class: "r-fig", children: p.fig }),
-      /* @__PURE__ */ jsx("span", { class: "r-fig-cap", children: "Page Figure \u2014 static frame. Real per-page figures land in a later ticket." })
-    ] })
-  ] }),
+  /* @__PURE__ */ jsx("div", { class: "r-cover", children: /* @__PURE__ */ jsxs("div", { class: "r-cover-inner", children: [
+    /* @__PURE__ */ jsx("a", { class: "r-breadcrumb", href: "/research/", children: "Research" }),
+    /* @__PURE__ */ jsxs("header", { class: "r-head", children: [
+      /* @__PURE__ */ jsx("h1", { class: "display", children: p.name }),
+      /* @__PURE__ */ jsx("p", { class: "r-q", children: p.q }),
+      /* @__PURE__ */ jsxs("div", { class: "r-meta-row", children: [
+        /* @__PURE__ */ jsx("span", { children: p.venue }),
+        /* @__PURE__ */ jsx("span", { class: `r-badge${p.status === "Published" ? " r-badge-solid" : ""}`, children: p.status })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { class: "r-fig", children: p.fig })
+  ] }) }),
   /* @__PURE__ */ jsxs("div", { class: "r-sheet", children: [
     /* @__PURE__ */ jsxs("div", { class: "r-outputs", children: [
       /* @__PURE__ */ jsx("p", { class: "kicker", children: "Outputs" }),

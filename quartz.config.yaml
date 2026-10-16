@@ -226,7 +226,6 @@ plugins:
         LinkedIn: https://www.linkedin.com/in/m-tarlton/
         GitHub: https://github.com/MichaTarlton
         RSS: /index.xml
-        Subscribe: https://neuroai.beehiiv.com/subscribe
     layout:
       position: footer
       priority: 50
