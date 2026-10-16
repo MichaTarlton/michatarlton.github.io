@@ -24,6 +24,9 @@ function LegacyRedirects() {
       const out = ctx.argv.output;
       const contentDir = ctx.argv.directory;
       const stubs = [
+        // v4 served the CV page as a cased leaf at /CV; v5's auto cased-filename
+        // alias vanished when the page moved to content/cv/index.md, so pin it here.
+        ["CV", "cv/"],
         ["NER_2025", "research/ner-2025/"],
         ["ner_2025", "research/ner-2025/"],
         // legacy folder pages

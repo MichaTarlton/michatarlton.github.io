@@ -278,6 +278,9 @@ img.photo { object-fit: cover; display: block; background: var(--surface); }
 // ── Prose (non-landing pages) ───────────────────────────────
 article { max-width: 68ch; h2 { border-bottom: 1px solid var(--rule); padding-bottom: var(--space-2); margin-top: var(--space-7); } }
 .content-meta, .breadcrumb-element { font-family: var(--codeFont); font-size: 0.72rem; letter-spacing: 0.06em; opacity: 0.72; }
+// Folder index pages with no children (e.g. /cv/) still emit a page-listing
+// ("0 items under this folder.") — don't render empty listings.
+.page-listing:not(:has(li)) { display: none; }
 footer { border-top: 1px solid var(--rule); padding-top: var(--space-5); margin-top: var(--space-8);
   a { @include micro-label; color: var(--text-secondary); text-decoration: none; &:hover { color: var(--link-color); } } }
 
