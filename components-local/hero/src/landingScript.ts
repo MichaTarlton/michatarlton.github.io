@@ -141,7 +141,45 @@ export default `(function () {
     readColors(); resize(); init();
     raf = requestAnimationFrame(frame);
   }
-  function boot() { label(); startField(); }
+  // PROTOTYPE CHIP: delete with the prototype
+  function protoStored() {
+    try { return localStorage.getItem("proto"); } catch (e) { return null; }
+  }
+  function protoGo(v) {
+    var q = new URLSearchParams(location.search);
+    if (v === "off") {
+      try { localStorage.removeItem("proto"); } catch (e) {}
+      q.delete("proto");
+    } else {
+      q.set("proto", v);
+    }
+    var qs = q.toString();
+    location.href = location.pathname + (qs ? "?" + qs : "") + location.hash;
+  }
+  function protoChip() {
+    var cur = html.getAttribute("data-proto");
+    window.__proto = cur === "gr" || cur === "nat" ? cur : null;
+    var hasParam = new URLSearchParams(location.search).has("proto");
+    var existing = document.querySelector(".proto-chip");
+    if (!window.__proto && !hasParam && !protoStored()) {
+      if (existing) existing.parentNode.removeChild(existing);
+      return;
+    }
+    if (existing) return;
+    var chip = document.createElement("div");
+    chip.className = "proto-chip";
+    chip.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:9999;display:flex;gap:2px;padding:4px;font:600 11px/1 monospace;background:rgba(20,20,20,.85);border-radius:6px;";
+    ["gr", "nat", "off"].forEach(function (v) {
+      var a = document.createElement("a");
+      a.href = "#";
+      a.textContent = v.toUpperCase();
+      a.style.cssText = "padding:5px 8px;border-radius:4px;text-decoration:none;color:" + (v === window.__proto || (v === "off" && !window.__proto) ? "#111;background:#fff" : "#fff");
+      a.addEventListener("click", function (e) { e.preventDefault(); protoGo(v); });
+      chip.appendChild(a);
+    });
+    document.body.appendChild(chip);
+  }
+  function boot() { label(); startField(); protoChip(); }
   boot();
   document.addEventListener("nav", boot); // Quartz SPA: re-init on every navigation
 })();`

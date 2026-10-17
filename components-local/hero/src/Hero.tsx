@@ -4,6 +4,7 @@ import {
   QuartzComponentProps,
 } from "../../../quartz/components/types"
 import landingScript from "./landingScript"
+import { PROTO_BOOT_SCRIPT } from "./proto"
 
 /**
  * Landing page (Studio layout, approved in redesign ticket 05).
@@ -210,7 +211,8 @@ Hero.beforeDOMLoaded = `(function(){
     if(!p.has("dark")){localStorage.setItem("theme","light");document.documentElement.setAttribute("saved-theme","light");}
   }
   document.documentElement.setAttribute("data-variant","a");
-})();`
+})();
+` + PROTO_BOOT_SCRIPT
 
 Hero.afterDOMLoaded = landingScript
 
