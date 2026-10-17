@@ -19,3 +19,42 @@ html[data-proto="gr"] {
 
   --headerFont: "Archivo", sans-serif;
 }
+
+// Voice re-pin: --headerFont is Archivo under GR, so voice selectors go back to Fraunces
+// and display roles are pinned explicitly to Archivo.
+html[data-proto="gr"] {
+  em, i, .lede, .q, .r-q, .r-lede, .thinking-copy {
+    font-family: Fraunces, serif;
+    font-variation-settings: "WONK" 1;
+  }
+  .display, h1, h2, h3, h4 {
+    font-family: Archivo, sans-serif;
+    letter-spacing: -0.02em;
+    font-variation-settings: normal;
+  }
+  .display { font-weight: 800; }
+  h2 { font-weight: 700; }
+
+  .a-hero {
+    border: 2px solid var(--proto-ink);
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .section-head { border-bottom-width: 2px; }
+  .a-cards { border-left: 1px solid var(--rule); }
+  .a-card {
+    border: 2px solid var(--proto-ink);
+    border-radius: 0;
+    background: transparent;
+    transition: box-shadow 0.15s;
+    &:hover { box-shadow: 4px 4px 0 0 var(--proto-ink); border-color: var(--proto-ink); }
+  }
+  .a-card-fig { color: var(--proto-ink); }
+
+  .cta { border: 2px solid var(--proto-ink); border-radius: 0; }
+  .cta-primary { background: var(--secondary); color: #fff; &:hover { background: var(--secondary); color: #fff; } }
+  .cta-secondary { color: var(--proto-ink); }
+  .site-nav-link { font-weight: 600; }
+  .site-nav-link.active { border-bottom: 2px solid var(--accent-mark); }
+  .status-dot { background: var(--accent-mark); border-radius: 0; }
+}
