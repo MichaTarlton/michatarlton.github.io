@@ -78,10 +78,10 @@ html[data-proto="gr"] {
       letter-spacing: 0.08em;
       color: var(--proto-ink-2);
     }
-    .door-name { font-family: Archivo, sans-serif; font-weight: 800; font-size: var(--text-xl, 1.5rem); margin-right: var(--space-3); }
+    .door-name { font-family: var(--headerFont); font-weight: 800; font-size: var(--text-xl); margin-right: var(--space-3); }
     .door-flavor { display: block; color: var(--proto-ink-2); }
     .door-enter { display: block; margin-top: var(--space-2); color: var(--secondary); font-weight: 600; }
-    [data-track-glyph="gr"] { color: var(--accent-mark); margin-right: var(--space-3); font-weight: 800; }
+    [data-track-glyph="gr"] { display: inline-block; color: var(--accent-mark); margin-right: var(--space-3); font-weight: 800; }
     [data-track-glyph="nat"] { display: none; }
   }
 }

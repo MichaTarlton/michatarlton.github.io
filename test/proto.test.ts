@@ -59,4 +59,7 @@ test("built landing: door mark replaces fake recency", (t) => {
   assert.ok(html.includes("cortex-door"), "cortex-door missing")
   assert.ok(html.includes('data-placeholder="true"'), "placeholder marginalia missing")
   assert.ok(html.includes("Enter the Cortex"), "nav door link missing")
+  assert.match(html, /<section class="cortex-door">\s*<a href="\/wiki\/"/, "door link must point to /wiki/")
+  assert.ok(html.includes('data-track-glyph="gr"'), "gr glyph missing")
+  assert.ok(html.includes('data-track-glyph="nat"'), "nat glyph missing")
 })
