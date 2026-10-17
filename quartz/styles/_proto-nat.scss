@@ -28,8 +28,8 @@ html[data-proto="nat"] {
   .a-card { box-shadow: inset 0 2px 0 0 color-mix(in srgb, var(--proto-gilding) 55%, transparent); }
   .a-card:hover { box-shadow: var(--shadow-md), inset 0 2px 0 0 var(--proto-gilding); }
 
-  .site-nav-link.active { border-bottom-color: var(--proto-gilding); }
-  .status-dot { background: var(--proto-gilding); }
+  .site-nav-link.active { border-bottom-color: var(--accent-mark); }
+  .status-dot { background: var(--accent-mark); }
 
   .cortex-door a {
     display: block;
@@ -61,6 +61,7 @@ html[data-proto="nat"] .proto-marginalia {
   display: block;
   grid-column: 1 / -1;
   font-style: italic;
-  color: var(--proto-gilding);
+  color: var(--accent-text);
   font-size: var(--text-sm);
 }
+html[data-proto="nat"] .proto-marginalia svg { stroke: var(--accent-mark); }

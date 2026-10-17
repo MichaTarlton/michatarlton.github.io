@@ -78,3 +78,10 @@ test("landingScript: hero sims and shared cadence helper are present", () => {
   const body = src.slice(start, end > start ? end : undefined)
   assert.ok(body.includes("reducedMotion()"), "startSBF must honour reducedMotion()")
 })
+
+test("NAT partial: gilding never carries meaningful marks or text", () => {
+  const scss = readFileSync(new URL("../quartz/styles/_proto-nat.scss", import.meta.url), "utf8")
+  assert.match(scss, /\.site-nav-link\.active\s*\{[^}]*border-bottom-color:\s*var\(--accent-mark\)/)
+  assert.match(scss, /\.status-dot\s*\{[^}]*background:\s*var\(--accent-mark\)/)
+  assert.match(scss, /\.proto-marginalia\s*\{[^}]*color:\s*var\(--accent-text\)/)
+})
