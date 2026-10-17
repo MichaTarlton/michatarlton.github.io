@@ -69,6 +69,8 @@ export default `(function () {
     var v = current();
     var canvas = document.querySelector(".landing.variant-" + v + " canvas.field-canvas");
     if (!canvas) { motionState = "no canvas in variant " + v.toUpperCase(); label(); return; }
+    var p = window.__proto;
+    if (p === "gr") return startSBF(canvas);
     if (reducedMotion()) { motionState = "OFF (prefers-reduced-motion" + (motionParam() ? ", ?motion=" + motionParam() : " from OS") + ") — click to force on"; label(); return; }
     motionState = "running" + (motionParam() === "on" ? " (forced)" : "");
     label();
@@ -140,6 +142,146 @@ export default `(function () {
     window.addEventListener("resize", function () { resize(); init(); });
     readColors(); resize(); init();
     raf = requestAnimationFrame(frame);
+  }
+  // ── Shared 30 fps throttle for the proto hero sims ───────────
+  // fn must re-arm itself: raf = requestAnimationFrame(tick).
+  function cadence(fn, fps) {
+    var last = 0, gap = 1000 / (fps || 30) - 1;
+    function tick(t) {
+      if (t - last < gap) { raf = requestAnimationFrame(tick); return; }
+      last = t;
+      fn(t);
+    }
+    return tick;
+  }
+  function protoSmall() {
+    return window.matchMedia("(max-width: 800px)").matches || !!(navigator.connection && navigator.connection.saveData);
+  }
+  function protoHost(canvas) { return canvas.closest(".a-hero") || canvas.parentElement; }
+  function protoPoint(canvas, e) {
+    var r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top, inside: e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom };
+  }
+
+  // ── GR hero: SBF oscillator bank, vector ink ─────────────────
+  function startSBF(canvas) {
+    var ctx = canvas.getContext("2d");
+    var reduced = reducedMotion();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var N = protoSmall() ? 80 : 160;
+    var K = 3;
+    var W = 0, H = 0, neurons = [];
+    var pointer = { x: -1e4, y: -1e4 };
+    var onscreen = true;
+    var col = { sec: "#1b3fd8", mark: "#e5231b" };
+    var host = protoHost(canvas);
+    motionState = reduced ? "frozen (reduced motion)" : "running (gr)";
+    label();
+
+    function readColors() {
+      var cs = getComputedStyle(html);
+      var a = cs.getPropertyValue("--secondary").trim();
+      var b = cs.getPropertyValue("--accent-mark").trim();
+      if (a) col.sec = a;
+      if (b) col.mark = b;
+    }
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function init() {
+      neurons = [];
+      for (var i = 0; i < N; i++) {
+        neurons.push({ x: Math.random(), y: Math.random(), f: 0.5 + Math.random() * 1.4, p: Math.random() * Math.PI * 2, s: 0, nb: [] });
+      }
+      for (var a = 0; a < N; a++) {
+        var dists = [];
+        for (var b = 0; b < N; b++) {
+          if (a === b) continue;
+          var dx = neurons[a].x - neurons[b].x, dy = neurons[a].y - neurons[b].y;
+          dists.push([dx * dx + dy * dy, b]);
+        }
+        dists.sort(function (u, v) { return u[0] - v[0]; });
+        for (var k = 0; k < K; k++) neurons[a].nb.push(dists[k][1]);
+      }
+    }
+    function step(dt) {
+      for (var i = 0; i < N; i++) {
+        var n = neurons[i];
+        n.p += n.f * dt * Math.PI * 2 * 0.55;
+        var dx = n.x * W - pointer.x, dy = n.y * H - pointer.y, r2 = dx * dx + dy * dy;
+        if (r2 < 12000) n.p += dt * 16 * (1 - r2 / 12000);
+        if (n.p >= Math.PI * 2) {
+          n.p -= Math.PI * 2;
+          n.s = 1;
+          for (var k = 0; k < n.nb.length; k++) neurons[n.nb[k]].p += 0.35;
+        }
+        // heroSim decays 0.90 per 60 Hz frame; 0.81 matches that at 30 fps
+        n.s *= reduced ? 0.90 : 0.81;
+      }
+    }
+    function burst(x, y) {
+      for (var i = 0; i < N; i++) {
+        var n = neurons[i], dx = n.x * W - x, dy = n.y * H - y;
+        if (dx * dx + dy * dy < 20000) n.s = 1;
+      }
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 2;
+      ctx.lineCap = "butt";
+      ctx.strokeStyle = col.sec;
+      for (var i = 0; i < N; i++) {
+        var n = neurons[i];
+        for (var k = 0; k < n.nb.length; k++) {
+          var m = neurons[n.nb[k]];
+          ctx.globalAlpha = 0.12 + 0.3 * Math.max(n.s, m.s);
+          ctx.beginPath(); ctx.moveTo(n.x * W, n.y * H); ctx.lineTo(m.x * W, m.y * H); ctx.stroke();
+        }
+      }
+      for (var j = 0; j < N; j++) {
+        var q = neurons[j], x = q.x * W, y = q.y * H;
+        ctx.globalAlpha = 0.8; ctx.fillStyle = col.sec;
+        ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill();
+        if (q.s > 0.03) {
+          ctx.globalAlpha = q.s * 0.9; ctx.fillStyle = col.mark;
+          ctx.beginPath(); ctx.arc(x, y, 2 + 6 * (1 - q.s), 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = q.s * 0.5; ctx.strokeStyle = col.mark;
+          ctx.beginPath(); ctx.arc(x, y, 3 + 14 * (1 - q.s), 0, Math.PI * 2); ctx.stroke();
+          ctx.strokeStyle = col.sec;
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    readColors(); resize(); init();
+    document.addEventListener("themechange", function () { readColors(); if (reduced && document.body.contains(canvas)) draw(); });
+    window.addEventListener("resize", function () { if (!document.body.contains(canvas)) return; resize(); if (reduced) draw(); });
+    if (reduced) {
+      for (var s = 0; s < 240; s++) step(0.016);
+      draw();
+      return;
+    }
+    host.addEventListener("pointermove", function (e) { var p = protoPoint(canvas, e); pointer.x = p.x; pointer.y = p.y; });
+    host.addEventListener("pointerleave", function () { pointer.x = -1e4; pointer.y = -1e4; });
+    host.addEventListener("pointerdown", function (e) {
+      if (e.target.closest && e.target.closest("a,button,input")) return;
+      var p = protoPoint(canvas, e);
+      if (p.inside) burst(p.x, p.y);
+    });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) { onscreen = en[0].isIntersecting; }, { threshold: 0.05 }).observe(canvas);
+    }
+    var last = 0;
+    var tick = cadence(function (t) {
+      if (!document.body.contains(canvas)) return;
+      var dt = Math.min(0.05, (t - last) / 1000 || 0.033); last = t;
+      if (onscreen && document.visibilityState === "visible") { step(dt); draw(); }
+      raf = requestAnimationFrame(tick);
+    }, 30);
+    raf = requestAnimationFrame(tick);
   }
   // PROTOTYPE CHIP: delete with the prototype
   function protoStored() {

@@ -63,3 +63,18 @@ test("built landing: door mark replaces fake recency", (t) => {
   assert.ok(html.includes('data-track-glyph="gr"'), "gr glyph missing")
   assert.ok(html.includes('data-track-glyph="nat"'), "nat glyph missing")
 })
+
+test("landingScript: hero sims and shared cadence helper are present", () => {
+  const src = readFileSync(
+    new URL("../components-local/hero/src/landingScript.ts", import.meta.url),
+    "utf8",
+  )
+  assert.ok(src.includes("startSBF"), "startSBF missing")
+  assert.ok(src.includes("startBranch"), "startBranch missing")
+  assert.ok(src.includes("function cadence("), "cadence helper missing")
+  const start = src.indexOf("function startSBF(")
+  assert.ok(start >= 0, "startSBF definition missing")
+  const end = src.indexOf("function startBranch(", start)
+  const body = src.slice(start, end > start ? end : undefined)
+  assert.ok(body.includes("reducedMotion()"), "startSBF must honour reducedMotion()")
+})
