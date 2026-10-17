@@ -1,0 +1,21 @@
+@use "./variables.scss" as *;
+
+html[data-proto="gr"] {
+  --proto-ink: #16161a;
+  --proto-ink-2: #6a6a6a;
+
+  --light: #f7f6f4;
+  --dark: #16161a;
+  --darkgray: #6a6a6a;
+  --secondary: #1b3fd8;
+  --accent-mark: #e5231b;
+  --accent-text: #16161a;
+  --rule: #16161a;
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --shadow-sm: none;
+  --shadow-md: none;
+
+  --headerFont: "Archivo", sans-serif;
+}
