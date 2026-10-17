@@ -21,15 +21,28 @@ html[data-proto="nat"] {
       width: 96px;
       height: 22px;
       pointer-events: none;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 22' fill='none' stroke='%23c9a227' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M2 15 C 14 2, 26 2, 36 11 S 58 20, 70 9 S 88 4, 94 12'/%3E%3Cpath d='M30 19 C 44 15, 60 17, 80 19' stroke-opacity='.6'/%3E%3C/svg%3E") no-repeat right bottom / contain;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 22' fill='none' stroke='%23c9a227' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M2 15 C 14 2, 26 2, 36 11 S 58 20, 70 9 S 88 4, 94 12'/%3E%3Cpath d='M30 19 C 44 15, 60 17, 80 19' stroke-opacity='.6'/%3E%3C/svg%3E")
+        no-repeat right bottom / contain;
     }
   }
-  .section-head { border-bottom: 1px solid var(--proto-gilding); }
-  .a-card { box-shadow: inset 0 2px 0 0 color-mix(in srgb, var(--proto-gilding) 55%, transparent); }
-  .a-card:hover { box-shadow: var(--shadow-md), inset 0 2px 0 0 var(--proto-gilding); }
+  .section-head {
+    border-bottom: 1px solid var(--proto-gilding);
+  }
+  .a-card {
+    box-shadow: inset 0 2px 0 0 color-mix(in srgb, var(--proto-gilding) 55%, transparent);
+  }
+  .a-card:hover {
+    box-shadow:
+      var(--shadow-md),
+      inset 0 2px 0 0 var(--proto-gilding);
+  }
 
-  .site-nav-link.active { border-bottom-color: var(--accent-mark); }
-  .status-dot { background: var(--accent-mark); }
+  .site-nav-link.active {
+    border-bottom-color: var(--accent-mark);
+  }
+  .status-dot {
+    background: var(--accent-mark);
+  }
 
   .cortex-door a {
     display: block;
@@ -37,26 +50,53 @@ html[data-proto="nat"] {
     text-decoration: none;
     border: 1px solid var(--proto-gilding);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--proto-gilding) 25%, transparent);
-    .door-name { font-weight: 600; margin-right: var(--space-3); }
-    .door-flavor { display: block; font-style: italic; }
-    .door-enter { display: block; margin-top: var(--space-2); color: var(--accent-text); }
-    [data-track-glyph="nat"] { display: inline-block; color: var(--accent-mark); margin-right: var(--space-3); vertical-align: middle; }
-    [data-track-glyph="gr"] { display: none; }
+    .door-name {
+      font-weight: 600;
+      margin-right: var(--space-3);
+    }
+    .door-flavor {
+      display: block;
+      font-style: italic;
+    }
+    .door-enter {
+      display: block;
+      margin-top: var(--space-2);
+      color: var(--accent-text);
+    }
+    [data-track-glyph="nat"] {
+      display: inline-block;
+      color: var(--accent-mark);
+      margin-right: var(--space-3);
+      vertical-align: middle;
+    }
+    [data-track-glyph="gr"] {
+      display: none;
+    }
   }
 
   // NER project page: gilded cover; gold wash sits behind the figure only, never under text.
   .research.page {
     .r-cover {
       border: 1px solid var(--proto-gilding);
-      box-shadow: var(--shadow-sm), 0 0 0 3px color-mix(in srgb, var(--proto-gilding) 22%, transparent);
+      box-shadow:
+        var(--shadow-sm),
+        0 0 0 3px color-mix(in srgb, var(--proto-gilding) 22%, transparent);
     }
-    .r-cover .r-fig { background-color: color-mix(in srgb, var(--proto-gilding) 6%, var(--surface)); }
-    .r-fig { color: color-mix(in srgb, var(--secondary) 80%, black 20%); }
+    .r-cover .r-fig {
+      background-color: color-mix(in srgb, var(--proto-gilding) 6%, var(--surface));
+    }
+    .r-fig {
+      color: color-mix(in srgb, var(--secondary) 80%, black 20%);
+    }
   }
 }
 
-[data-track-glyph] { display: none; }
-.proto-marginalia { display: none; }
+[data-track-glyph] {
+  display: none;
+}
+.proto-marginalia {
+  display: none;
+}
 html[data-proto="nat"] .proto-marginalia {
   display: block;
   grid-column: 1 / -1;
@@ -64,4 +104,6 @@ html[data-proto="nat"] .proto-marginalia {
   color: var(--accent-text);
   font-size: var(--text-sm);
 }
-html[data-proto="nat"] .proto-marginalia svg { stroke: var(--accent-mark); }
+html[data-proto="nat"] .proto-marginalia svg {
+  stroke: var(--accent-mark);
+}

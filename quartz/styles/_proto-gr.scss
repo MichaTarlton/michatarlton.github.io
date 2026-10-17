@@ -23,44 +23,88 @@ html[data-proto="gr"] {
 // Voice re-pin: --headerFont is Archivo under GR, so voice selectors go back to Fraunces
 // and display roles are pinned explicitly to Archivo.
 html[data-proto="gr"] {
-  em, i, .lede, .q, .r-q, .r-lede, .thinking-copy {
+  em,
+  i,
+  .lede,
+  .q,
+  .r-q,
+  .r-lede,
+  .thinking-copy {
     font-family: Fraunces, serif;
     font-variation-settings: "WONK" 1;
   }
   .research .r-head .r-q {
     font-family: Fraunces, serif;
-    font-variation-settings: "WONK" 1, "SOFT" 60;
+    font-variation-settings:
+      "WONK" 1,
+      "SOFT" 60;
   }
-  .display, h1, h2, h3, h4 {
+  .display,
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: Archivo, sans-serif;
     letter-spacing: -0.02em;
     font-variation-settings: normal;
   }
-  .display { font-weight: 800; }
-  h2 { font-weight: 700; }
+  .display {
+    font-weight: 800;
+  }
+  h2 {
+    font-weight: 700;
+  }
 
   .a-hero {
     border: 2px solid var(--proto-ink);
     border-radius: 0;
     box-shadow: none;
   }
-  .section-head { border-bottom-width: 2px; }
-  .a-cards { border-left: 1px solid var(--rule); }
+  .section-head {
+    border-bottom-width: 2px;
+  }
+  .a-cards {
+    border-left: 1px solid var(--rule);
+  }
   .a-card {
     border: 2px solid var(--proto-ink);
     border-radius: 0;
     background: transparent;
     transition: box-shadow 0.15s;
-    &:hover { box-shadow: 4px 4px 0 0 var(--proto-ink); border-color: var(--proto-ink); }
+    &:hover {
+      box-shadow: 4px 4px 0 0 var(--proto-ink);
+      border-color: var(--proto-ink);
+    }
   }
-  .variant-a .a-card .a-card-fig { color: var(--proto-ink); }
+  .variant-a .a-card .a-card-fig {
+    color: var(--proto-ink);
+  }
 
-  .cta { border: 2px solid var(--proto-ink); border-radius: 0; }
-  .cta-primary { background: var(--secondary); color: #fff; &:hover { background: var(--secondary); color: #fff; } }
-  .cta-secondary { color: var(--proto-ink); }
-  .site-nav-link { font-weight: 600; }
-  .site-nav-link.active { border-bottom: 2px solid var(--accent-mark); }
-  .status-dot { background: var(--accent-mark); border-radius: 0; }
+  .cta {
+    border: 2px solid var(--proto-ink);
+    border-radius: 0;
+  }
+  .cta-primary {
+    background: var(--secondary);
+    color: #fff;
+    &:hover {
+      background: var(--secondary);
+      color: #fff;
+    }
+  }
+  .cta-secondary {
+    color: var(--proto-ink);
+  }
+  .site-nav-link {
+    font-weight: 600;
+  }
+  .site-nav-link.active {
+    border-bottom: 2px solid var(--accent-mark);
+  }
+  .status-dot {
+    background: var(--accent-mark);
+    border-radius: 0;
+  }
 
   .cortex-door a {
     display: block;
@@ -69,7 +113,9 @@ html[data-proto="gr"] {
     border-radius: 0;
     text-decoration: none;
     color: var(--proto-ink);
-    &:hover { box-shadow: 4px 4px 0 0 var(--proto-ink); }
+    &:hover {
+      box-shadow: 4px 4px 0 0 var(--proto-ink);
+    }
     &::after {
       content: "ROOM · /wiki/";
       display: block;
@@ -78,11 +124,31 @@ html[data-proto="gr"] {
       letter-spacing: 0.08em;
       color: var(--proto-ink-2);
     }
-    .door-name { font-family: var(--headerFont); font-weight: 800; font-size: var(--text-xl); margin-right: var(--space-3); }
-    .door-flavor { display: block; color: var(--proto-ink-2); }
-    .door-enter { display: block; margin-top: var(--space-2); color: var(--secondary); font-weight: 600; }
-    [data-track-glyph="gr"] { display: inline-block; color: var(--accent-mark); margin-right: var(--space-3); font-weight: 800; }
-    [data-track-glyph="nat"] { display: none; }
+    .door-name {
+      font-family: var(--headerFont);
+      font-weight: 800;
+      font-size: var(--text-xl);
+      margin-right: var(--space-3);
+    }
+    .door-flavor {
+      display: block;
+      color: var(--proto-ink-2);
+    }
+    .door-enter {
+      display: block;
+      margin-top: var(--space-2);
+      color: var(--secondary);
+      font-weight: 600;
+    }
+    [data-track-glyph="gr"] {
+      display: inline-block;
+      color: var(--accent-mark);
+      margin-right: var(--space-3);
+      font-weight: 800;
+    }
+    [data-track-glyph="nat"] {
+      display: none;
+    }
   }
 
   // NER project page: flat slab cover; FIG. tag names the figure (functional, not decorative).
@@ -93,7 +159,9 @@ html[data-proto="gr"] {
       background: transparent;
       box-shadow: none;
     }
-    .r-cover .r-fig { color: var(--proto-ink); }
+    .r-cover .r-fig {
+      color: var(--proto-ink);
+    }
     .r-cover-inner::after {
       content: "FIG. 01";
       display: block;
@@ -111,6 +179,10 @@ html[data-proto="gr"] {
       color: var(--proto-ink);
     }
     // ink fill, not red: the accent never carries text
-    .r-badge-solid { background: var(--proto-ink); border-color: var(--proto-ink); color: #fff; }
+    .r-badge-solid {
+      background: var(--proto-ink);
+      border-color: var(--proto-ink);
+      color: #fff;
+    }
   }
 }
