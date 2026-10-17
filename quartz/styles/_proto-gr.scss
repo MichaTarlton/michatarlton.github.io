@@ -27,6 +27,10 @@ html[data-proto="gr"] {
     font-family: Fraunces, serif;
     font-variation-settings: "WONK" 1;
   }
+  .research .r-head .r-q {
+    font-family: Fraunces, serif;
+    font-variation-settings: "WONK" 1, "SOFT" 60;
+  }
   .display, h1, h2, h3, h4 {
     font-family: Archivo, sans-serif;
     letter-spacing: -0.02em;
@@ -49,7 +53,7 @@ html[data-proto="gr"] {
     transition: box-shadow 0.15s;
     &:hover { box-shadow: 4px 4px 0 0 var(--proto-ink); border-color: var(--proto-ink); }
   }
-  .a-card-fig { color: var(--proto-ink); }
+  .variant-a .a-card .a-card-fig { color: var(--proto-ink); }
 
   .cta { border: 2px solid var(--proto-ink); border-radius: 0; }
   .cta-primary { background: var(--secondary); color: #fff; &:hover { background: var(--secondary); color: #fff; } }
