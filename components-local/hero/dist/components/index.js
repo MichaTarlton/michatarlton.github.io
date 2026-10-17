@@ -265,12 +265,6 @@ var research = [
     ] })
   }
 ];
-var recent = [
-  { t: "Striatal beat-frequency model", d: "Sep 12", m: "sapling" },
-  { t: "Ising-model network inference", d: "Sep 9", m: "tree" },
-  { t: "Neuromorphic edge hardware", d: "Sep 3", m: "seedling" },
-  { t: "Spike-timing-dependent plasticity", d: "Aug 28", m: "sapling" }
-];
 var Photo = ({ size, hero }) => hero.photo ? /* @__PURE__ */ jsx(
   "img",
   {
@@ -317,6 +311,10 @@ var Landing = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varian
         /* @__PURE__ */ jsx("h1", { class: "display", children: hero.name }),
         /* @__PURE__ */ jsx("p", { class: "lede", children: hero.identity }),
         /* @__PURE__ */ jsx(Ctas, { hero })
+      ] }),
+      /* @__PURE__ */ jsxs("aside", { class: "proto-marginalia", "data-placeholder": "true", children: [
+        /* @__PURE__ */ jsx("svg", { viewBox: "0 0 96 22", width: "96", height: "22", fill: "none", stroke: "currentColor", "stroke-width": "1", "stroke-linecap": "round", "aria-hidden": "true", children: /* @__PURE__ */ jsx("path", { d: "M2 15 C 14 2, 26 2, 36 11 S 58 20, 70 9 S 88 4, 94 12" }) }),
+        /* @__PURE__ */ jsx("span", { children: "placeholder" })
       ] })
     ] })
   ] }),
@@ -331,17 +329,18 @@ var Landing = ({ hero }) => /* @__PURE__ */ jsxs("div", { class: "landing varian
       /* @__PURE__ */ jsx("p", { class: "meta", children: r.meta })
     ] })) })
   ] }),
-  /* @__PURE__ */ jsxs("section", { class: "a-recent", children: [
-    /* @__PURE__ */ jsxs("div", { class: "section-head", children: [
-      /* @__PURE__ */ jsx("h2", { children: "Recently in the Cortex" }),
-      /* @__PURE__ */ jsx("a", { class: "more", href: "/wiki/", children: "Enter the Cortex \u2192" })
-    ] }),
-    /* @__PURE__ */ jsx("ul", { class: "recent-list", children: recent.map((n) => /* @__PURE__ */ jsxs("li", { children: [
-      /* @__PURE__ */ jsx("span", { class: `maturity m-${n.m}`, title: n.m }),
-      /* @__PURE__ */ jsx("a", { href: "/wiki/", children: n.t }),
-      /* @__PURE__ */ jsx("span", { class: "date", children: n.d })
-    ] })) })
-  ] }),
+  /* @__PURE__ */ jsx("section", { class: "cortex-door", children: /* @__PURE__ */ jsxs("a", { href: "/wiki/", children: [
+    /* @__PURE__ */ jsx("span", { "data-track-glyph": "gr", "aria-hidden": "true", children: "\u25B6\u25B6" }),
+    /* @__PURE__ */ jsx("span", { "data-track-glyph": "nat", "aria-hidden": "true", children: /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", width: "24", height: "24", fill: "none", stroke: "currentColor", "stroke-width": "1", children: [
+      /* @__PURE__ */ jsx("rect", { x: "2", y: "2", width: "9", height: "9" }),
+      /* @__PURE__ */ jsx("rect", { x: "13", y: "2", width: "9", height: "9" }),
+      /* @__PURE__ */ jsx("rect", { x: "2", y: "13", width: "9", height: "9" }),
+      /* @__PURE__ */ jsx("rect", { x: "13", y: "13", width: "9", height: "9" })
+    ] }) }),
+    /* @__PURE__ */ jsx("span", { class: "door-name", children: "The Cortex" }),
+    /* @__PURE__ */ jsx("span", { class: "door-flavor", children: "the Neuro-AI knowledge garden" }),
+    /* @__PURE__ */ jsx("span", { class: "door-enter", children: "Enter the Cortex \u2192" })
+  ] }) }),
   /* @__PURE__ */ jsx(Contact, {})
 ] });
 var Hero = ({ fileData }) => {

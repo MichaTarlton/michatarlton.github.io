@@ -61,4 +61,27 @@ html[data-proto="gr"] {
   .site-nav-link { font-weight: 600; }
   .site-nav-link.active { border-bottom: 2px solid var(--accent-mark); }
   .status-dot { background: var(--accent-mark); border-radius: 0; }
+
+  .cortex-door a {
+    display: block;
+    border: 2px solid var(--proto-ink);
+    padding: var(--space-5);
+    border-radius: 0;
+    text-decoration: none;
+    color: var(--proto-ink);
+    &:hover { box-shadow: 4px 4px 0 0 var(--proto-ink); }
+    &::after {
+      content: "ROOM · /wiki/";
+      display: block;
+      margin-top: var(--space-2);
+      font-size: var(--text-sm);
+      letter-spacing: 0.08em;
+      color: var(--proto-ink-2);
+    }
+    .door-name { font-family: Archivo, sans-serif; font-weight: 800; font-size: var(--text-xl, 1.5rem); margin-right: var(--space-3); }
+    .door-flavor { display: block; color: var(--proto-ink-2); }
+    .door-enter { display: block; margin-top: var(--space-2); color: var(--secondary); font-weight: 600; }
+    [data-track-glyph="gr"] { color: var(--accent-mark); margin-right: var(--space-3); font-weight: 800; }
+    [data-track-glyph="nat"] { display: none; }
+  }
 }

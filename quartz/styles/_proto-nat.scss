@@ -31,10 +31,24 @@ html[data-proto="nat"] {
   .site-nav-link.active { border-bottom-color: var(--proto-gilding); }
   .status-dot { background: var(--proto-gilding); }
 
-  .proto-marginalia { display: none; }
+  .cortex-door a {
+    display: block;
+    padding: var(--space-5);
+    text-decoration: none;
+    border: 1px solid var(--proto-gilding);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--proto-gilding) 25%, transparent);
+    .door-name { font-weight: 600; margin-right: var(--space-3); }
+    .door-flavor { display: block; font-style: italic; }
+    .door-enter { display: block; margin-top: var(--space-2); color: var(--accent-text); }
+    [data-track-glyph="nat"] { color: var(--accent-mark); margin-right: var(--space-3); vertical-align: middle; }
+    [data-track-glyph="gr"] { display: none; }
+  }
 }
-html[data-proto="nat"] .proto-marginalia[data-placeholder="true"] {
+
+.proto-marginalia { display: none; }
+html[data-proto="nat"] .proto-marginalia {
   display: block;
+  grid-column: 1 / -1;
   font-style: italic;
   color: var(--proto-gilding);
   font-size: var(--text-sm);

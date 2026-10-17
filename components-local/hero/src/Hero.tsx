@@ -82,13 +82,6 @@ const research = [
   },
 ]
 
-const recent = [
-  { t: "Striatal beat-frequency model", d: "Sep 12", m: "sapling" },
-  { t: "Ising-model network inference", d: "Sep 9", m: "tree" },
-  { t: "Neuromorphic edge hardware", d: "Sep 3", m: "seedling" },
-  { t: "Spike-timing-dependent plasticity", d: "Aug 28", m: "sapling" },
-]
-
 const Photo = ({ size, hero }: { size: "sm" | "lg"; hero: HeroCopy }) =>
   hero.photo ? (
     <img
@@ -152,6 +145,12 @@ const Landing = ({ hero }: { hero: HeroCopy }) => (
           <p class="lede">{hero.identity}</p>
           <Ctas hero={hero} />
         </div>
+        <aside class="proto-marginalia" data-placeholder="true">
+          <svg viewBox="0 0 96 22" width="96" height="22" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true">
+            <path d="M2 15 C 14 2, 26 2, 36 11 S 58 20, 70 9 S 88 4, 94 12" />
+          </svg>
+          <span>placeholder</span>
+        </aside>
       </div>
     </section>
 
@@ -171,20 +170,18 @@ const Landing = ({ hero }: { hero: HeroCopy }) => (
       </div>
     </section>
 
-    <section class="a-recent">
-      <div class="section-head">
-        <h2>Recently in the Cortex</h2>
-        <a class="more" href="/wiki/">Enter the Cortex →</a>
-      </div>
-      <ul class="recent-list">
-        {recent.map((n) => (
-          <li>
-            <span class={`maturity m-${n.m}`} title={n.m} />
-            <a href="/wiki/">{n.t}</a>
-            <span class="date">{n.d}</span>
-          </li>
-        ))}
-      </ul>
+    <section class="cortex-door">
+      <a href="/wiki/">
+        <span data-track-glyph="gr" aria-hidden="true">▶▶</span>
+        <span data-track-glyph="nat" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="2" width="9" height="9" /><rect x="13" y="2" width="9" height="9" /><rect x="2" y="13" width="9" height="9" /><rect x="13" y="13" width="9" height="9" />
+          </svg>
+        </span>
+        <span class="door-name">The Cortex</span>
+        <span class="door-flavor">the Neuro-AI knowledge garden</span>
+        <span class="door-enter">Enter the Cortex →</span>
+      </a>
     </section>
 
     <Contact />

@@ -1,6 +1,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { resolveProto, PROTO_BOOT_SCRIPT } from "../components-local/hero/src/proto"
+import { existsSync, readFileSync } from "node:fs"
 
 test("resolveProto: query param wins", () => {
   assert.equal(resolveProto("?proto=gr", null), "gr")
@@ -49,3 +50,13 @@ for (const [label, fg, bg, min] of PAIRS) {
     assert.ok(ratio >= min, `${ratio.toFixed(2)} < ${min}`)
   })
 }
+
+test("built landing: door mark replaces fake recency", (t) => {
+  const path = new URL("../public/index.html", import.meta.url)
+  if (!existsSync(path)) return t.skip("public/index.html not built")
+  const html = readFileSync(path, "utf8")
+  assert.ok(!html.includes("a-recent"), "a-recent section still present")
+  assert.ok(html.includes("cortex-door"), "cortex-door missing")
+  assert.ok(html.includes('data-placeholder="true"'), "placeholder marginalia missing")
+  assert.ok(html.includes("Enter the Cortex"), "nav door link missing")
+})
