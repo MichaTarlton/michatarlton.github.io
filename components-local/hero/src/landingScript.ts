@@ -351,15 +351,11 @@ export default `(function () {
       for (var i = 0; i < segs.length; i++) { ctx.moveTo(segs[i].x1, segs[i].y1); ctx.lineTo(segs[i].x2, segs[i].y2); }
       ctx.stroke();
       ctx.globalAlpha = 1; ctx.fillStyle = col.gold;
-      if (tips.length) {
-        for (var j = 0; j < tips.length; j++) { ctx.beginPath(); ctx.arc(tips[j].x, tips[j].y, 2.2, 0, Math.PI * 2); ctx.fill(); }
-      } else if (newest) {
-        ctx.beginPath(); ctx.arc(newest.x, newest.y, 2.2, 0, Math.PI * 2); ctx.fill();
-      }
+      if (newest) { ctx.beginPath(); ctx.arc(newest.x, newest.y, 2.2, 0, Math.PI * 2); ctx.fill(); }
     }
 
     readColors(); resize(); reset();
-    document.addEventListener("themechange", function () { readColors(); if (reduced && document.body.contains(canvas)) draw(); });
+    document.addEventListener("themechange", function () { readColors(); if (document.body.contains(canvas)) draw(); });
     window.addEventListener("resize", function () {
       if (!document.body.contains(canvas)) return;
       resize(); reset();
@@ -376,7 +372,11 @@ export default `(function () {
       if (p.inside) seed(p.x, p.y);
     });
     if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (en) { onscreen = en[0].isIntersecting; }, { threshold: 0.05 }).observe(canvas);
+      new IntersectionObserver(function (en) {
+        var was = onscreen;
+        onscreen = en[0].isIntersecting;
+        if (onscreen && !was && document.body.contains(canvas)) draw();
+      }, { threshold: 0.05 }).observe(canvas);
     }
     var tick = cadence(function () {
       if (!document.body.contains(canvas)) return;
