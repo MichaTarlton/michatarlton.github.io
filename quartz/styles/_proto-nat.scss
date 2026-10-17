@@ -43,6 +43,16 @@ html[data-proto="nat"] {
     [data-track-glyph="nat"] { display: inline-block; color: var(--accent-mark); margin-right: var(--space-3); vertical-align: middle; }
     [data-track-glyph="gr"] { display: none; }
   }
+
+  // NER project page: gilded cover; gold wash sits behind the figure only, never under text.
+  .research.page {
+    .r-cover {
+      border: 1px solid var(--proto-gilding);
+      box-shadow: var(--shadow-sm), 0 0 0 3px color-mix(in srgb, var(--proto-gilding) 22%, transparent);
+    }
+    .r-cover .r-fig { background-color: color-mix(in srgb, var(--proto-gilding) 6%, var(--surface)); }
+    .r-fig { color: color-mix(in srgb, var(--secondary) 80%, black 20%); }
+  }
 }
 
 [data-track-glyph] { display: none; }
