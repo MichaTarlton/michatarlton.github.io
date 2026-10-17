@@ -97,6 +97,17 @@ html[data-proto="nat"] {
 .proto-marginalia {
   display: none;
 }
+// PROTOTYPE: minimal rhythm for the Cortex door on the default (no-proto) site,
+// so the OFF baseline Mike compares against is not a run-on link. Track treatments
+// are scoped under html[data-proto=...] and never see this rule.
+html:not([data-proto]) .cortex-door {
+  margin: 4rem 0 0;
+  .door-name,
+  .door-flavor,
+  .door-enter {
+    display: block;
+  }
+}
 html[data-proto="nat"] .proto-marginalia {
   display: block;
   grid-column: 1 / -1;

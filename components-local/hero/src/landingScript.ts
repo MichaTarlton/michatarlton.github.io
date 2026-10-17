@@ -404,11 +404,17 @@ export default `(function () {
     location.href = location.pathname + (qs ? "?" + qs : "") + location.hash;
   }
   function protoChip() {
-    var cur = html.getAttribute("data-proto");
-    window.__proto = cur === "gr" || cur === "nat" ? cur : null;
-    var hasParam = new URLSearchParams(location.search).has("proto");
+    var param = new URLSearchParams(location.search).get("proto");
+    var stored = protoStored();
     var existing = document.querySelector(".proto-chip");
-    if (!window.__proto && !hasParam && !protoStored()) {
+    if (
+      !window.__proto &&
+      param !== "gr" &&
+      param !== "nat" &&
+      param !== "off" &&
+      stored !== "gr" &&
+      stored !== "nat"
+    ) {
       if (existing) existing.parentNode.removeChild(existing);
       return;
     }
@@ -433,9 +439,17 @@ export default `(function () {
     l.id = "proto-archivo";
     l.rel = "stylesheet";
     l.href = "https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap";
+    l.setAttribute("data-persist", "");
     document.head.appendChild(l);
   }
-  function boot() { label(); startField(); protoChip(); protoFont(); }
+  function boot() {
+    var cur = html.getAttribute("data-proto");
+    window.__proto = cur === "gr" || cur === "nat" ? cur : null;
+    label();
+    startField();
+    protoChip();
+    protoFont();
+  }
   boot();
   document.addEventListener("nav", boot); // Quartz SPA: re-init on every navigation
 })();`
