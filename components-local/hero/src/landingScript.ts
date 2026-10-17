@@ -179,7 +179,16 @@ export default `(function () {
     });
     document.body.appendChild(chip);
   }
-  function boot() { label(); startField(); protoChip(); }
+  function protoFont() {
+    // shortcut: runtime injection; move to build config if the GR track graduates.
+    if (html.getAttribute("data-proto") !== "gr" || document.getElementById("proto-archivo")) return;
+    var l = document.createElement("link");
+    l.id = "proto-archivo";
+    l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap";
+    document.head.appendChild(l);
+  }
+  function boot() { label(); startField(); protoChip(); protoFont(); }
   boot();
   document.addEventListener("nav", boot); // Quartz SPA: re-init on every navigation
 })();`
