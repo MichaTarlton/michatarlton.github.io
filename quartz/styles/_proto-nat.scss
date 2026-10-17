@@ -1,0 +1,9 @@
+@use "./variables.scss" as *;
+
+html[data-proto="nat"] {
+  --proto-gilding: #c9a227;
+
+  --accent-mark: #a97b1f;
+  --link-color: var(--secondary);
+  --accent-text: #8f5c08;
+}
