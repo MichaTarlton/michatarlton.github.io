@@ -67,6 +67,7 @@ var landingScript_default = `(function () {
     if (!canvas) { motionState = "no canvas in variant " + v.toUpperCase(); label(); return; }
     var p = window.__proto;
     if (p === "gr") return startSBF(canvas);
+    if (p === "nat") return startBranch(canvas);
     if (reducedMotion()) { motionState = "OFF (prefers-reduced-motion" + (motionParam() ? ", ?motion=" + motionParam() : " from OS") + ") \u2014 click to force on"; label(); return; }
     motionState = "running" + (motionParam() === "on" ? " (forced)" : "");
     label();
@@ -275,6 +276,110 @@ var landingScript_default = `(function () {
       if (!document.body.contains(canvas)) return;
       var dt = Math.min(0.05, (t - last) / 1000 || 0.033); last = t;
       if (onscreen && document.visibilityState === "visible") { step(dt); draw(); }
+      raf = requestAnimationFrame(tick);
+    }, 30);
+    raf = requestAnimationFrame(tick);
+  }
+  // \u2500\u2500 Natural hero: growing branching graph, notebook ink \u2500\u2500\u2500\u2500\u2500\u2500
+  function startBranch(canvas) {
+    var ctx = canvas.getContext("2d");
+    var reduced = reducedMotion();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var small = protoSmall();
+    var CAP = small ? 70 : 140;
+    var ROOTS = small ? 2 : 3;
+    var MAXGEN = 5, SPLIT = 0.09;
+    var W = 0, H = 0, segs = [], tips = [], newest = null, beat = 0;
+    var onscreen = true;
+    var col = { ink: "#3a4a8f", gold: "#c9a227" };
+    var host = protoHost(canvas);
+    motionState = reduced ? "frozen (reduced motion)" : "running (nat)";
+    label();
+
+    function readColors() {
+      var cs = getComputedStyle(html);
+      var a = cs.getPropertyValue("--secondary").trim();
+      var g = cs.getPropertyValue("--proto-gilding").trim();
+      if (a) col.ink = a;
+      if (g) col.gold = g;
+    }
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function addTip(x, y, a, gen, list) {
+      (list || tips).push({ x: x, y: y, a: a, gen: gen, life: 8 + Math.floor(Math.random() * 5) });
+    }
+    function reset() {
+      segs = []; tips = []; newest = null;
+      for (var i = 0; i < ROOTS; i++) addTip(W * (i + 1) / (ROOTS + 1), H, -Math.PI / 2 + (Math.random() - 0.5) * 0.4, 0);
+    }
+    function advance() {
+      var next = [];
+      for (var i = 0; i < tips.length; i++) {
+        var t = tips[i];
+        if (segs.length >= CAP || t.life <= 0 || t.x < 0 || t.x > W || t.y < 0 || t.y > H + 4) continue;
+        t.a += (Math.random() - 0.5) * 0.4;
+        var len = 7 + Math.random() * 5;
+        var nx = t.x + Math.cos(t.a) * len + (Math.random() - 0.5) * 1.4;
+        var ny = t.y + Math.sin(t.a) * len + (Math.random() - 0.5) * 1.4;
+        segs.push({ x1: t.x, y1: t.y, x2: nx, y2: ny });
+        newest = { x: nx, y: ny };
+        t.x = nx; t.y = ny; t.life--;
+        if (t.gen < MAXGEN && Math.random() < SPLIT) {
+          addTip(nx, ny, t.a + (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 0.4), t.gen + 1, next);
+        }
+        next.push(t);
+      }
+      tips = next;
+    }
+    function seed(x, y) {
+      if (segs.length + 12 > CAP) segs.splice(0, segs.length + 12 - CAP);
+      for (var i = 0; i < 3; i++) addTip(x, y, -Math.PI / 2 + (Math.random() - 0.5) * 2.2, 2);
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1; ctx.lineCap = "round";
+      ctx.strokeStyle = col.ink; ctx.globalAlpha = 0.8;
+      ctx.beginPath();
+      for (var i = 0; i < segs.length; i++) { ctx.moveTo(segs[i].x1, segs[i].y1); ctx.lineTo(segs[i].x2, segs[i].y2); }
+      ctx.stroke();
+      ctx.globalAlpha = 1; ctx.fillStyle = col.gold;
+      if (tips.length) {
+        for (var j = 0; j < tips.length; j++) { ctx.beginPath(); ctx.arc(tips[j].x, tips[j].y, 2.2, 0, Math.PI * 2); ctx.fill(); }
+      } else if (newest) {
+        ctx.beginPath(); ctx.arc(newest.x, newest.y, 2.2, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+
+    readColors(); resize(); reset();
+    document.addEventListener("themechange", function () { readColors(); if (reduced && document.body.contains(canvas)) draw(); });
+    window.addEventListener("resize", function () {
+      if (!document.body.contains(canvas)) return;
+      resize(); reset();
+      if (reduced) { for (var s = 0; s < 300; s++) advance(); draw(); }
+    });
+    if (reduced) {
+      for (var s = 0; s < 300; s++) advance();
+      draw();
+      return;
+    }
+    host.addEventListener("pointerdown", function (e) {
+      if (e.target.closest && e.target.closest("a,button,input")) return;
+      var p = protoPoint(canvas, e);
+      if (p.inside) seed(p.x, p.y);
+    });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) { onscreen = en[0].isIntersecting; }, { threshold: 0.05 }).observe(canvas);
+    }
+    var tick = cadence(function () {
+      if (!document.body.contains(canvas)) return;
+      if (onscreen && document.visibilityState === "visible" && tips.length) {
+        beat++;
+        if (beat % 2 === 0) { advance(); draw(); }
+      }
       raf = requestAnimationFrame(tick);
     }, 30);
     raf = requestAnimationFrame(tick);
