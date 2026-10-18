@@ -7,7 +7,7 @@ Plan: docs/superpowers/plans/2026-10-18-track-graphic-realism-rebuild.md
 - [x] T3 landing composition
 - [x] T4 hero simulation
 - [x] T5 research hub + project pages
-- [ ] T6 prose chrome + remaining pages
+- [x] T6 prose chrome + remaining pages
 - [ ] T7 verification + claims sheet
 
 Rule: one task at a time; verify (build + tests) before commit; local commits only, no push (push awaits Mike's go).
