@@ -154,20 +154,27 @@ a {
 }
 
 // ── data-page scoping: hide default Quartz chrome on track pages ──
-// NOTE (deviation, see T2 report): in this Quartz fork the frames render both
-// the header slot AND beforeBody inside `.page-header` (landing/research live
-// in beforeBody). A literal `display:none` on `.page-header` would therefore
-// erase the track's own content on those pages. So on track pages we hide the
-// Quartz default chrome inside it — the toolbar group (search / darkmode /
-// reader) — and drop the default top offset, while the track topbar (site nav,
-// brief §5.3) stays. Engine scaffolding untouched elsewhere.
+// NOTE (deviation, reasoned — mirrors the GR lane): this fork's frames nest
+// the toolbar <header> AND the beforeBody slot inside .page-header, and
+// landing/research render into beforeBody — so `display: none` on
+// .page-header would blank those pages and take the topbar nav with it.
+// "Hide Quartz's default .page-header" is therefore implemented as quashing
+// the engine's default chrome inside it: the toolbar group (search / darkmode
+// / reader-mode) is hidden, and the engine's ~6rem .page-header offset plus
+// the toolbar <header>'s own margins are zeroed. The track topbar (site nav,
+// brief §5.3) stays. If a later task adds more default .page-header children
+// on these pages, hide them here by class.
 html[data-page="index"],
 html[data-page="research"] {
   .page > #quartz-body > .center > .page-header {
     margin-top: 0;
-  }
 
-  .page > #quartz-body > .center > .page-header > header > .flex-component {
-    display: none;
+    > header {
+      margin: 0;
+
+      > .flex-component {
+        display: none;
+      }
+    }
   }
 }

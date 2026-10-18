@@ -1,2 +1,13 @@
 // Track: Natural — research (Task 5: plate album hub, project covers, ink-and-gold figures).
-// Placeholder: no styles yet.
+// Minimal stub styling for T2 so the tokens are visible in the build; hub/project chrome lands in T5.
+
+.nat-research {
+  h1 {
+    font-family: var(--headerFont); // Fraunces display
+    font-weight: 300;
+    font-size: var(--nat-text-3xl);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--nat-ink);
+  }
+}

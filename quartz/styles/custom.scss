@@ -6,7 +6,11 @@
 @use "./variables.scss" as *;
 
 @use "./tokens.scss" as *;
-@use "./base.scss" as *;
+// NB: `_base` must carry the underscore. Sass resolves the exact filename
+// `base.scss` first, which is the ENGINE base — importing it here would
+// silently shadow our track partial and duplicate engine styles into the
+// custom layer. `tokens/chrome/landing/research` have no exact-name clash.
+@use "./_base.scss" as *;
 @use "./chrome.scss" as *;
 @use "./landing.scss" as *;
 @use "./research.scss" as *;
