@@ -129,3 +129,138 @@ test("ornament gold #c9a227 never appears as a color: property in track partials
   }
   assert.deepEqual(offenders, [], "ornament gold used as text color")
 })
+
+// ============================================================================
+// Task 3 — landing composition: renderToString pins + built-output checks
+// ============================================================================
+
+import LandingComp from "../components-local/landing/src/Landing"
+import { renderToString } from "preact-render-to-string"
+import { projects } from "../components-local/research/src/projects"
+import type { QuartzComponentProps } from "../quartz/components/types"
+
+const Landing = LandingComp()
+
+// Mirrors content/index.md hero frontmatter (read as-is; content stays Mike's).
+const landingProps = {
+  fileData: {
+    slug: "index",
+    frontmatter: {
+      hero: {
+        name: "Mike Tarlton",
+        identity:
+          "I build artificially thinking systems inspired by physics and neuroscience; spiking neural networks and neuro-dynamics models, groundwork for the next generation of machine intelligence.",
+        status: "PhD candidate at OsloMet, open to research positions",
+        primaryCta: {
+          label: "Faculty page",
+          href: "https://www.oslomet.no/en/about/employee/michaelt",
+        },
+        photo: "/attachments/portrait.jpg",
+        photoAlt: "Mike Tarlton, portrait photo",
+      },
+    },
+  },
+} as unknown as QuartzComponentProps
+
+const landingHtml = renderToString(Landing(landingProps))
+
+test("landing renders name in Fraunces with gold initial cap and identity in voice italic", () => {
+  assert.ok(landingHtml.includes('class="nat-landing-name initial-cap"'))
+  assert.ok(landingHtml.includes("Mike Tarlton"))
+  assert.ok(landingHtml.includes('class="nat-landing-identity voice"'))
+  assert.ok(landingHtml.includes("I build artificially thinking systems"))
+})
+
+test("opening band: photo plate with alt, both CTAs, mono status", () => {
+  assert.ok(landingHtml.includes('class="nat-plate-photo"'))
+  assert.ok(landingHtml.includes('src="/attachments/portrait.jpg"'))
+  assert.ok(landingHtml.includes('alt="Mike Tarlton, portrait photo"'))
+  assert.ok(landingHtml.includes('href="https://www.oslomet.no/en/about/employee/michaelt"'))
+  assert.ok(landingHtml.includes("Faculty page"))
+  assert.ok(landingHtml.includes('href="/attachments/tarlton-cv.pdf"'))
+  assert.ok(landingHtml.includes("Download CV"))
+  assert.ok(landingHtml.includes('class="nat-landing-status nat-mono"'))
+  assert.ok(landingHtml.includes("PhD candidate at OsloMet"))
+})
+
+test("sim plate: FIG. 01 annotation, stable canvas mount with data attributes, no sim script", () => {
+  assert.ok(landingHtml.includes("FIG. 01 · growing graph"))
+  assert.ok(landingHtml.includes('id="nat-sim-canvas"'))
+  assert.ok(landingHtml.includes('data-sim="tree"'))
+  assert.ok(landingHtml.includes('data-sim-seed="tarlton-nat"'))
+  assert.ok(landingHtml.includes('data-sim-tick="33"'))
+  assert.ok(landingHtml.includes('class="nat-plate nat-sim-plate"'))
+  assert.ok(landingHtml.includes('class="nat-handmark nat-handmark--frame"'))
+  // gilded corner marks: four of them on the sim plate
+  const cornerMarks = landingHtml.match(/nat-plate__corner/g) ?? []
+  assert.ok(cornerMarks.length >= 4, "sim plate should have gilded corner marks")
+  // no sim logic yet (Task 4): component ships no afterDOMLoaded
+  assert.ok(Landing.afterDOMLoaded === undefined, "no sim logic before Task 4")
+})
+
+test("featured research spreads: all three questions, blurb, marginalia placeholder, status, links", () => {
+  for (const p of projects) {
+    assert.ok(landingHtml.includes(p.q), `missing question for ${p.slug}`)
+    assert.ok(landingHtml.includes(`/research/${p.slug}/`), `missing link for ${p.slug}`)
+    assert.ok(landingHtml.includes(p.name), `missing name for ${p.slug}`)
+    assert.ok(landingHtml.includes(p.status), `missing status for ${p.slug}`)
+  }
+  // one-line blurbs present (first words of each)
+  assert.ok(landingHtml.includes("I transposed the striatal beat-frequency model"))
+  // clearly-marked placeholder marginalia (brief §9.5)
+  assert.ok(landingHtml.includes("[placeholder marginalia]"))
+  // also items
+  assert.ok(landingHtml.includes("Oscillatory Timing Models in RL-Automata (AAMAS 2024)"))
+  assert.ok(landingHtml.includes("Experiencing a Slice of the Sky"))
+})
+
+test("Cortex door: exactly ONE door element (class pin), no Cortex note list", () => {
+  const doors = landingHtml.match(/class="nat-door"/g) ?? []
+  assert.equal(doors.length, 1, "exactly one loud-ornament door on landing")
+  assert.ok(landingHtml.includes('href="/wiki/"'))
+  assert.ok(landingHtml.includes("The Cortex"))
+  assert.ok(landingHtml.includes("nat-door__tree"))
+  // No Cortex content on hub pages (brief §3): no fake note lists
+  assert.ok(!landingHtml.includes("Recently in the Cortex"))
+  assert.ok(!landingHtml.includes("nat-cortex-list"))
+})
+
+test("contact band: email, LinkedIn, GitHub", () => {
+  assert.ok(landingHtml.includes("mailto:M@Tarlton.info"))
+  assert.ok(landingHtml.includes("M@Tarlton.info"))
+  assert.ok(landingHtml.includes("https://www.linkedin.com/in/m-tarlton/"))
+  assert.ok(landingHtml.includes("https://github.com/MichaTarlton"))
+})
+
+test("mosaic dividers: thin gilded band separators between sheet bands", () => {
+  const bands = landingHtml.match(/class="nat-band /g) ?? []
+  assert.equal(bands.length, 5, "five sheet bands (opening, sim, research, door, contact)")
+  const dividers = landingHtml.match(/class="nat-mosaic"/g) ?? []
+  assert.equal(dividers.length, 4, "four mosaic dividers between five bands")
+})
+
+test("hand mark on every band: each band contains a hand mark or marginal note", () => {
+  const split = landingHtml.split('class="nat-band ')
+  // split[0] is the wrapper; bands follow
+  const bands = split.slice(1)
+  assert.equal(bands.length, 5)
+  for (const [i, band] of bands.entries()) {
+    const hasMark =
+      band.includes("nat-handmark") ||
+      band.includes("nat-spread__margin") ||
+      band.includes("nat-door__tree")
+    assert.ok(hasMark, `band ${i} lacks a hand mark`)
+  }
+})
+
+test("built index.html carries the landing composition", () => {
+  const html = read("index.html")
+  assert.ok(html.includes("nat-landing"))
+  assert.ok(html.includes("FIG. 01 · growing graph"))
+  assert.ok(html.includes("nat-sim-canvas"))
+  assert.ok(html.includes('class="nat-door"'))
+  assert.ok(html.includes("mailto:M@Tarlton.info"))
+  // exactly one door in built output too
+  const doors = html.match(/class="nat-door"/g) ?? []
+  assert.equal(doors.length, 1)
+})

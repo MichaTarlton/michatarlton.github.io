@@ -1,5 +1,125 @@
-// Track: Natural — landing (Task 3: notebook sheet bands, mosaic dividers, Cortex door).
-// Minimal stub styling for T2 so the tokens are visible in the build; composition lands in T3.
+// Track: Natural — landing (Task 3). Notebook-sheet bands divided by thin gilded
+// mosaic bands (structural dividers only). Gold is leaf: rules, initial caps,
+// mosaic bands, door frame — never large fills, never a text colour (pinned test).
+// Hand marks (sketch lines, imperfect strokes, placeholder marginalia) per band.
+// No gradients; ornament structural only (brief §5.2, §5.5).
+
+@use "./variables.scss" as *;
+
+// ── Sheet bands ───────────────────────────────────────────────
+.nat-landing {
+  padding: var(--nat-space-8) 0 var(--nat-space-9);
+
+  @media all and ($mobile) {
+    padding: var(--nat-space-6) 0 var(--nat-space-8);
+  }
+}
+
+.nat-band {
+  background: var(--nat-surface); // the notebook sheet
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  box-shadow: var(--nat-shadow-md), var(--nat-shadow-plate);
+  padding: var(--nat-space-7);
+  margin: 0 auto var(--nat-space-7);
+  position: relative;
+
+  @media all and ($mobile) {
+    padding: var(--nat-space-5);
+  }
+
+  & + & {
+    margin-top: 0;
+  }
+}
+
+// ── Gilded mosaic band dividers (structural only) ─────────────
+// Flat ornament-gold tiles with grout gaps (paper shows through); thin, never a
+// large fill, never carries text.
+.nat-mosaic {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  height: 10px;
+  margin: var(--nat-space-5) auto;
+  max-width: 680px;
+  padding: 0 var(--nat-space-4);
+}
+
+.nat-mosaic__tile {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 1px;
+  background: var(--nat-ornament-gold);
+  opacity: 0.85;
+
+  &--deep {
+    background: var(--nat-accent-mark); // deeper leaf tone among the tiles
+    opacity: 1;
+  }
+
+  &--gap {
+    background: transparent; // deliberate grout gap
+  }
+}
+
+// ── Hand marks (ornament-only, aria-hidden) ───────────────────
+.nat-handmark {
+  display: block;
+  pointer-events: none;
+
+  &--stroke {
+    width: 100%;
+    max-width: 260px;
+    height: 8px;
+    color: var(--nat-ink); // stroke paint is ink, not gilding
+    opacity: 0.55;
+
+    &.nat-handmark--name {
+      margin: var(--nat-space-2) 0 var(--nat-space-4);
+    }
+  }
+
+  &--frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--nat-ink);
+    opacity: 0.4;
+    border-radius: inherit;
+    clip-path: inset(0);
+  }
+
+  &--sprig {
+    width: 34px;
+    height: 34px;
+    color: var(--nat-ink);
+    opacity: 0.7;
+
+    .nat-handmark__leaf {
+      fill: var(--nat-accent-mark);
+      stroke: none;
+    }
+  }
+}
+
+// ── (A) Opening band ──────────────────────────────────────────
+.nat-band--opening {
+  .nat-band__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--nat-space-7);
+    align-items: center;
+
+    @media all and ($mobile) {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--nat-space-5);
+    }
+  }
+}
 
 .nat-landing-name {
   font-family: var(--headerFont); // Fraunces display
@@ -11,4 +131,299 @@
   font-variation-settings:
     "SOFT" 100,
     "opsz" 144;
+}
+
+.nat-landing-identity {
+  margin: var(--nat-space-4) 0 0;
+  font-size: var(--nat-text-lg);
+  line-height: 1.5;
+  color: var(--nat-darkgray);
+  max-width: 46ch;
+}
+
+.nat-landing-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nat-space-4);
+  margin-top: var(--nat-space-5);
+}
+
+.nat-cta {
+  display: inline-block;
+  font-family: var(--bodyFont);
+  font-size: var(--nat-text-sm);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--nat-accent-text);
+  border: 1px solid var(--nat-accent-mark);
+  border-radius: var(--nat-radius-md);
+  background: var(--nat-surface);
+  box-shadow: var(--nat-shadow-sm);
+  padding: var(--nat-space-2) var(--nat-space-4);
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--nat-accent-text);
+    box-shadow: var(--nat-shadow-md);
+    color: var(--nat-accent-text);
+  }
+}
+
+.nat-landing-status {
+  margin: var(--nat-space-5) 0 0;
+  color: var(--nat-accent-text); // accent text role (5.0:1 on paper), mono badge
+}
+
+// Circular photo plate with gilded ring (Klimt gold circle).
+.nat-plate-photo {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  padding: 5px;
+  border: 1.5px solid var(--nat-accent-mark);
+  outline: 1px solid var(--nat-ornament-gold);
+  outline-offset: 3px;
+  box-shadow: var(--nat-shadow-md);
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+  }
+
+  @media all and ($mobile) {
+    margin-top: var(--nat-space-2);
+  }
+}
+
+// ── (B) Sim plate (markup only; sim logic is Task 4) ──────────
+.nat-sim-plate {
+  margin: 0;
+}
+
+.nat-plate {
+  position: relative;
+  background: var(--nat-surface);
+  border-radius: var(--nat-radius-md);
+
+  &__corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--nat-accent-mark); // gilded corner marks, leaf on edges
+    pointer-events: none;
+
+    &--tl {
+      top: -4px;
+      left: -4px;
+      border-right: none;
+      border-bottom: none;
+    }
+    &--tr {
+      top: -4px;
+      right: -4px;
+      border-left: none;
+      border-bottom: none;
+    }
+    &--bl {
+      bottom: -4px;
+      left: -4px;
+      border-right: none;
+      border-top: none;
+    }
+    &--br {
+      bottom: -4px;
+      right: -4px;
+      border-left: none;
+      border-top: none;
+    }
+  }
+
+  &__fig {
+    margin: var(--nat-space-3) 0 0;
+    font-size: var(--nat-text-xs);
+    color: var(--nat-gray);
+  }
+
+  &--figure {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    background: var(--nat-paper);
+  }
+}
+
+.nat-sim-canvas {
+  display: block;
+  width: 100%;
+  height: 320px;
+  border-radius: var(--nat-radius-sm);
+
+  @media all and ($mobile) {
+    height: 220px;
+  }
+}
+
+// ── (C) Notebook spreads ──────────────────────────────────────
+.nat-spread {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nat-space-5);
+  padding: var(--nat-space-6) 0;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid var(--nat-rule);
+  }
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  &__q {
+    margin: 0;
+    font-size: var(--nat-text-2xl);
+    line-height: 1.25;
+    color: var(--nat-ink);
+    font-weight: 400;
+  }
+
+  &__blurb {
+    margin: var(--nat-space-3) 0 0;
+    color: var(--nat-darkgray);
+    line-height: 1.6;
+  }
+
+  &__foot {
+    display: flex;
+    align-items: baseline;
+    gap: var(--nat-space-4);
+    margin: var(--nat-space-3) 0 0;
+  }
+
+  &__status {
+    color: var(--nat-accent-text);
+    white-space: nowrap;
+  }
+
+  &__margin {
+    margin-bottom: var(--nat-space-3);
+  }
+
+  &__margin-label {
+    display: inline-block;
+    font-style: normal;
+    font-size: var(--nat-text-xs);
+    color: var(--nat-terracotta); // marginalia play colour (brief §5.3)
+    letter-spacing: 0.1em;
+    margin-bottom: var(--nat-space-1);
+  }
+
+  @media all and ($mobile) {
+    flex-direction: column;
+
+    .nat-plate--figure {
+      order: -1;
+      margin-bottom: var(--nat-space-2);
+    }
+  }
+}
+
+.nat-also {
+  list-style: none;
+  margin: var(--nat-space-6) 0 0;
+  padding: var(--nat-space-4) 0 0;
+  border-top: 1px solid var(--nat-rule);
+
+  li {
+    margin-bottom: var(--nat-space-2);
+    line-height: 1.5;
+  }
+
+  .nat-mono {
+    color: var(--nat-gray);
+    font-size: var(--nat-text-xs);
+  }
+}
+
+// ── (D) Cortex door — the one loud ornament ───────────────────
+.nat-door {
+  display: block;
+  text-decoration: none;
+
+  &__panel {
+    position: relative;
+    border: 2px solid var(--nat-accent-mark);
+    outline: 1px solid var(--nat-ornament-gold);
+    outline-offset: 4px;
+    border-radius: var(--nat-radius-md);
+    background: var(--nat-surface);
+    box-shadow: var(--nat-shadow-md), var(--nat-shadow-plate);
+    padding: var(--nat-space-7) var(--nat-space-6);
+    text-align: center;
+    overflow: hidden;
+  }
+
+  &__tree {
+    display: block;
+    width: min(320px, 80%);
+    height: auto;
+    margin: 0 auto var(--nat-space-4);
+  }
+
+  &__branches path {
+    fill: none;
+    stroke: var(--nat-ink);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+
+  &__leaves circle {
+    fill: var(--nat-ornament-gold); // gilding on the tips: leaf, not text
+  }
+
+  &__name {
+    margin: 0;
+    font-family: var(--headerFont);
+    font-weight: 300;
+    font-size: var(--nat-text-2xl);
+    color: var(--nat-ink);
+  }
+
+  &__note {
+    margin: var(--nat-space-2) 0 0;
+    font-size: var(--nat-text-sm);
+    color: var(--nat-gray);
+  }
+
+  &__go {
+    display: inline-block;
+    margin-top: var(--nat-space-4);
+    font-size: var(--nat-text-xs);
+    color: var(--nat-accent-text);
+    border-bottom: 1px solid var(--nat-accent-mark);
+    padding-bottom: 2px;
+  }
+}
+
+// ── (E) Contact band ──────────────────────────────────────────
+.nat-band--contact {
+  text-align: center;
+
+  .nat-contact__note {
+    margin: 0 0 var(--nat-space-4);
+    font-size: var(--nat-text-lg);
+    color: var(--nat-darkgray);
+  }
+
+  .nat-handmark--stroke {
+    margin: 0 auto;
+  }
 }
