@@ -194,8 +194,11 @@ test("sim plate: FIG. 01 annotation, stable canvas mount with data attributes, n
   // gilded corner marks: four of them on the sim plate
   const cornerMarks = landingHtml.match(/nat-plate__corner/g) ?? []
   assert.ok(cornerMarks.length >= 4, "sim plate should have gilded corner marks")
-  // no sim logic yet (Task 4): component ships no afterDOMLoaded
-  assert.ok(Landing.afterDOMLoaded === undefined, "no sim logic before Task 4")
+  // Task 4 supersedes the old "no sim logic" pin: the mount script now exists,
+  // inlined as a string static and guarded on the single mount id.
+  assert.ok(typeof Landing.afterDOMLoaded === "string" && Landing.afterDOMLoaded.length > 0)
+  assert.ok(Landing.afterDOMLoaded.includes("nat-sim-canvas"), "mount guard present")
+  assert.ok(Landing.afterDOMLoaded.includes("addCleanup"), "SPA idempotent teardown registered")
 })
 
 test("featured research spreads: all three questions, blurb, marginalia placeholder, status, links", () => {

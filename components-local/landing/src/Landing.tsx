@@ -5,6 +5,7 @@ import {
 } from "../../../quartz/components/types"
 import { projects, also } from "../../research/src/projects"
 import { MosaicBand, SketchStroke, SketchFrame, SprigMark, DoorTree } from "./marks"
+import simMount from "../dist/simMount.generated"
 
 /**
  * Natural track landing (Task 3): notebook-sheet bands divided by thin gilded
@@ -170,5 +171,11 @@ Landing.beforeDOMLoaded = `
     document.documentElement.dataset.page = "index";
   }
 `
+
+// postscript static: the hero simulation mount (Task 4). Self-initializing IIFE
+// compiled from src/simMount.ts by scripts/build-components.sh (dist is tracked,
+// so this inlines as a plain string — no runtime bundle import). Guarded on the
+// single mount id; tears down any previous instance for SPA idempotency.
+Landing.afterDOMLoaded = simMount
 
 export default (() => Landing) satisfies QuartzComponentConstructor
