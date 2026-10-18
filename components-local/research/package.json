@@ -1,7 +1,7 @@
 {
   "name": "tarlton-research",
   "version": "0.1.0",
-  "description": "Research hub + project-page header prototype (ticket 08) for tarlton.info",
+  "description": "Natural track research hub + project pages (scaffold) for tarlton.info",
   "type": "module",
   "private": true,
   "exports": {
@@ -19,8 +19,8 @@
     "dependencies": [],
     "defaultEnabled": true,
     "components": {
-      "ResearchPage": {
-        "displayName": "ResearchPage",
+      "Research": {
+        "displayName": "Research",
         "defaultPosition": "beforeBody",
         "defaultPriority": 1
       }

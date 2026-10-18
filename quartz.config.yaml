@@ -239,23 +239,29 @@ plugins:
       position: left
       priority: 25
       display: mobile-only
-  - source: ./components-local/nav
+  - source: ./components-local/topbar
     enabled: true
     layout:
       position: header
       priority: 5
-  - source: ./components-local/hero
+  - source: ./components-local/landing
     enabled: true
-    # enabled: false
     layout:
       position: beforeBody
       priority: 1
+      condition: is-index
   - source: ./components-local/research
     enabled: true
     layout:
       position: beforeBody
       priority: 1
       condition: is-research
+  - source: ./components-local/footer
+    enabled: true
+    layout:
+      position: afterBody
+      priority: 5
+      condition: not-index
   - source: ./components-local/redirects
     enabled: true
   - source: "@quartz-community/bases-page"

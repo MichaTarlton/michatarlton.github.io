@@ -1,7 +1,7 @@
 {
-  "name": "tarlton-hero",
+  "name": "tarlton-footer",
   "version": "0.1.0",
-  "description": "Landing hero with autonomous spiking-network canvas for tarlton.info",
+  "description": "Natural track footer contact block for tarlton.info",
   "type": "module",
   "private": true,
   "exports": {
@@ -11,18 +11,18 @@
     "./package.json": "./package.json"
   },
   "quartz": {
-    "name": "hero",
-    "displayName": "Hero",
+    "name": "footer",
+    "displayName": "Footer",
     "category": "component",
     "version": "0.1.0",
     "quartzVersion": ">=5.0.0",
     "dependencies": [],
     "defaultEnabled": true,
     "components": {
-      "Hero": {
-        "displayName": "Hero",
-        "defaultPosition": "beforeBody",
-        "defaultPriority": 1
+      "Footer": {
+        "displayName": "Footer",
+        "defaultPosition": "afterBody",
+        "defaultPriority": 10
       }
     }
   }

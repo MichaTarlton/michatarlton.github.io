@@ -1,0 +1,29 @@
+{
+  "name": "tarlton-topbar",
+  "version": "0.1.0",
+  "description": "Natural track top bar (nav links with active state) for tarlton.info",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./components": {
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "topbar",
+    "displayName": "Topbar",
+    "category": "component",
+    "version": "0.1.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultEnabled": true,
+    "components": {
+      "Topbar": {
+        "displayName": "Topbar",
+        "defaultPosition": "header",
+        "defaultPriority": 5
+      }
+    }
+  }
+}
