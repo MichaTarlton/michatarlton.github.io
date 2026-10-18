@@ -2,6 +2,8 @@ import { test } from "node:test"
 import assert from "node:assert"
 import fs from "node:fs"
 import path from "node:path"
+import { renderToString } from "preact-render-to-string"
+import LandingConstructor from "../components-local/landing/src/Landing"
 
 /**
  * Graphic Realism track — built-output pins + token/contrast checks.
@@ -120,4 +122,106 @@ test("accent is never used as a text color in the track partials", () => {
       .findIndex((line) => /(?<![-\w])color:\s*var\(--accent\b/.test(line))
     assert.equal(offender, -1, `${name}.scss line ${offender + 1} uses accent as a text color`)
   }
+})
+
+// ── Task 3: landing composition (SSR renderToString with mocked props) ────
+
+const Landing = LandingConstructor()
+
+function renderLanding(): string {
+  const props = {
+    fileData: {
+      slug: "index",
+      frontmatter: {
+        hero: {
+          name: "Mike Tarlton",
+          identity: "I build artificially thinking systems inspired by physics and neuroscience",
+          status: "PhD candidate at OsloMet, open to research positions",
+          primaryCta: {
+            label: "Faculty page",
+            href: "https://www.oslomet.no/en/about/employee/michaelt",
+          },
+          photo: "/attachments/portrait.jpg",
+          photoAlt: "Mike Tarlton, portrait photo",
+        },
+      },
+    },
+    children: [],
+  } as never
+  return renderToString(Landing(props as never))
+}
+
+test("landing renders masthead from hero frontmatter", () => {
+  const html = renderLanding()
+  assert.match(html, /Mike Tarlton/)
+  assert.match(html, /I build artificially thinking systems/)
+  assert.match(html, /PhD candidate at OsloMet, open to research positions/)
+  // CTAs: faculty page + CV download with the download attribute
+  assert.match(html, /Faculty page/)
+  assert.match(html, /href="\/attachments\/tarlton-cv\.pdf"[^>]*download/)
+  // photo plate with alt text
+  assert.match(html, /portrait\.jpg/)
+  assert.match(html, /alt="Mike Tarlton, portrait photo"/)
+})
+
+test("landing renders sim mount with corner annotations (FIG. 01)", () => {
+  const html = renderLanding()
+  assert.match(html, /id="gr-sim-mount"/)
+  assert.match(html, /FIG\. 01/)
+  assert.match(html, /OSC 6/)
+  assert.match(html, /30 FPS/)
+  // stable data-attributes for the Task 4 renderer
+  assert.match(html, /data-sim="sbf-oscillator-bank"/)
+  assert.match(html, /data-sim-oscillators="6"/)
+  assert.match(html, /data-sim-fps="30"/)
+})
+
+test("landing research index carries all three project questions", () => {
+  const html = renderLanding()
+  for (const q of [
+    "Can the brain's way of keeping time make machine learning cheaper at the edge?",
+    "How does time itself emerge from the plasticity of single neurons?",
+    "How do you choose the right model when inferring networks from spiking data?",
+  ]) {
+    assert.ok(html.includes(q), `missing project question: ${q.slice(0, 40)}...`)
+  }
+  // numbered rows + links to the fixed URL set
+  assert.match(html, /href="\/research\/ner-2025\/"/)
+  assert.match(html, /href="\/research\/phd-overview\/"/)
+  assert.match(html, /href="\/research\/masters-thesis\/"/)
+  assert.match(html, />01</)
+  assert.match(html, />02</)
+  assert.match(html, />03</)
+})
+
+test("landing cortex door links to /wiki/ with coordinate label", () => {
+  const html = renderLanding()
+  assert.match(html, /class="gr-door"[^>]*href="\/wiki\/"/)
+  assert.match(html, /→ \/wiki\//)
+})
+
+test("landing contact band carries email + linkedin + github", () => {
+  const html = renderLanding()
+  assert.match(html, /mailto:M@Tarlton\.info/)
+  assert.match(html, /linkedin\.com\/in\/m-tarlton/)
+  assert.match(html, /github\.com\/MichaTarlton/)
+})
+
+test("NO Cortex note list anywhere on the landing", () => {
+  const html = renderLanding()
+  // §3/§9.4: no Cortex content on Hub pages; the door is a link only.
+  assert.ok(!html.includes("Recently in the Cortex"), "Cortex note list snuck in")
+  assert.ok(!html.includes("cortex-note"), "Cortex note markup snuck in")
+  // no note titles/links pointing into /wiki/ notes — only the door href itself
+  const wikiHrefs = [...html.matchAll(/href="\/wiki\/"/g)].length
+  assert.equal(wikiHrefs, 1, "expected exactly the door link to /wiki/")
+})
+
+test("built index contains the landing bands (end-to-end pin)", () => {
+  const html = readIndex()
+  assert.match(html, /gr-band--masthead/)
+  assert.match(html, /gr-sim-mount/)
+  assert.match(html, /gr-band--research/)
+  assert.match(html, /class="gr-door"/)
+  assert.match(html, /gr-band--contact/)
 })

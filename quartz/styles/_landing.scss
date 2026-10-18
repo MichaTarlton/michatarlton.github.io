@@ -1,21 +1,349 @@
-// Graphic Realism track — landing bands.
-// Task 2: minimal stub styling only (masthead name in the Archivo display
-// role) so the build visibly reflects tokens. Full band composition
-// (masthead, hero sim mount, research index, Cortex door, contact) is Task 3.
+// Graphic Realism track — landing bands (Task 3).
+// Engineered dossier: five bands separated by 2px rules, rail-offset, aligned
+// to the hairline grid. One hot accent per view (the Cortex door marker);
+// everything else ink/paper/gray. Radius 0, no shadows, no gradients; hover /
+// focus states are 0ms hard flips; annotation carries data or disappears.
+//
+// Caveat from _base.scss: the beforeBody slot (where this renders) sits INSIDE
+// .page-header in this fork's frame; the engine's default chrome there is
+// already quashed on data-page="index". Do not display:none .page-header.
+@use "./variables.scss" as *; // breakpoints: $mobile / $tablet / $desktop
 @use "./tokens" as *;
 
-.gr-landing {
-  padding: var(--space-8) var(--space-5);
-
-  // oversized name from hero frontmatter — display role: Archivo heavy caps
-  h1 {
-    font-family: var(--headerFont);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: var(--track-display);
-    font-size: var(--fs-display);
-    line-height: 1.05;
-    color: var(--ink);
-    margin: 0;
+// ── index-only frame flattening ──────────────────────────────────────────
+// The landing owns the whole index composition: kill the engine's gutters so
+// the 2px band rules run the full content column, and drop the default <hr>
+// the frame inserts before .page-footer (the footer is not-index, so it would
+// dangle after an empty article body).
+html[data-page="index"] {
+  #quartz-body {
+    @media all and not ($mobile) {
+      padding-left: var(--gr-rail);
+      padding-right: 0;
+    }
+    @media all and ($mobile) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
+
+  .center > hr {
+    display: none;
+  }
+}
+
+// ── band scaffold ────────────────────────────────────────────────────────
+.gr-landing {
+  min-width: 100%;
+}
+
+.gr-band {
+  padding: var(--space-8) var(--space-6);
+  max-width: 72rem; // dossier sheet width; rules still read full column at ≤72rem
+
+  @media all and ($mobile) {
+    padding: var(--space-7) var(--space-5);
+  }
+
+  & + & {
+    border-top: var(--rule) solid var(--ink); // 2px structural band rule
+  }
+
+  &:last-of-type {
+    border-bottom: var(--rule) solid var(--ink); // close the sheet
+  }
+}
+
+.gr-band__head {
+  margin: 0 0 var(--space-6);
+}
+
+// ── Band A: masthead ─────────────────────────────────────────────────────
+.gr-masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-8);
+  align-items: start;
+
+  @media all and ($mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gr-masthead__name {
+  margin: 0 0 var(--space-5);
+  font-size: clamp(2.75rem, 7vw, 5rem);
+}
+
+.gr-masthead__identity {
+  margin: 0 0 var(--space-6);
+  max-width: 44rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+// Status: mono annotation BLOCK — carries data (role + availability).
+.gr-masthead__status {
+  display: inline-block;
+  margin: 0 0 var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  border: var(--hairline) solid var(--hairline-color);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.gr-masthead__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+// Rectangular 2px-border buttons: Link Colour text (underline always), hover
+// is a 0ms hard flip to ink ground / paper text (no transitions anywhere).
+.gr-btn {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  border: var(--rule) solid var(--ink);
+  background-color: var(--paper);
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  text-decoration: none; // underline returns on hover as the 2px mark
+  color: var(--link);
+  transition: none;
+
+  &:hover {
+    background-color: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+  }
+}
+
+// Square photo plate: radius 0, hairline border, flat.
+.gr-masthead__plate {
+  margin: 0;
+  border: var(--hairline) solid var(--hairline-color);
+
+  img {
+    display: block;
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+
+    @media all and ($mobile) {
+      width: 160px;
+      height: 160px;
+    }
+  }
+}
+
+// ── Band B: hero simulation mount (markup now, Task 4 wires the canvas) ───
+// Full-bleed: no horizontal band padding; the canvas spans the content column.
+.gr-band--sim {
+  max-width: none;
+  padding: 0;
+}
+
+.gr-sim {
+  position: relative;
+  height: min(56vw, 480px);
+  min-height: 280px;
+  background-color: var(--paper);
+  border-top: var(--hairline) solid var(--hairline-color);
+  border-bottom: var(--hairline) solid var(--hairline-color);
+}
+
+.gr-sim__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+// Static corner annotations (FIG. number, oscillator count, cadence) —
+// functional annotation per §4.2.3; Task 4 keeps them wired to real values.
+.gr-sim__annot {
+  position: absolute;
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--gray);
+  pointer-events: none;
+
+  &--tl {
+    top: var(--space-3);
+    left: var(--space-4);
+  }
+  &--tr {
+    top: var(--space-3);
+    right: var(--space-4);
+  }
+  &--br {
+    bottom: var(--space-3);
+    right: var(--space-4);
+  }
+}
+
+// ── Band C: research index ───────────────────────────────────────────────
+// Numbered rows on hairlines; the whole row is the link; hover/focus is a
+// hard color flip (ink ground, paper text) at 0ms.
+.gr-rrow {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: var(--space-6);
+  padding: var(--space-6) 0;
+  border-top: var(--hairline) solid var(--hairline-color);
+  color: inherit;
+  text-decoration: none;
+  transition: none;
+
+  @media all and ($mobile) {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  &:last-of-type {
+    border-bottom: var(--hairline) solid var(--hairline-color);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--ink);
+    color: var(--paper);
+
+    .gr-rrow__numeral,
+    .gr-rrow__q,
+    .gr-rrow__meta,
+    .gr-rrow__venue {
+      color: var(--paper);
+    }
+  }
+}
+
+.gr-rrow__numeral {
+  font-size: 3rem;
+  color: var(--gray);
+
+  @media all and ($mobile) {
+    font-size: 2rem;
+  }
+}
+
+.gr-rrow__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: var(--space-6);
+  border-left: var(--hairline) solid var(--hairline-color);
+
+  @media all and ($mobile) {
+    padding-left: var(--space-4);
+  }
+}
+
+.gr-rrow__q {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.gr-rrow__meta {
+  color: var(--ink);
+}
+
+.gr-rrow__venue {
+  color: var(--gray);
+  text-transform: none;
+}
+
+// `also` items: mono annotation lines, links in Link Colour.
+.gr-also {
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin-bottom: var(--space-3);
+    line-height: 1.6;
+    text-transform: none;
+    color: var(--gray);
+  }
+}
+
+// ── Band D: Cortex door ──────────────────────────────────────────────────
+// One deliberate marker block, the view's single hot accent (the red square).
+// Door only: no Cortex content, no fake note lists (§3 / §9.4).
+.gr-door {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: var(--rule) solid var(--ink);
+  background-color: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  transition: none;
+
+  &:hover {
+    background-color: var(--ink);
+    color: var(--paper);
+
+    .gr-door__coord {
+      color: var(--paper);
+    }
+  }
+}
+
+.gr-door__marker {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  background-color: var(--accent); // mark/block use only (§4.2.9)
+}
+
+.gr-door__label {
+  font-size: var(--fs-h2);
+  letter-spacing: var(--track-display);
+}
+
+.gr-door__coord {
+  margin-left: auto;
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.gr-door__chevron {
+  flex: 0 0 auto;
+}
+
+// ── Band E: contact ──────────────────────────────────────────────────────
+.gr-contact__email {
+  margin: 0 0 var(--space-4);
+
+  a {
+    font-family: var(--codeFont);
+    font-size: var(--fs-small);
+    letter-spacing: var(--track-mono);
+    text-transform: uppercase;
+    text-decoration-thickness: var(--rule);
+  }
+}
+
+// Inline mono-caps links: Email · LinkedIn · GitHub.
+.gr-contact__links {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--gray);
 }
