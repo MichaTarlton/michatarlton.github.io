@@ -1,7 +1,7 @@
 {
-  "name": "tarlton-nav",
+  "name": "tarlton-footer",
   "version": "0.1.0",
-  "description": "Site navigation component for tarlton.info",
+  "description": "Graphic Realism track: contact band on non-index pages",
   "type": "module",
   "private": true,
   "exports": {
@@ -11,18 +11,18 @@
     "./package.json": "./package.json"
   },
   "quartz": {
-    "name": "nav",
-    "displayName": "Site Nav",
+    "name": "footer",
+    "displayName": "Footer",
     "category": "component",
     "version": "0.1.0",
     "quartzVersion": ">=5.0.0",
     "dependencies": [],
     "defaultEnabled": true,
     "components": {
-      "SiteNav": {
-        "displayName": "Site Nav",
-        "defaultPosition": "header",
-        "defaultPriority": 5
+      "Footer": {
+        "displayName": "Footer",
+        "defaultPosition": "afterBody",
+        "defaultPriority": 60
       }
     }
   }

@@ -5,27 +5,28 @@ import {
 } from "../../../quartz/components/types"
 
 /**
- * Site navigation — Blueprint §3: Research · CV · Writing · Wiki.
- * Rendered in the `header` position (injected via quartz.ts layout overrides).
+ * Graphic Realism topbar — header slot.
+ * Task 1 scaffold: the nav set with active state. Name lockup, numbered mono
+ * nav, status block and the mobile top-strip land in Task 6.
  */
 const links: { label: string; href: string; section: string }[] = [
-  { label: "About", href: "/", section: "index" },
+  { label: "Index", href: "/", section: "index" },
   { label: "Research", href: "/research/", section: "research" },
   { label: "CV", href: "/cv/", section: "cv" },
   { label: "Writing", href: "/writing/", section: "writing" },
   { label: "Wiki", href: "/wiki/", section: "wiki" },
 ]
 
-const SiteNav: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
+const Topbar: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   const slug = fileData.slug ?? ""
   return (
-    <nav class="site-nav" aria-label="Site">
+    <nav class="gr-topbar" aria-label="Site">
       {links.map(({ label, href, section }) => {
         const active = slug === section || slug.startsWith(`${section}/`)
         return (
           <a
             href={href}
-            class={`site-nav-link${active ? " active" : ""}`}
+            class={`gr-nav-link${active ? " is-active" : ""}`}
             aria-current={active ? "page" : undefined}
           >
             {label}
@@ -36,4 +37,4 @@ const SiteNav: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
-export default (() => SiteNav) satisfies QuartzComponentConstructor
+export default (() => Topbar) satisfies QuartzComponentConstructor

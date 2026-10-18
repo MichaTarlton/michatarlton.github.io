@@ -1,7 +1,7 @@
 {
   "name": "tarlton-research",
   "version": "0.1.0",
-  "description": "Research hub + project-page header prototype (ticket 08) for tarlton.info",
+  "description": "Graphic Realism track: research hub + project pages",
   "type": "module",
   "private": true,
   "exports": {

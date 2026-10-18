@@ -1,7 +1,7 @@
 {
-  "name": "tarlton-hero",
+  "name": "tarlton-landing",
   "version": "0.1.0",
-  "description": "Landing hero with autonomous spiking-network canvas for tarlton.info",
+  "description": "Graphic Realism track: landing composition (index only)",
   "type": "module",
   "private": true,
   "exports": {
@@ -11,16 +11,16 @@
     "./package.json": "./package.json"
   },
   "quartz": {
-    "name": "hero",
-    "displayName": "Hero",
+    "name": "landing",
+    "displayName": "Landing",
     "category": "component",
     "version": "0.1.0",
     "quartzVersion": ">=5.0.0",
     "dependencies": [],
     "defaultEnabled": true,
     "components": {
-      "Hero": {
-        "displayName": "Hero",
+      "Landing": {
+        "displayName": "Landing",
         "defaultPosition": "beforeBody",
         "defaultPriority": 1
       }
