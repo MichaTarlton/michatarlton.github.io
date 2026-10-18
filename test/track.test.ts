@@ -267,3 +267,186 @@ test("built index.html carries the landing composition", () => {
   const doors = html.match(/class="nat-door"/g) ?? []
   assert.equal(doors.length, 1)
 })
+
+// ============================================================================
+// Task 5 — research hub + project pages: plate album, covers, ink-and-gold figures
+// ============================================================================
+
+import ResearchComp from "../components-local/research/src/Research"
+import {
+  NerRasterFigure,
+  PhdAttractorFigure,
+  MscLatticeFigure,
+} from "../components-local/research/src/figures"
+import { also, nerRasterSeed } from "../components-local/research/src/projects"
+
+const Research = ResearchComp()
+
+const hubProps = {
+  fileData: {
+    slug: "research/index",
+    frontmatter: {
+      description:
+        "Mike Tarlton's research: brain-inspired learning systems, from models of neural timing to model selection for spiking networks. Grouped by question, not by paper.",
+    },
+  },
+} as unknown as QuartzComponentProps
+
+const nerProps = {
+  fileData: { slug: "research/ner-2025/index", frontmatter: {} },
+} as unknown as QuartzComponentProps
+
+const hubHtml = renderToString(Research(hubProps) as any)
+const nerHtml = renderToString(Research(nerProps) as any)
+
+test("hub: plate album lists all three questions, names, statuses, and slug links", () => {
+  assert.ok(hubHtml.includes('class="nat-research nat-research-hub"'))
+  for (const p of projects) {
+    assert.ok(hubHtml.includes(p.q), `missing question for ${p.slug}`)
+    assert.ok(hubHtml.includes(p.name), `missing name for ${p.slug}`)
+    assert.ok(hubHtml.includes(p.status), `missing status for ${p.slug}`)
+    assert.ok(hubHtml.includes(`href="/research/${p.slug}/"`), `missing link for ${p.slug}`)
+  }
+  // questions in the voice register; status as soft mono pill
+  assert.ok(hubHtml.includes('class="nat-album__q voice"'))
+  assert.ok(hubHtml.includes('class="nat-badge nat-mono"'))
+  // gilded corner marks on mounted plates
+  assert.ok(hubHtml.includes('class="nat-plate__corner nat-plate__corner--tl"'))
+  // a hand mark somewhere in the hub (sketch stroke under the title)
+  assert.ok(hubHtml.includes("nat-handmark"))
+  // also items below, with the external one flagged
+  for (const a of also) assert.ok(hubHtml.includes(a.label))
+})
+
+test("hub: NO Cortex content (brief §3)", () => {
+  assert.ok(!hubHtml.includes("Cortex"))
+  assert.ok(!hubHtml.includes("nat-door"))
+  assert.ok(!hubHtml.includes("nat-cortex"))
+})
+
+test("project: cover header, outputs row, figure plate — rendered via dispatcher", () => {
+  assert.ok(nerHtml.includes('class="nat-research nat-research-project"'))
+  assert.ok(nerHtml.includes("SBF-Automata"))
+  assert.ok(nerHtml.includes('class="nat-badge nat-mono"'))
+  assert.ok(nerHtml.includes("Principal author, spotlight poster at IEEE NER 2025"))
+  assert.ok(nerHtml.includes('class="nat-cover__q voice"'))
+  assert.ok(nerHtml.includes("Paper PDF"))
+  assert.ok(nerHtml.includes("FIG. 01 · beat raster"))
+  // raster seed values present: rhythms + tcap
+  assert.ok(nerHtml.includes(`rhythms ${nerRasterSeed.rhythms.join("/")}`))
+  assert.ok(nerHtml.includes(`t-cap ${nerRasterSeed.tcap}`))
+  // hand mark on the project cover slab too
+  assert.ok(nerHtml.includes("nat-handmark"))
+})
+
+test("dispatcher: project slugs match after stripping trailing /index (cross-lane fix)", () => {
+  // The T1 bug: slug 'research/<slug>/index' never matched the project branch.
+  for (const p of projects) {
+    const html = renderToString(
+      Research({
+        fileData: { slug: `research/${p.slug}/index`, frontmatter: {} },
+      } as unknown as QuartzComponentProps) as any,
+    )
+    assert.ok(html.includes(p.name), `project page for ${p.slug} rendered nothing`)
+    assert.ok(html.includes("nat-cover__slab"), `project page for ${p.slug} missing cover slab`)
+  }
+  // Non-research slugs render nothing.
+  assert.equal(Research({ fileData: { slug: "cv", frontmatter: {} } } as any), null)
+})
+
+test("figures: deterministic — renderToString twice yields identical markup", () => {
+  for (const Figure of [NerRasterFigure, PhdAttractorFigure, MscLatticeFigure]) {
+    const a = renderToString(Figure() as any)
+    const b = renderToString(Figure() as any)
+    assert.equal(a, b)
+    assert.ok(a.includes("FIG."), "figure carries its FIG. label")
+    assert.ok(a.includes("nat-plate__corner"), "figure plate has a gilded corner")
+  }
+  // track-specific accents
+  assert.ok(renderToString(PhdAttractorFigure() as any).includes("nat-fig__verdigris"))
+  assert.ok(renderToString(MscLatticeFigure() as any).includes("nat-fig__terracotta"))
+  assert.ok(renderToString(NerRasterFigure() as any).includes("nat-fig__wash"))
+})
+
+test("gold pin: _research.scss never uses ornament gold or accent mark as a text color", () => {
+  const src = fs.readFileSync(path.join(stylesDir, "_research.scss"), "utf-8")
+  const offenders: string[] = []
+  src.split("\n").forEach((line, i) => {
+    if (
+      /(^|[;{\s])color:\s*[^;]*(#c9a227|#a97b1f|var\(--nat-ornament-gold\)|var\(--nat-accent-mark\))/i.test(
+        line,
+      )
+    ) {
+      offenders.push(`_research.scss:${i + 1}: ${line.trim()}`)
+    }
+  })
+  assert.deepEqual(offenders, [], "gilding used as text color in _research.scss")
+})
+
+test("hub engine suppression: scoped strictly to body[data-slug=research/index]", () => {
+  const src = fs.readFileSync(path.join(stylesDir, "_research.scss"), "utf-8")
+  assert.ok(
+    src.includes('body[data-slug="research/index"] .page-listing'),
+    "engine folder listing must be hidden on the hub only",
+  )
+  assert.ok(
+    src.includes('body[data-slug="research/index"] .center > .popover-hint > article'),
+    "empty hub content article must be hidden, scoped to the hub slug",
+  )
+  // and nowhere else: no unscoped page-listing suppression
+  const unscoped = src
+    .split("\n")
+    .some((l) => /\.page-listing\s*[,{]/.test(l) && !l.includes("data-slug"))
+  assert.ok(!unscoped, "page-listing suppression must stay scoped to the hub slug")
+})
+
+test("built /research/index.html: album, questions, slug links, no Cortex content", () => {
+  const html = read("research/index.html")
+  for (const p of projects) {
+    assert.ok(html.includes(p.q), `built hub missing question for ${p.slug}`)
+    assert.ok(html.includes(`/research/${p.slug}/`), `built hub missing link for ${p.slug}`)
+  }
+  assert.ok(!html.includes("The Cortex"))
+  assert.ok(!html.includes("nat-door"))
+  assert.ok(!html.includes("nat-cortex"))
+})
+
+test("built /research/ner-2025/index.html: FIG., paper PDF output, prose article present", () => {
+  const html = read("research/ner-2025/index.html")
+  assert.ok(html.includes("FIG."), "figure label present")
+  assert.ok(html.includes("Paper PDF"), "paper PDF output present")
+  assert.ok(html.includes(".pdf"), "paper PDF href present")
+  // Quartz still renders the authored prose below (component renders no content)
+  assert.ok(
+    html.includes("Periodicity finding is a critical element"),
+    "article prose from content must remain",
+  )
+  assert.ok(html.includes('class="nat-cover__slab"'))
+})
+
+test("built phd-overview + masters-thesis render their names and figures", () => {
+  const phd = read("research/phd-overview/index.html")
+  assert.ok(phd.includes("PhD Research Overview"))
+  assert.ok(phd.includes("FIG. 01 · attractor arcs"))
+  const msc = read("research/masters-thesis/index.html")
+  assert.ok(msc.includes("MSc Thesis: Model Selection for Ising Inference"))
+  assert.ok(msc.includes("FIG. 01 · Ising lattice"))
+  // external thesis link flagged with ↗
+  assert.ok(msc.includes("↗"))
+})
+
+test("built research pages keep the hand mark and no legacy classes", () => {
+  for (const rel of [
+    "research/index.html",
+    "research/ner-2025/index.html",
+    "research/phd-overview/index.html",
+    "research/masters-thesis/index.html",
+  ]) {
+    const html = read(rel)
+    assert.ok(html.includes("nat-research"), `${rel}: research component mounted`)
+    assert.ok(html.includes("nat-handmark"), `${rel}: hand mark present`)
+    for (const forbidden of ["r-card", "a-hero", "a-cards", "theme-a", "site-nav-link"]) {
+      assert.ok(!html.includes(forbidden), `${rel} still contains "${forbidden}"`)
+    }
+  }
+})

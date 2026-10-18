@@ -4,36 +4,35 @@ import {
   QuartzComponentProps,
 } from "../../../quartz/components/types"
 import { projects } from "./projects"
+import { ResearchHub } from "./hub"
+import { ResearchProject } from "./project"
 
 /**
- * Natural track research — hub vs project branch by fileData.slug (Task 1 scaffold).
- * Full hub album / project covers / figures land in Task 5.
+ * Natural track research — hub vs project branch by fileData.slug (Task 1
+ * scaffold; full hub album / project covers / figures in Task 5).
+ *
+ * Cross-lane fix (GR lane finding): `fileData.slug` for `content/research/<slug>/
+ * index.md` is `research/<slug>/index`, NOT `research/<slug>` — the T1 scaffold's
+ * project branch never matched, so project pages rendered no component. Strip
+ * the trailing `/index` before matching. The hub's own slug is `research/index`,
+ * which keeps matching unchanged.
  */
+const normalizeSlug = (slug: string) => slug.replace(/\/index$/, "")
+
 const isResearchSlug = (slug: string) => slug === "research/index" || slug.startsWith("research/")
 
 const Research: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
-  const slug = fileData.slug ?? ""
-  if (!isResearchSlug(slug)) return null
+  const raw = fileData.slug ?? ""
+  if (!isResearchSlug(raw)) return null
+  const slug = normalizeSlug(raw)
 
-  if (slug === "research/index") {
-    return (
-      <div class="nat-research nat-research-hub">
-        <h1>Research</h1>
-        {projects.map((p) => (
-          <p class="nat-research-hub-question" key={p.slug}>
-            {p.q}
-          </p>
-        ))}
-      </div>
-    )
+  if (slug === "research") {
+    return <ResearchHub description={fileData.frontmatter?.description} />
   }
 
-  const p = projects.find((proj) => slug.startsWith(`research/${proj.slug}`))
-  return (
-    <div class="nat-research nat-research-project">
-      <h1>{p?.name ?? "Research"}</h1>
-    </div>
-  )
+  const project = projects.find((p) => slug === `research/${p.slug}`)
+  if (!project) return null
+  return <ResearchProject project={project} />
 }
 
 // prescript static: mark research pages with html[data-page="research"]. Statics

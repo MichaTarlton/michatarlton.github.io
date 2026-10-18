@@ -1,7 +1,22 @@
-// Track: Natural — research (Task 5: plate album hub, project covers, ink-and-gold figures).
-// Minimal stub styling for T2 so the tokens are visible in the build; hub/project chrome lands in T5.
+// Track: Natural — research (Task 5): plate album hub, project cover sheets,
+// ink-and-gold figures. Gold is leaf (brief §5.2.1): gilded corner marks, rules,
+// flat slab wash, gilded underlines — never a text colour (pinned test). One
+// hand mark per page (sketch stroke). Scoping: html[data-page="research"] plus
+// the .nat-research-hub / .nat-research-project classes; the hub-only engine
+// suppression is keyed to body[data-slug="research/index"] (present in static
+// HTML, unlike data-page which a prescript sets).
 
+@use "./variables.scss" as *;
+
+// ── Shared frame ─────────────────────────────────────────────
 .nat-research {
+  padding: var(--nat-space-7) 0 var(--nat-space-8);
+  max-width: var(--nat-measure);
+
+  @media all and ($mobile) {
+    padding: var(--nat-space-5) 0 var(--nat-space-6);
+  }
+
   h1 {
     font-family: var(--headerFont); // Fraunces display
     font-weight: 300;
@@ -9,5 +24,310 @@
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--nat-ink);
+    margin: 0;
   }
+}
+
+// ── Status badge: soft pill, mono ────────────────────────────
+.nat-badge {
+  display: inline-block;
+  padding: 2px var(--nat-space-3);
+  border-radius: var(--nat-radius-pill);
+  border: 1px solid var(--nat-accent-mark);
+  background: color-mix(in srgb, var(--nat-accent-text) 7%, var(--nat-surface));
+  color: var(--nat-accent-text); // accent text role (5.0:1 on paper), not gilding
+  font-size: var(--nat-text-xs);
+  white-space: nowrap;
+}
+
+// ── Hub: plate album ─────────────────────────────────────────
+.nat-album__head {
+  margin-bottom: var(--nat-space-7);
+
+  .nat-handmark--stroke {
+    max-width: 200px;
+  }
+}
+
+.nat-album__lede {
+  margin: var(--nat-space-4) 0 0;
+  font-size: var(--nat-text-lg);
+  line-height: 1.5;
+  color: var(--nat-darkgray);
+  max-width: 52ch;
+}
+
+.nat-album {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); // a vertical album, never equal cards
+  gap: var(--nat-space-6);
+}
+
+// Mounted plate: surface sheet, hairline rule, gilded corner marks.
+.nat-album__plate {
+  position: relative;
+  margin: 0;
+  background: var(--nat-surface);
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  box-shadow: var(--nat-shadow-md), var(--nat-shadow-plate);
+  padding: var(--nat-space-6);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+
+  // Hover: gentle warm-ink shift (no hard flip, no gold fill).
+  &:hover {
+    border-color: color-mix(in srgb, var(--nat-accent-mark) 40%, var(--nat-rule));
+    background: color-mix(in srgb, var(--nat-paper) 55%, var(--nat-surface));
+    box-shadow:
+      var(--nat-shadow-md),
+      var(--nat-shadow-plate),
+      0 0 0 1px color-mix(in srgb, var(--nat-shadow-warm) / 0.04, transparent);
+  }
+}
+
+.nat-album__caption {
+  display: block;
+}
+
+.nat-album__q {
+  margin: 0;
+  font-size: var(--nat-text-xl);
+  line-height: 1.3;
+  font-weight: 400;
+  color: var(--nat-ink);
+}
+
+.nat-album__namerow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nat-space-4);
+  margin: var(--nat-space-4) 0 0;
+}
+
+.nat-album__name {
+  font-family: var(--headerFont);
+  font-size: var(--nat-text-base);
+  font-weight: 400;
+}
+
+.nat-album__venue {
+  margin: var(--nat-space-2) 0 0;
+  font-size: var(--nat-text-sm);
+  color: var(--nat-gray);
+}
+
+.nat-album__blurb {
+  margin: var(--nat-space-3) 0 0;
+  color: var(--nat-darkgray);
+  line-height: 1.6;
+}
+
+// ── Hub: also items ──────────────────────────────────────────
+.nat-album__also {
+  margin-top: var(--nat-space-8);
+  padding-top: var(--nat-space-5);
+  border-top: 1px solid var(--nat-rule);
+
+  @media all and ($mobile) {
+    margin-top: var(--nat-space-6);
+  }
+}
+
+.nat-album__also-title {
+  color: var(--nat-accent-text); // accent text role, mono label with work to do
+  letter-spacing: 0.12em;
+}
+
+.nat-album__also .nat-also {
+  // the parent section already carries the hairline rule; drop the landing's border
+  margin-top: var(--nat-space-3);
+  border-top: none;
+  padding-top: 0;
+
+  li {
+    line-height: 1.5;
+  }
+
+  .nat-mono {
+    color: var(--nat-gray);
+    font-size: var(--nat-text-xs);
+  }
+}
+
+// ── Project: cover header on a gold-wash slab ────────────────
+// The slab is the one loud ornament on a project page: flat gilded tint
+// (opacity mix, no gradient), gilded corner marks, name + badge + venue +
+// question in the voice register.
+.nat-cover__slab {
+  position: relative;
+  background: color-mix(in srgb, var(--nat-ornament-gold) 9%, var(--nat-surface));
+  border: 1px solid color-mix(in srgb, var(--nat-accent-mark) 45%, var(--nat-rule));
+  border-radius: var(--nat-radius-md);
+  box-shadow: var(--nat-shadow-md), var(--nat-shadow-plate);
+  padding: var(--nat-space-7) var(--nat-space-6) var(--nat-space-6);
+  margin-bottom: var(--nat-space-7);
+
+  @media all and ($mobile) {
+    padding: var(--nat-space-5) var(--nat-space-4) var(--nat-space-5);
+  }
+}
+
+.nat-cover__name {
+  font-size: var(--nat-text-4xl);
+  max-width: 24ch;
+}
+
+.nat-cover__badgerow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nat-space-4);
+  margin: var(--nat-space-4) 0 0;
+}
+
+.nat-cover__venue {
+  font-size: var(--nat-text-sm);
+  color: var(--nat-gray);
+}
+
+.nat-cover__q {
+  margin: var(--nat-space-4) 0 0;
+  font-size: var(--nat-text-xl);
+  line-height: 1.3;
+  color: var(--nat-ink);
+  max-width: 44ch;
+}
+
+// ── Project: Outputs row (mono, gilded-underline links) ──────
+.nat-outputs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nat-space-4) var(--nat-space-6);
+  margin-bottom: var(--nat-space-7);
+}
+
+.nat-outputs__label {
+  color: var(--nat-accent-text); // accent text role, mono label
+  letter-spacing: 0.12em;
+}
+
+.nat-outputs__row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--nat-space-6);
+  row-gap: var(--nat-space-2);
+
+  li {
+    font-family: var(--codeFont);
+    font-size: var(--nat-text-sm);
+  }
+}
+
+.nat-outputs__link {
+  color: var(--nat-link); // the one link colour
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--nat-accent-mark); // gilded underline: leaf, not text
+  padding-bottom: 1px;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    color: var(--nat-link-hover);
+    border-bottom-color: var(--nat-accent-text);
+  }
+}
+
+.nat-outputs__ext {
+  color: var(--nat-gray);
+}
+
+// ── Ink-and-gold figure plates ───────────────────────────────
+// Pen-and-ink line with gold wash on accents (brief §5.2.5, §5.3). Gilding is
+// fill/opacity on marks only; every text-bearing token here is ink/gray. The
+// FIG. caption is functional annotation (brief §8.4), mono, muted.
+.nat-figplate {
+  position: relative;
+  margin: var(--nat-space-7) 0;
+  padding: var(--nat-space-5);
+  background: var(--nat-surface);
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  box-shadow: var(--nat-shadow-plate);
+  max-width: 420px;
+}
+
+.nat-fig {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  &__ink {
+    fill: none;
+    stroke: var(--nat-ink); // pen-and-ink line
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    opacity: 0.85;
+  }
+
+  &__rule {
+    stroke: var(--nat-rule); // hairline row rules
+    stroke-width: 1;
+  }
+
+  &__label {
+    font-family: var(--codeFont);
+    font-size: 9px;
+    fill: var(--nat-gray); // muted text, not gilding
+  }
+
+  &__wash {
+    fill: var(--nat-ornament-gold); // gold wash on spike heads / fixed point: leaf fill
+    opacity: 0.45;
+  }
+
+  &__verdigris {
+    fill: none;
+    stroke: var(--nat-verdigris); // trajectory accent (figures only, brief §5.3)
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+
+  &__terracotta {
+    fill: none;
+    stroke: var(--nat-terracotta); // selected-topology accent (figures only)
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  &__dot {
+    fill: var(--nat-ink);
+    stroke: none;
+  }
+}
+
+.nat-fig__cap {
+  margin: var(--nat-space-3) 0 0;
+  font-size: var(--nat-text-xs);
+  color: var(--nat-gray);
+}
+
+// ── Hub-only engine suppression ──────────────────────────────
+// Hub only (body data-slug is the folder slug, present in static HTML): the
+// designed plate album IS the index. The engine's default folder listing and
+// the empty content article that follow it would duplicate the album with
+// generic chrome; content/research/index.md carries only frontmatter plus a
+// comment saying the hub body is component-rendered, so nothing authored is
+// hidden here. (Cross-lane fix confirmed in the GR lane.)
+body[data-slug="research/index"] .page-listing,
+body[data-slug="research/index"] .center > .popover-hint > article {
+  display: none;
 }
