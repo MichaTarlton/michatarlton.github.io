@@ -37,4 +37,17 @@ const Topbar: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
+// prescript fallback: derive html[data-page] from the first pathname segment for
+// any page whose own component static didn't set it (CV, Writing, Wiki, ...).
+// Landing/research statics run too and win if they fire first; this only fills
+// the value when unset.
+Topbar.beforeDOMLoaded = `
+  var el = document.documentElement;
+  if (!el.dataset.page) {
+    var p = location.pathname || "/";
+    var seg = (p.match(/^\\/([A-Za-z0-9_-]+)/) || [])[1] || "";
+    el.dataset.page = seg === "" || seg === "index.html" ? "index" : seg.toLowerCase();
+  }
+`
+
 export default (() => Topbar) satisfies QuartzComponentConstructor

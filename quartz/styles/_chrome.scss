@@ -1,2 +1,32 @@
 // Track: Natural — chrome (Task 6: topbar, footer, CV island, prose chrome, TOC/backlinks/search).
-// Placeholder: no styles yet.
+// Minimal stub styling for T2 so the tokens are visible in the build; full chrome lands in T6.
+
+// Topbar: sentence-case nav; active state gets the gold underline (brief §5.3).
+.nat-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nat-space-5);
+  align-items: baseline;
+}
+
+.nat-topbar-link {
+  font-family: var(--bodyFont);
+  font-size: var(--nat-text-base);
+  font-weight: 500;
+  color: var(--nat-gray);
+  text-decoration: none;
+  padding-bottom: var(--nat-space-1);
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    color: var(--nat-ink);
+  }
+
+  &.active {
+    color: var(--nat-ink);
+    border-bottom-color: var(--nat-accent-mark);
+  }
+}

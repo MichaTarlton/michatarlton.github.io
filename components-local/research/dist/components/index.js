@@ -72,6 +72,12 @@ var Research = ({ fileData }) => {
   const p = projects.find((proj) => slug.startsWith(`research/${proj.slug}`));
   return /* @__PURE__ */ jsx("div", { class: "nat-research nat-research-project", children: /* @__PURE__ */ jsx("h1", { children: p?.name ?? "Research" }) });
 };
+Research.beforeDOMLoaded = `
+  var p = location.pathname || "/";
+  if (p === "/research" || p.startsWith("/research/")) {
+    document.documentElement.dataset.page = "research";
+  }
+`;
 var Research_default = (() => Research);
 
 // components-local/research/src/index.ts

@@ -36,4 +36,13 @@ const Research: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
+// prescript static: mark research pages with html[data-page="research"]. Statics
+// are collected globally, so gate on location.pathname (hub + project pages).
+Research.beforeDOMLoaded = `
+  var p = location.pathname || "/";
+  if (p === "/research" || p.startsWith("/research/")) {
+    document.documentElement.dataset.page = "research";
+  }
+`
+
 export default (() => Research) satisfies QuartzComponentConstructor

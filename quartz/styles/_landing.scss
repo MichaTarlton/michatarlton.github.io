@@ -1,2 +1,14 @@
 // Track: Natural — landing (Task 3: notebook sheet bands, mosaic dividers, Cortex door).
-// Placeholder: no styles yet.
+// Minimal stub styling for T2 so the tokens are visible in the build; composition lands in T3.
+
+.nat-landing-name {
+  font-family: var(--headerFont); // Fraunces display
+  font-weight: 300;
+  font-size: var(--nat-text-4xl);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--nat-ink);
+  font-variation-settings:
+    "SOFT" 100,
+    "opsz" 144;
+}

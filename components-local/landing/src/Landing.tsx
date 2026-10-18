@@ -23,4 +23,13 @@ const Landing: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
+// prescript static: mark landing pages with html[data-page="index"]. Statics are
+// collected globally (one prescript for every page), so gate on location.pathname.
+Landing.beforeDOMLoaded = `
+  var p = location.pathname || "/";
+  if (p === "/" || p === "/index.html") {
+    document.documentElement.dataset.page = "index";
+  }
+`
+
 export default (() => Landing) satisfies QuartzComponentConstructor

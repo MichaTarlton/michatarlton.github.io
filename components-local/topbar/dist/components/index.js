@@ -23,6 +23,14 @@ var Topbar = ({ fileData }) => {
     );
   }) });
 };
+Topbar.beforeDOMLoaded = `
+  var el = document.documentElement;
+  if (!el.dataset.page) {
+    var p = location.pathname || "/";
+    var seg = (p.match(/^\\/([A-Za-z0-9_-]+)/) || [])[1] || "";
+    el.dataset.page = seg === "" || seg === "index.html" ? "index" : seg.toLowerCase();
+  }
+`;
 var Topbar_default = (() => Topbar);
 export {
   Topbar_default as Topbar

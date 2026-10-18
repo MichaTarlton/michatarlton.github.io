@@ -13,6 +13,12 @@ var Landing = ({ fileData }) => {
   const hero = fileData.frontmatter?.hero ?? {};
   return /* @__PURE__ */ jsx("div", { class: "nat-landing", children: /* @__PURE__ */ jsx("h1", { class: "nat-landing-name", children: hero.name ?? "Mike Tarlton" }) });
 };
+Landing.beforeDOMLoaded = `
+  var p = location.pathname || "/";
+  if (p === "/" || p === "/index.html") {
+    document.documentElement.dataset.page = "index";
+  }
+`;
 var Landing_default = (() => Landing);
 
 // components-local/landing/src/index.ts

@@ -1,2 +1,91 @@
-// Track: Natural — tokens (Task 2: paper/gilding palette, type roles, radius, grain).
-// Placeholder: no styles yet.
+// Track: Natural — tokens.
+// Paper and gilding per tracks-design-brief §5.3 (ratified 2026-10-17): warm straw
+// paper, leaf-gold gilding (marks/bands/door frame, never text), lapis as the single
+// link colour. Values here are the single source of truth; test/track.test.ts parses
+// the hexes and verifies WCAG AA against them.
+//
+// Contrast on paper (computed, WCAG 2.1 relative luminance):
+//   link #3a4a8f      7.24:1   (text)
+//   accent text #8f5c08 5.00:1 on paper / 5.35:1 on surface (text)
+//   ink #22243a      13.39:1   (text)
+//   accent mark #a97b1f 3.34:1 on paper / 3.58:1 on surface (non-text marks, >=3 OK)
+//   ornament gold #c9a227 2.13:1 — ornament/gilding only, NEVER a text colour (pinned test)
+
+:root {
+  // ── Paper & ink ────────────────────────────────────────────
+  --nat-paper: #f6f0e4; // page ground, warm straw
+  --nat-surface: #fcf8f0; // sheets, cards, raised plates
+  --nat-ink: #22243a; // primary text, ink navy
+
+  // ── Roles: one link colour, one accent ─────────────────────
+  --nat-link: #3a4a8f; // lapis — the one link colour, underlined
+  --nat-link-hover: #2f3c75; // darker lapis for hover
+  --nat-accent-text: #8f5c08; // gold as text (accent role, text-safe)
+  --nat-accent-mark: #a97b1f; // leaf gold, marks/gilding, >=3:1 non-text
+  --nat-ornament-gold: #c9a227; // mosaic/gold-leaf material: bands, initial caps, door frame; never text
+
+  // ── Secondary play (figures & marginalia only, never surfaces) ──
+  --nat-verdigris: #2e7d6e;
+  --nat-terracotta: #a4492e;
+
+  // ── Support tones ──────────────────────────────────────────
+  --nat-gray: #6b675b; // secondary text (4.98:1 on paper)
+  --nat-darkgray: #4a4c5e; // body prose tone
+  --nat-rule: #e7ddc6; // hairline rules on paper
+  --nat-shadow-warm: 94 76 40; // warm ink-brown for soft shadows
+
+  // ── Radii: one corner system (4 / 6 / pill) ────────────────
+  --nat-radius-sm: 4px;
+  --nat-radius-md: 6px;
+  --nat-radius-pill: 999px;
+
+  // ── Soft shadows (subtle, warm) ────────────────────────────
+  --nat-shadow-sm: 0 1px 2px rgb(var(--nat-shadow-warm) / 0.1);
+  --nat-shadow-md: 0 8px 24px -8px rgb(var(--nat-shadow-warm) / 0.22);
+  --nat-shadow-plate: 0 2px 0 0 rgb(var(--nat-shadow-warm) / 0.06);
+
+  // ── Spacing scale ──────────────────────────────────────────
+  --nat-space-1: 4px;
+  --nat-space-2: 8px;
+  --nat-space-3: 12px;
+  --nat-space-4: 16px;
+  --nat-space-5: 24px;
+  --nat-space-6: 32px;
+  --nat-space-7: 48px;
+  --nat-space-8: 64px;
+  --nat-space-9: 96px;
+
+  // ── Type scale ─────────────────────────────────────────────
+  --nat-text-xs: 0.68rem;
+  --nat-text-sm: 0.8rem;
+  --nat-text-base: 1rem;
+  --nat-text-lg: 1.25rem;
+  --nat-text-xl: 1.56rem;
+  --nat-text-2xl: 1.95rem;
+  --nat-text-3xl: 2.44rem;
+  --nat-text-4xl: 3.05rem;
+
+  // ── Frame geometry ─────────────────────────────────────────
+  --nat-margin-col: 220px; // right marginalia column at >=800px
+  --nat-measure: 72ch; // article measure
+  --nat-grain:
+    radial-gradient(rgb(34 36 58 / 3.5%) 0.6px, transparent 0.6px),
+    radial-gradient(rgb(143 92 8 / 2%) 0.9px, transparent 0.9px);
+  --nat-grain-size: 3px 3px, 7px 7px;
+}
+
+// ── Engine variable overrides ────────────────────────────────
+// Quartz's base.scss and community chrome read these core vars; point them at
+// the track so engine scaffolding (callouts, syntax, search, TOC…) sits on the
+// same paper without restyling it. Light is the judged build; dark is untouched.
+:root {
+  --light: #f6f0e4; // paper
+  --lightgray: #e7ddc6; // rules / hairlines
+  --gray: #6b675b; // secondary text
+  --darkgray: #4a4c5e; // body prose
+  --dark: #22243a; // ink
+  --secondary: #3a4a8f; // lapis link
+  --tertiary: #8f5c08; // accent text
+  --highlight: rgb(58 74 143 / 10%);
+  --textHighlight: #e0c88f55;
+}
