@@ -19,4 +19,9 @@ const Landing: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
+/** Sets the page scope attribute for the landing; topbar fills the fallback. */
+Landing.beforeDOMLoaded = `(function () {
+  document.documentElement.setAttribute("data-page", "index");
+})();`
+
 export default (() => Landing) satisfies QuartzComponentConstructor

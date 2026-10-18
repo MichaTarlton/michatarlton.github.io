@@ -1,2 +1,21 @@
-// Graphic Realism track — landing bands: masthead, hero sim mount, research index, Cortex door, contact.
-// Styling lands in Task 3; placeholder here so custom.scss compiles from Task 1 on.
+// Graphic Realism track — landing bands.
+// Task 2: minimal stub styling only (masthead name in the Archivo display
+// role) so the build visibly reflects tokens. Full band composition
+// (masthead, hero sim mount, research index, Cortex door, contact) is Task 3.
+@use "./tokens" as *;
+
+.gr-landing {
+  padding: var(--space-8) var(--space-5);
+
+  // oversized name from hero frontmatter — display role: Archivo heavy caps
+  h1 {
+    font-family: var(--headerFont);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: var(--track-display);
+    font-size: var(--fs-display);
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 0;
+  }
+}

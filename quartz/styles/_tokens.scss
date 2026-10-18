@@ -1,2 +1,96 @@
-// Graphic Realism track — design tokens (paper/ink/gray/link/accent, rules, spacing).
-// Values land in Task 2; placeholder here so custom.scss compiles from Task 1 on.
+// Graphic Realism track — design tokens.
+// Single source of truth for the track's palette, geometry, spacing and type
+// scale (brief §4.3, ratified §9.1). Everything below lands both as Sass
+// variables (for the partials) and as CSS custom properties on :root — this
+// file is imported from custom.scss, which compiles OUTSIDE the engine's
+// @layer quartz-base, so the engine variable overrides at the bottom of the
+// :root block win over quartz/util/theme.ts's joinStyles() defaults.
+
+// ── palette ──────────────────────────────────────────────────────────────
+$paper: #f7f6f4; // cold near-white (brief §4.3; §1 struck for this track, §8.1)
+$surface: #f7f6f4; // one surface: flat, no second tier
+$ink: #16161a; // near-black text
+$gray: #6a6a6a; // secondary text; AA on paper verified in test/track.test.ts
+$link: #1b3fd8; // one Link Colour, underlined always
+$accent: #e5231b; // signal red — marks and blocks only, never text (§4.2.9)
+// Hairline: ink at ~15% over paper — reads as a grid line, not a mark.
+// Not a contrast-bearing color (decorative grid), so no AA gate; kept in the
+// test file's pin list anyway so it can't drift into being used as text.
+$hairline-color: #d5d4d1;
+
+// ── geometry ─────────────────────────────────────────────────────────────
+$radius: 0; // the whole system (brief §4.3, §4.2.4)
+$rule: 2px; // structural rules
+$hairline: 1px; // hairline grid
+$rail: 200px; // left rail width at ≥800px
+
+// ── 4px spacing scale ────────────────────────────────────────────────────
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-7: 32px;
+$space-8: 40px;
+
+// ── type scale ───────────────────────────────────────────────────────────
+$fs-display: 3rem; // oversized display numerals / masthead name (Task 3 scales up)
+$fs-h2: 1.5rem; // section heads
+$fs-body: 1rem;
+$fs-small: 0.875rem;
+$fs-mono: 0.75rem; // annotation / labels
+$track-display: -0.02em; // tight tracking on Archivo caps
+$track-mono: 0.08em; // utility spread on mono annotation
+
+:root {
+  // track tokens
+  --paper: #{$paper};
+  --surface: #{$surface};
+  --ink: #{$ink};
+  --gray: #{$gray};
+  --link: #{$link};
+  --accent: #{$accent};
+  --hairline-color: #{$hairline-color};
+  --radius: #{$radius};
+  --rule: #{$rule};
+  --hairline: #{$hairline};
+  --gr-rail: #{$rail};
+
+  --space-1: #{$space-1};
+  --space-2: #{$space-2};
+  --space-3: #{$space-3};
+  --space-4: #{$space-4};
+  --space-5: #{$space-5};
+  --space-6: #{$space-6};
+  --space-7: #{$space-7};
+  --space-8: #{$space-8};
+
+  --fs-display: #{$fs-display};
+  --fs-h2: #{$fs-h2};
+  --fs-body: #{$fs-body};
+  --fs-small: #{$fs-small};
+  --fs-mono: #{$fs-mono};
+  --track-display: #{$track-display};
+  --track-mono: #{$track-mono};
+
+  // Fraunces italic voice — the font file is injected as <link data-persist>
+  // by topbar.beforeDOMLoaded (SPA-safe, round-1 lesson).
+  --gr-voice-font: "Fraunces", Georgia, serif;
+
+  // ── engine variable overrides (quartz/util/theme.ts joinStyles) ──────
+  // quartz-base sets these to the old Blueprint values; the track re-points
+  // them so engine scaffolding (base.scss, callouts, syntax, popovers) renders
+  // on the GR surface. --darkgray is the engine's body-text color, so it goes
+  // to ink (GR text is ink/gray/link only). --tertiary is the engine hover
+  // color — it must NOT become the accent (accent never carries text), so it
+  // stays the Link Colour: one link colour, no hover recolor.
+  --light: #{$paper};
+  --lightgray: #{$hairline-color};
+  --darkgray: #{$ink};
+  --dark: #{$ink};
+  --secondary: #{$link};
+  --tertiary: #{$link};
+  --highlight: rgba(27, 63, 216, 0.1);
+  --textHighlight: rgba(229, 35, 27, 0.2);
+}

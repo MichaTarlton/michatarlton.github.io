@@ -1,2 +1,169 @@
-// Graphic Realism track — base frame: #quartz-body grid, type roles, links, focus ring.
-// Structure lands in Task 2; placeholder here so custom.scss compiles from Task 1 on.
+// Graphic Realism track — base frame: surface, type roles, links, focus,
+// selection, rail + content column. Layout scaffolding (#quartz-body grid,
+// sidebars, .page-header/.page-footer placement) stays in the engine's
+// base.scss; this partial re-points the frame for the track without
+// re-implementing any of it.
+@use "./variables.scss" as *; // breakpoints: $mobile / $tablet / $desktop
+@use "./tokens" as *;
+
+// ── surface + base type ──────────────────────────────────────────────────
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--bodyFont); // Instrument Sans (theme.typography.body)
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+
+// ── type roles ───────────────────────────────────────────────────────────
+// Display: Archivo heavy caps, tight tracking (name, section heads, nav
+// lockup — class-level roles; component markup wires the classes).
+.display {
+  font-family: var(--headerFont); // Archivo (theme.typography.header)
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: var(--track-display);
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.h2 {
+  font-family: var(--headerFont);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--track-display);
+  font-size: var(--fs-h2);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+// Annotation / labels: Plex Mono, small, spread (FIG. numbers, counts,
+// coordinates — functional annotation only, brief §4.2.3).
+.annotation {
+  font-family: var(--codeFont); // IBM Plex Mono (theme.typography.code)
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+// Voice: Fraunces italic — the author's register (lede, questions).
+.voice {
+  font-family: var(--gr-voice-font);
+  font-style: italic;
+  font-weight: 400;
+}
+
+// ── links ────────────────────────────────────────────────────────────────
+// One Link Colour, underlined always (brief §4.3). Engine's `a` sets
+// text-decoration: none + font-weight 600 in @layer quartz-base; these win.
+a {
+  color: var(--link);
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule);
+  text-underline-offset: 2px;
+  transition: none;
+
+  &:hover,
+  &:focus {
+    color: var(--link);
+  }
+}
+
+// Internal wiki-links: engine paints a highlight pill; the track keeps links
+// as plain underlined links (no pill, no radius).
+a.internal {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+// ── focus ring ───────────────────────────────────────────────────────────
+// 2px accent, offset 2px — a non-text mark (§4.2.9 allows accent here).
+:where(a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+// ── selection ────────────────────────────────────────────────────────────
+// Accent-red ground with white text: measured white-on-accent ≈4.58:1, so the
+// Task 2 rule "white ONLY if contrast holds" passes and white wins (ink on the
+// same red is ≈3.94:1 and would not). Accent here is a ground, never a text
+// color — the accent-never-text pin in test/track.test.ts keeps it that way.
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+// ── base frame: left rail + content column ───────────────────────────────
+// All page types run the full-width frame, so #quartz-body's grid children
+// are .center and footer. The track rail is the topbar (fixed, 200px) at
+// ≥800px; everything in the flow clears it. Below 800px: single column,
+// topbar back in flow (mobile top-strip treatment is Task 6).
+#quartz-body {
+  column-gap: 0;
+  row-gap: 0;
+}
+
+.gr-topbar {
+  @media all and not ($mobile) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    box-sizing: border-box;
+    width: var(--gr-rail);
+    min-height: 100vh;
+    padding: var(--space-8) var(--space-5) var(--space-8) var(--space-6);
+    background-color: var(--paper);
+    border-right: var(--hairline) solid var(--hairline-color);
+  }
+
+  @media all and ($mobile) {
+    border-bottom: var(--hairline) solid var(--hairline-color);
+  }
+}
+
+.page[data-frame="full-width"] > #quartz-body {
+  @media all and not ($mobile) {
+    // content column clears the rail
+    padding-left: var(--gr-rail);
+  }
+  @media all and ($mobile) {
+    padding-left: 0;
+  }
+}
+
+// ── article measure ──────────────────────────────────────────────────────
+article {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-5);
+}
+
+// ── default header chrome off on landing/research ─────────────────────────
+// data-page is set by landing/topbar beforeDOMLoaded (index / research).
+// NOTE (deviation, reasoned): this fork's frame puts the <header> toolbar AND
+// the beforeBody slot inside .page-header, and landing/research render into
+// beforeBody — so `display: none` on .page-header would blank those pages and
+// take the topbar nav with it. "Hide Quartz's default .page-header" is
+// therefore implemented as quashing the engine's default chrome inside it: the
+// toolbar group (search / darkmode / reader-mode) is hidden, and the engine's
+// 6rem .page-header offset plus the toolbar <header>'s own margins are zeroed.
+// Our gr-topbar nav stays (it IS the rail). If a later task adds more default
+// .page-header children on these pages, hide them here by class.
+html[data-page="index"],
+html[data-page="research"] {
+  .page-header {
+    margin-top: 0;
+
+    > header {
+      margin: 0;
+
+      > .flex-component {
+        display: none;
+      }
+    }
+  }
+}

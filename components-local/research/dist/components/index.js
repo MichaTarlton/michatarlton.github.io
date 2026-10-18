@@ -77,6 +77,9 @@ var ResearchPage = ({ fileData }) => {
   const project = projects.find((p) => p.slug === projectSlug);
   return /* @__PURE__ */ jsx("section", { class: "gr-research gr-research-project", children: /* @__PURE__ */ jsx("h1", { children: project?.name ?? projectSlug }) });
 };
+ResearchPage.beforeDOMLoaded = `(function () {
+  document.documentElement.setAttribute("data-page", "research");
+})();`;
 var ResearchPage_default = (() => ResearchPage);
 
 // components-local/research/src/index.ts

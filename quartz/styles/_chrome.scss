@@ -1,2 +1,34 @@
-// Graphic Realism track — chrome: topbar rail, footer contact band, CV/callout/TOC/backlinks/search.
-// Styling lands in Task 6; placeholder here so custom.scss compiles from Task 1 on.
+// Graphic Realism track — chrome: topbar rail, footer.
+// Task 2: minimal stub styling only (link color + active 2px accent underline,
+// mono footer annotation) so the build visibly reflects tokens. Full chrome
+// (name lockup, numbered mono nav, status block, mobile top-strip, contact
+// band) is Task 6.
+@use "./tokens" as *;
+
+.gr-topbar {
+  // nav links carry the Link Colour (global `a` rule: underlined always, 2px,
+  // offset 2px). Active = 2px Accent underline — a mark, not text color
+  // (§4.2.9), thickness already 2px from the base link rule.
+  .gr-nav-link.is-active {
+    text-decoration-color: var(--accent);
+    font-weight: 700;
+  }
+}
+
+.gr-footer {
+  padding: var(--space-7) var(--space-5);
+
+  h2 {
+    font-family: var(--headerFont);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--track-display);
+    font-size: var(--fs-h2);
+    color: var(--ink);
+  }
+
+  a {
+    font-family: var(--codeFont);
+    font-size: var(--fs-small);
+  }
+}

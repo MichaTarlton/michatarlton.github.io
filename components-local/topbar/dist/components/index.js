@@ -22,6 +22,21 @@ var Topbar = ({ fileData }) => {
     );
   }) });
 };
+Topbar.beforeDOMLoaded = `(function () {
+  var href = "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&display=swap";
+  if (!document.querySelector('link[href="' + href + '"]')) {
+    var l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = href;
+    l.setAttribute("data-persist", "");
+    document.head.appendChild(l);
+  }
+  var html = document.documentElement;
+  var computed = (location.pathname.split("/").filter(Boolean)[0] || "index").toLowerCase();
+  if (html.getAttribute("data-page") !== computed) {
+    html.setAttribute("data-page", computed);
+  }
+})();`;
 var Topbar_default = (() => Topbar);
 export {
   Topbar_default as Topbar

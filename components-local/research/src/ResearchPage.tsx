@@ -37,4 +37,9 @@ const ResearchPage: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
+/** Sets the page scope attribute for research hub/project; topbar fills the fallback. */
+ResearchPage.beforeDOMLoaded = `(function () {
+  document.documentElement.setAttribute("data-page", "research");
+})();`
+
 export default (() => ResearchPage) satisfies QuartzComponentConstructor

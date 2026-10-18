@@ -13,6 +13,9 @@ var Landing = ({ fileData }) => {
   const hero = fileData.frontmatter?.hero ?? {};
   return /* @__PURE__ */ jsx("div", { class: "gr-landing", children: /* @__PURE__ */ jsx("h1", { children: hero.name }) });
 };
+Landing.beforeDOMLoaded = `(function () {
+  document.documentElement.setAttribute("data-page", "index");
+})();`;
 var Landing_default = (() => Landing);
 
 // components-local/landing/src/index.ts

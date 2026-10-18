@@ -8,7 +8,10 @@
 // ─────────────────────────────────────────────────────────────
 
 @use "./tokens";
-@use "./base";
+// NOTE: "./base" would resolve to the ENGINE's base.scss (exact filename wins
+// over the partial), which silently dropped the track partial. Use the explicit
+// partial name.
+@use "./_base";
 @use "./chrome";
 @use "./landing";
 @use "./research";

@@ -1,2 +1,20 @@
-// Graphic Realism track — research hub table, project sheets, flat figures.
-// Styling lands in Task 5; placeholder here so custom.scss compiles from Task 1 on.
+// Graphic Realism track — research hub + project sheets.
+// Task 2: minimal stub styling only (section head in the display role) so the
+// build visibly reflects tokens. Hub index table, project document sheets and
+// flat figures are Task 5.
+@use "./tokens" as *;
+
+.gr-research {
+  padding: var(--space-8) var(--space-5);
+
+  h1 {
+    font-family: var(--headerFont);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: var(--track-display);
+    font-size: var(--fs-display);
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 0 0 var(--space-6);
+  }
+}
