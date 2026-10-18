@@ -4,7 +4,7 @@ Plan: docs/superpowers/plans/2026-10-18-track-graphic-realism-rebuild.md
 
 - [x] T1 scorched earth + scaffold
 - [x] T2 tokens, type, base frame
-- [ ] T3 landing composition
+- [x] T3 landing composition
 - [ ] T4 hero simulation
 - [ ] T5 research hub + project pages
 - [ ] T6 prose chrome + remaining pages
