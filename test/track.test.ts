@@ -4,6 +4,12 @@ import fs from "node:fs"
 import path from "node:path"
 import { renderToString } from "preact-render-to-string"
 import LandingConstructor from "../components-local/landing/src/Landing"
+import ResearchPageConstructor from "../components-local/research/src/ResearchPage"
+import {
+  NerRasterFigure,
+  PhdAttractorFigure,
+  MastersLatticeFigure,
+} from "../components-local/research/src/figures"
 
 /**
  * Graphic Realism track — built-output pins + token/contrast checks.
@@ -224,4 +230,120 @@ test("built index contains the landing bands (end-to-end pin)", () => {
   assert.match(html, /gr-band--research/)
   assert.match(html, /class="gr-door"/)
   assert.match(html, /gr-band--contact/)
+})
+
+// ── Task 5: research hub + project pages ──────────────────────────────────
+
+const ResearchPage = ResearchPageConstructor()
+
+function renderResearch(slug: string): string {
+  const props = { fileData: { slug, frontmatter: {} }, children: [] } as never
+  return renderToString(ResearchPage(props as never))
+}
+
+function readBuilt(rel: string): string {
+  const p = path.join(root, "public", rel)
+  assert.ok(fs.existsSync(p), `missing ${p} — run the build first`)
+  return fs.readFileSync(p, "utf-8")
+}
+
+const threeQuestions = [
+  "Can the brain's way of keeping time make machine learning cheaper at the edge?",
+  "How does time itself emerge from the plasticity of single neurons?",
+  "How do you choose the right model when inferring networks from spiking data?",
+]
+
+test("built /research/ hub lists all three questions, three slug links, no Cortex", () => {
+  const html = readBuilt("research/index.html")
+  for (const q of threeQuestions) {
+    assert.ok(html.includes(q), `hub missing project question: ${q.slice(0, 40)}...`)
+  }
+  assert.match(html, /href="\/research\/ner-2025\/"/)
+  assert.match(html, /href="\/research\/phd-overview\/"/)
+  assert.match(html, /href="\/research\/masters-thesis\/"/)
+  // index-table treatment: FIG. gutter numerals + boxed status badges + also lines
+  assert.match(html, /FIG\. 01/)
+  assert.match(html, /FIG\. 02/)
+  assert.match(html, /FIG\. 03/)
+  assert.match(html, /gr-hub__badge/)
+  assert.match(html, /gr-hub__also/)
+  // Hub page: no Cortex content (§3), and no Cortex door either here — the
+  // door belongs to the landing.
+  assert.ok(!html.includes("Recently in the Cortex"), "Cortex note list snuck into hub")
+  assert.ok(!html.includes("cortex-note"), "Cortex note markup snuck into hub")
+  // scoping: root class + page attr (beforeDOMLoaded is bundled into the
+  // prescript, not inlined — assert the component static directly)
+  assert.match(html, /gr-research--hub/)
+  assert.match(ResearchPage.beforeDOMLoaded ?? "", /setAttribute\("data-page", "research"\)/)
+})
+
+test("built /research/ner-2025/ has FIG., Paper PDF output, and the prose article", () => {
+  const html = readBuilt("research/ner-2025/index.html")
+  // figure plate: FIG. label + equation-style annotation
+  assert.match(html, /FIG\./)
+  assert.match(html, /Δφ_i = dt \/ T_i/)
+  // Outputs row: paper PDF label + link (2px-border output button)
+  assert.match(html, /Paper PDF/)
+  assert.match(
+    html,
+    /href="\/attachments\/EMBS NER 2025 - Investigation of Novel SBF-Automata Architecture for Periodicity Finding Solutions at Edge Systems - Tarlton\.pdf"/,
+  )
+  assert.match(html, /gr-sheet__out/)
+  // header band + scoping
+  assert.match(html, /SBF-Automata/)
+  assert.match(html, /gr-research--project gr-research--ner-2025/)
+  // Quartz renders the prose article below (component does not render content)
+  assert.match(html, /<article/)
+  assert.ok(
+    html.includes("Periodicity finding is a critical element"),
+    "paper prose body missing from built project page",
+  )
+})
+
+test("built /research/phd-overview/ and /research/masters-thesis/ render their names", () => {
+  const phd = readBuilt("research/phd-overview/index.html")
+  assert.match(phd, /PhD Research Overview/)
+  assert.match(phd, /FIG\./)
+  assert.match(phd, /gr-research--phd-overview/)
+
+  const msc = readBuilt("research/masters-thesis/index.html")
+  assert.match(msc, /MSc Thesis: Model Selection for Ising Inference/)
+  assert.match(msc, /FIG\./)
+  assert.match(msc, /gr-research--masters-thesis/)
+})
+
+test("figures render deterministically (renderToString twice equal)", () => {
+  for (const [name, Fig] of [
+    ["NerRasterFigure", NerRasterFigure],
+    ["PhdAttractorFigure", PhdAttractorFigure],
+    ["MastersLatticeFigure", MastersLatticeFigure],
+  ] as const) {
+    const a = renderToString(Fig())
+    const b = renderToString(Fig())
+    assert.equal(a, b, `${name} output not deterministic`)
+    assert.match(a, /FIG\./, `${name} missing FIG. label`)
+  }
+})
+
+test("hub/project SSR is deterministic and scoped by slug", () => {
+  assert.equal(renderResearch("research/index"), renderResearch("research/index"))
+  assert.equal(renderResearch("research/ner-2025"), renderResearch("research/ner-2025"))
+  // unknown research slugs render nothing (no invented content)
+  assert.match(renderResearch("research/does-not-exist"), /^$/)
+  // non-research slugs render nothing
+  assert.match(renderResearch("index"), /^$/)
+})
+
+test("no legacy design-layer classes on built research pages", () => {
+  for (const rel of [
+    "research/index.html",
+    "research/ner-2025/index.html",
+    "research/phd-overview/index.html",
+    "research/masters-thesis/index.html",
+  ]) {
+    const html = readBuilt(rel)
+    for (const legacy of ["r-card", "a-hero", "a-cards", "theme-a", "site-nav-link"]) {
+      assert.ok(!html.includes(legacy), `${rel} still contains legacy "${legacy}"`)
+    }
+  }
 })

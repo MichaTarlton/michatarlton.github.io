@@ -1,20 +1,389 @@
-// Graphic Realism track — research hub + project sheets.
-// Task 2: minimal stub styling only (section head in the display role) so the
-// build visibly reflects tokens. Hub index table, project document sheets and
-// flat figures are Task 5.
+// Graphic Realism track — research hub index table + project document sheets
+// (Task 5). Engineered dossier: rail-offset, 2px rule separators between
+// blocks, hairline grid between rows, mono annotation, 2px-border status badge
+// and output buttons, flat figure plates with corner FIG. labels. Radius 0,
+// no shadows, no gradients; hover/focus are 0ms hard flips; the accent only
+// ever marks (figures), never carries text (§4.2.9).
+//
+// Caveat from _base.scss: the beforeBody slot (where this renders) sits INSIDE
+// .page-header in this fork's frame; the engine's default chrome there is
+// already quashed on data-page="research". Do not display:none .page-header.
+// Scoping: html[data-page="research"] + slug-derived root class
+// (.gr-research--hub / .gr-research--<slug>) set in ResearchPage.tsx.
+@use "./variables.scss" as *; // breakpoints: $mobile / $tablet / $desktop
 @use "./tokens" as *;
 
-.gr-research {
-  padding: var(--space-8) var(--space-5);
-
-  h1 {
-    font-family: var(--headerFont);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: var(--track-display);
-    font-size: var(--fs-display);
-    line-height: 1.05;
-    color: var(--ink);
-    margin: 0 0 var(--space-6);
+// ── research-only frame flattening ───────────────────────────────────────
+// The research sheets own the full content column: kill the engine's gutters
+// so the 2px rules run edge to edge, and re-point the frame's <hr> (between
+// the article and the footer block) as a 2px structural rule.
+html[data-page="research"] {
+  #quartz-body {
+    @media all and not ($mobile) {
+      padding-left: var(--gr-rail);
+      padding-right: 0;
+    }
+    @media all and ($mobile) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
+
+  .center > hr {
+    border: 0;
+    height: 0;
+    margin: 0;
+    border-top: var(--rule) solid var(--ink);
+  }
+}
+
+// ── shared sheet scaffold (hub + project) ────────────────────────────────
+.gr-research {
+  min-width: 100%;
+  border-top: var(--rule) solid var(--ink); // open the sheet
+}
+
+// Oversized display numeral (gutter column).
+.gr-hub__numeral,
+.gr-sheet__numeral {
+  display: block;
+  line-height: 1;
+  color: var(--ink);
+}
+
+// 2px-border status badge box: mono, boxed, ink.
+.gr-hub__badge,
+.gr-sheet__badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border: var(--rule) solid var(--ink);
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+// ── hub: index-table treatment ───────────────────────────────────────────
+.gr-hub {
+  max-width: 72rem; // dossier sheet width (matches the landing bands)
+
+  @media all and ($mobile) {
+    max-width: none;
+  }
+}
+
+.gr-hub__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  border-bottom: var(--rule) solid var(--ink);
+
+  @media all and ($mobile) {
+    padding: var(--space-7) var(--space-5) var(--space-5);
+  }
+}
+
+.gr-hub__title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.gr-hub__count {
+  margin: 0;
+  margin-left: auto;
+  color: var(--gray);
+}
+
+// Row = link. Gutter column (FIG. numeral) + body, hairline grid separators.
+.gr-hub__row {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: var(--space-6);
+  padding: var(--space-7) var(--space-6);
+  border-top: var(--hairline) solid var(--hairline-color);
+  color: inherit;
+  text-decoration: none;
+  transition: none;
+
+  @media all and ($mobile) {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-5);
+  }
+
+  &:last-of-type {
+    border-bottom: var(--rule) solid var(--ink); // close the table
+  }
+
+  // Hard 0ms color flip: ink ground, paper text, hairline grid follows.
+  &:hover,
+  &:focus-visible {
+    background-color: var(--ink);
+    color: var(--paper);
+
+    .gr-hub__fig,
+    .gr-hub__numeral,
+    .gr-hub__q,
+    .gr-hub__name,
+    .gr-hub__venue,
+    .gr-hub__blurb {
+      color: var(--paper);
+    }
+
+    .gr-hub__badge {
+      border-color: var(--paper);
+      color: var(--paper);
+    }
+
+    .gr-hub__body {
+      border-left-color: var(--paper);
+    }
+  }
+}
+
+.gr-hub__gutter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-self: start;
+}
+
+.gr-hub__fig {
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.gr-hub__numeral {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.gr-hub__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: var(--space-6);
+  border-left: var(--hairline) solid var(--hairline-color);
+  min-width: 0;
+
+  @media all and ($mobile) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+.gr-hub__q {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.gr-hub__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.gr-hub__name {
+  font-family: var(--headerFont);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--track-display);
+  font-size: var(--fs-small);
+  color: var(--ink);
+}
+
+.gr-hub__venue {
+  color: var(--gray);
+  text-transform: none;
+}
+
+// Blurb: one line, hard-clipped (the row links to the full sheet).
+.gr-hub__blurb {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--ink);
+}
+
+// `also` items: mono annotation lines with links, below the table.
+.gr-hub__also {
+  padding: var(--space-6) var(--space-6) var(--space-8);
+
+  @media all and ($mobile) {
+    padding: var(--space-5);
+  }
+}
+
+.gr-hub__also-label {
+  margin: 0 0 var(--space-4);
+  color: var(--gray);
+}
+
+.gr-hub__also ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gr-hub__also-item {
+  margin-bottom: var(--space-3);
+  line-height: 1.6;
+  text-transform: none;
+  color: var(--gray);
+}
+
+// ── project: document sheet ──────────────────────────────────────────────
+.gr-sheet {
+  max-width: 72rem;
+
+  @media all and ($mobile) {
+    max-width: none;
+  }
+}
+
+.gr-sheet__head {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-6) var(--space-7);
+
+  @media all and ($mobile) {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding: var(--space-7) var(--space-5) var(--space-6);
+  }
+}
+
+.gr-sheet__gutter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.gr-sheet__fig {
+  color: var(--gray);
+}
+
+.gr-sheet__numeral {
+  font-size: clamp(3.5rem, 9vw, 6rem);
+}
+
+.gr-sheet__titleblock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-left: var(--space-8);
+  border-left: var(--hairline) solid var(--hairline-color);
+  min-width: 0;
+
+  @media all and ($mobile) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+.gr-sheet__name {
+  margin: 0;
+  font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+}
+
+.gr-sheet__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.gr-sheet__venue {
+  color: var(--gray);
+  text-transform: none;
+}
+
+.gr-sheet__q {
+  margin: 0;
+  max-width: 44rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+// Outputs row: mono links as rectangular 2px-border buttons; 2px rule above.
+.gr-sheet__outputs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  border-top: var(--rule) solid var(--ink);
+}
+
+.gr-sheet__outputs-label {
+  color: var(--gray);
+}
+
+.gr-sheet__outputs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.gr-sheet__out {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  border: var(--rule) solid var(--ink);
+  background-color: var(--paper);
+  font-family: var(--codeFont);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--link);
+  transition: none;
+
+  &:hover {
+    background-color: var(--ink);
+    color: var(--paper);
+  }
+}
+
+.gr-sheet__ext {
+  font-family: var(--codeFont);
+}
+
+// Figure plate: hairline border, flat; the FIG. label sits in the SVG's
+// top-left corner; the single accent is inside the figure.
+.gr-sheet__plate {
+  margin: 0;
+  padding: var(--space-6);
+  border-top: var(--rule) solid var(--ink);
+  padding-bottom: var(--space-8);
+}
+
+.gr-sheet__plate > .gr-fig {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  height: auto;
+  border: var(--hairline) solid var(--hairline-color);
+}
+// Hub only (body data-slug is the folder slug, present in static HTML): the
+// beforeBody hub table IS the index. The engine's default folder listing and
+// the empty content article that follow it would duplicate the table with
+// generic chrome; content/research/index.md carries only frontmatter plus a
+// comment saying the hub body is component-rendered, so nothing authored is
+// hidden here.
+body[data-slug="research/index"] .page-listing,
+body[data-slug="research/index"] .center > .popover-hint > article {
+  display: none;
 }
