@@ -341,7 +341,9 @@ var ResearchPage = ({ fileData }) => {
   return /* @__PURE__ */ jsx4("section", { class: `gr-research gr-research--project gr-research--${project.slug}`, children: /* @__PURE__ */ jsx4(ResearchProject, { project }) });
 };
 ResearchPage.beforeDOMLoaded = `(function () {
-  document.documentElement.setAttribute("data-page", "research");
+  if (!document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "research");
+  }
 })();`;
 var ResearchPage_default = (() => ResearchPage);
 

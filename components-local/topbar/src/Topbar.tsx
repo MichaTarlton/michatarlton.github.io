@@ -5,34 +5,51 @@ import {
 } from "../../../quartz/components/types"
 
 /**
- * Graphic Realism topbar — header slot.
- * Task 1 scaffold: the nav set with active state. Name lockup, numbered mono
- * nav, status block and the mobile top-strip land in Task 6.
+ * Graphic Realism topbar — header slot (Task 6 final).
+ * Desktop ≥800px on index/research: fixed left rail (name lockup, numbered
+ * mono nav, status block at the bottom). Everywhere else (<800px, and the
+ * content pages at any width) it renders as the horizontal top-strip; the
+ * variant is CSS-driven (body[data-slug] / width media queries), the markup
+ * contract is one shape: gr-topbar > brand + nav + status.
+ * The CORTEX label is the door concept for /wiki/ (the URL stays /wiki/).
  */
 const links: { label: string; href: string; section: string }[] = [
   { label: "Index", href: "/", section: "index" },
   { label: "Research", href: "/research/", section: "research" },
-  { label: "CV", href: "/cv/", section: "cv" },
   { label: "Writing", href: "/writing/", section: "writing" },
-  { label: "Wiki", href: "/wiki/", section: "wiki" },
+  { label: "CV", href: "/cv/", section: "cv" },
+  { label: "Cortex", href: "/wiki/", section: "wiki" },
 ]
 
 const Topbar: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   const slug = fileData.slug ?? ""
   return (
     <nav class="gr-topbar" aria-label="Site">
-      {links.map(({ label, href, section }) => {
-        const active = slug === section || slug.startsWith(`${section}/`)
-        return (
-          <a
-            href={href}
-            class={`gr-nav-link${active ? " is-active" : ""}`}
-            aria-current={active ? "page" : undefined}
-          >
-            {label}
-          </a>
-        )
-      })}
+      <div class="gr-topbar__brand">
+        <span class="gr-topbar__name display">Mike Tarlton</span>
+        <span class="gr-topbar__coord annotation">tarlton.info</span>
+      </div>
+      <div class="gr-topbar__nav">
+        {links.map(({ label, href, section }, i) => {
+          const active = slug === section || slug.startsWith(`${section}/`)
+          return (
+            <a
+              href={href}
+              class={`gr-nav-link${active ? " is-active" : ""}`}
+              aria-current={active ? "page" : undefined}
+            >
+              <span class="gr-nav-link__num" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="gr-nav-link__label">{label}</span>
+            </a>
+          )
+        })}
+      </div>
+      <div class="gr-topbar__status annotation">
+        <span>STATUS: OPEN TO</span>
+        <span>RESEARCH POSITIONS</span>
+      </div>
     </nav>
   )
 }

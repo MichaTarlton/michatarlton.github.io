@@ -44,9 +44,17 @@ const ResearchPage: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
-/** Sets the page scope attribute for research hub/project; topbar fills the fallback. */
+/**
+ * Seeds the page scope attribute for research hub/project. The topbar prescript
+ * runs first and derives the same value from the pathname, so this must only
+ * fill an unset attribute — an unconditional set here would clobber the value
+ * on every other page (e.g. /cv/ would inherit data-page=research and render
+ * the fixed rail instead of the strip).
+ */
 ResearchPage.beforeDOMLoaded = `(function () {
-  document.documentElement.setAttribute("data-page", "research");
+  if (!document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "research");
+  }
 })();`
 
 export default (() => ResearchPage) satisfies QuartzComponentConstructor

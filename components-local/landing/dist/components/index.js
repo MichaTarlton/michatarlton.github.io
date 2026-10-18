@@ -173,7 +173,9 @@ var Landing = ({ fileData }) => {
   ] });
 };
 Landing.beforeDOMLoaded = `(function () {
-  document.documentElement.setAttribute("data-page", "index");
+  if (!document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "index");
+  }
 })();`;
 Landing.afterDOMLoaded = `(function () {
   function inject() {

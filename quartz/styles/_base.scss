@@ -98,41 +98,16 @@ a.internal {
 
 // ── base frame: left rail + content column ───────────────────────────────
 // All page types run the full-width frame, so #quartz-body's grid children
-// are .center and footer. The track rail is the topbar (fixed, 200px) at
-// ≥800px; everything in the flow clears it. Below 800px: single column,
-// topbar back in flow (mobile top-strip treatment is Task 6).
+// are .center and footer. From Task 6 the topbar has two variants: the fixed
+// left rail (200px) on index/research at ≥800px, and the in-flow top-strip
+// everywhere else (mobile everywhere, content pages at any width). The
+// variant rules — including the rail positioning and the content-column
+// offset — live in _chrome.scss, scoped to body[data-slug] / html[data-page];
+// the rail-offset for index/research is additionally restated in
+// _landing.scss / _research.scss. Here only the grid gutters are flattened.
 #quartz-body {
   column-gap: 0;
   row-gap: 0;
-}
-
-.gr-topbar {
-  @media all and not ($mobile) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    box-sizing: border-box;
-    width: var(--gr-rail);
-    min-height: 100vh;
-    padding: var(--space-8) var(--space-5) var(--space-8) var(--space-6);
-    background-color: var(--paper);
-    border-right: var(--hairline) solid var(--hairline-color);
-  }
-
-  @media all and ($mobile) {
-    border-bottom: var(--hairline) solid var(--hairline-color);
-  }
-}
-
-.page[data-frame="full-width"] > #quartz-body {
-  @media all and not ($mobile) {
-    // content column clears the rail
-    padding-left: var(--gr-rail);
-  }
-  @media all and ($mobile) {
-    padding-left: 0;
-  }
 }
 
 // ── article measure ──────────────────────────────────────────────────────

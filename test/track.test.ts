@@ -347,3 +347,91 @@ test("no legacy design-layer classes on built research pages", () => {
     }
   }
 })
+
+// ── Task 6: prose chrome, CV island, 404, shadow pin ───────────────────────
+
+const legacyClasses = ["r-card", "a-hero", "a-cards", "theme-a", "site-nav-link"]
+
+test("built /cv/index.html keeps the CV island markup intact", () => {
+  const html = readBuilt("cv/index.html")
+  // cta markup as authored in content/cv/index.md (content untouched by Task 6).
+  // The engine rewrites the internal link to a relative path on /cv/ pages.
+  assert.match(
+    html,
+    /a class="cta cta-primary[^"]*" href="(?:\.\.\/|\/)attachments\/tarlton-cv\.pdf" download/,
+  )
+  assert.match(html, /class="cv-header"/)
+  assert.match(html, /class="micro-label section-eyebrow"/)
+  assert.match(html, /class="callout abstract"/)
+  for (const legacy of legacyClasses) {
+    assert.ok(!html.includes(legacy), `built /cv/ still contains legacy "${legacy}"`)
+  }
+})
+
+test("built /writing/ and /wiki/ render with track chrome (topbar), no legacy", () => {
+  for (const rel of ["writing/index.html", "wiki/index.html"]) {
+    const html = readBuilt(rel)
+    assert.match(html, /class="gr-topbar"/, `${rel} missing track topbar`)
+    // numbered mono nav + CORTEX door label on /wiki/
+    assert.match(html, /gr-nav-link__num/)
+    assert.match(html, /Cortex/)
+    assert.match(html, /href="\/wiki\/"/)
+    // folder listing rows (mono meta + hairline rules target these)
+    assert.match(html, /page-listing/)
+    for (const legacy of legacyClasses) {
+      assert.ok(!html.includes(legacy), `${rel} still contains legacy "${legacy}"`)
+    }
+  }
+})
+
+test("built 404 page exists with track chrome markers", () => {
+  const html = readBuilt("404.html")
+  assert.match(html, /class="gr-topbar"/)
+  assert.match(html, /<h1>404<\/h1>/)
+  for (const legacy of legacyClasses) {
+    assert.ok(!html.includes(legacy), `built 404 still contains legacy "${legacy}"`)
+  }
+})
+
+test("topbar rail markup carries lockup, numbered nav, status block", () => {
+  const html = readBuilt("cv/index.html")
+  assert.match(html, /gr-topbar__brand/)
+  assert.match(html, /Mike Tarlton/)
+  assert.match(html, /tarlton\.info/)
+  assert.match(html, /gr-topbar__status/)
+  assert.match(html, /OPEN TO/)
+  // numbered: 01 Index … 05 Cortex
+  assert.match(html, /<span class="gr-nav-link__num" aria-hidden="true">01<\/span>/)
+  assert.match(html, /<span class="gr-nav-link__num" aria-hidden="true">05<\/span>/)
+})
+
+test("track partials set no box-shadow (shadows are neutralized, never drawn)", () => {
+  // Brief §4.2.8: no soft shadows. Pin: no `box-shadow` declaration in the five
+  // track partials except explicit `box-shadow: none` neutralizations of
+  // engine/component shadows (search modal, popover) — a `none` draws nothing.
+  const partials = ["_tokens", "_base", "_chrome", "_landing", "_research"]
+  for (const name of partials) {
+    const src = fs.readFileSync(path.join(root, "quartz", "styles", `${name}.scss`), "utf-8")
+    const offenders = src
+      .split("\n")
+      .filter((line) => /box-shadow:/.test(line) && !/box-shadow:\s*none\s*;/.test(line))
+    assert.deepEqual(offenders, [], `${name}.scss declares a shadow`)
+  }
+})
+
+test("track partials use no radius > 0 and no gradients", () => {
+  // Radius 0 everywhere (§4.2.4); limited materials: no gradient fills (§4.2.8).
+  // Only literal values are pinned; tokens stay at 0 (asserted above in Task 2).
+  const partials = ["_tokens", "_base", "_chrome", "_landing", "_research"]
+  for (const name of partials) {
+    const src = fs.readFileSync(path.join(root, "quartz", "styles", `${name}.scss`), "utf-8")
+    const offenders = src
+      .split("\n")
+      .filter(
+        (line) =>
+          /border-radius:\s*[1-9]/.test(line) ||
+          /background(-image)?:\s*(linear|radial|conic)-gradient/.test(line),
+      )
+    assert.deepEqual(offenders, [], `${name}.scss uses radius>0 or a gradient`)
+  }
+})

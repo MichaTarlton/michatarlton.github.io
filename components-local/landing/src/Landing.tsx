@@ -161,9 +161,16 @@ const Landing: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
-/** Sets the page scope attribute for the landing; topbar fills the fallback. */
+/**
+ * Seeds the page scope attribute for the landing. The topbar prescript runs
+ * first and derives the same value from the pathname, so this must only fill
+ * an unset attribute — an unconditional set here would clobber the value on
+ * every other page and light up the landing/rail chrome site-wide.
+ */
 Landing.beforeDOMLoaded = `(function () {
-  document.documentElement.setAttribute("data-page", "index");
+  if (!document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "index");
+  }
 })();`
 
 /**
