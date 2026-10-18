@@ -175,6 +175,23 @@ var Landing = ({ fileData }) => {
 Landing.beforeDOMLoaded = `(function () {
   document.documentElement.setAttribute("data-page", "index");
 })();`;
+Landing.afterDOMLoaded = `(function () {
+  function inject() {
+    if (document.querySelector("script[data-gr-sim]")) return;
+    var s = document.createElement("script");
+    s.type = "module";
+    s.src = "/static/js/gr-sim.js";
+    s.setAttribute("data-gr-sim", "");
+    s.setAttribute("data-persist", "");
+    document.head.appendChild(s);
+  }
+  if (document.getElementById("gr-sim-mount")) inject();
+  // The loader runs once per full page load (module cache); re-check on SPA
+  // nav so index reached from another page still boots the bundle.
+  document.addEventListener("nav", function () {
+    if (document.getElementById("gr-sim-mount")) inject();
+  });
+})();`;
 var Landing_default = (() => Landing);
 
 // components-local/landing/src/index.ts

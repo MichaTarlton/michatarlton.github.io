@@ -166,4 +166,29 @@ Landing.beforeDOMLoaded = `(function () {
   document.documentElement.setAttribute("data-page", "index");
 })();`
 
+/**
+ * Task 4 wiring: the compiled sim bundle (scripts/build-components.sh →
+ * quartz/static/js/gr-sim.js, served from /static/ by the Static emitter).
+ * Injected as a persisted module script so the SPA head-patch re-adds it on
+ * nav; the bundle itself guards on the mount, self-boots, and tears down its
+ * previous instance on re-init, so this is idempotent across navigations.
+ */
+Landing.afterDOMLoaded = `(function () {
+  function inject() {
+    if (document.querySelector("script[data-gr-sim]")) return;
+    var s = document.createElement("script");
+    s.type = "module";
+    s.src = "/static/js/gr-sim.js";
+    s.setAttribute("data-gr-sim", "");
+    s.setAttribute("data-persist", "");
+    document.head.appendChild(s);
+  }
+  if (document.getElementById("gr-sim-mount")) inject();
+  // The loader runs once per full page load (module cache); re-check on SPA
+  // nav so index reached from another page still boots the bundle.
+  document.addEventListener("nav", function () {
+    if (document.getElementById("gr-sim-mount")) inject();
+  });
+})();`
+
 export default (() => Landing) satisfies QuartzComponentConstructor
