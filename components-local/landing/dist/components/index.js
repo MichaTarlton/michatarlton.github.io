@@ -308,8 +308,8 @@ var Landing = ({ fileData }) => {
 };
 Landing.beforeDOMLoaded = `
   var p = location.pathname || "/";
-  if (p === "/" || p === "/index.html") {
-    document.documentElement.dataset.page = "index";
+  if ((p === "/" || p === "/index.html") && !document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "index");
   }
 `;
 Landing.afterDOMLoaded = simMount_generated_default;

@@ -351,8 +351,8 @@ var Research = ({ fileData }) => {
 };
 Research.beforeDOMLoaded = `
   var p = location.pathname || "/";
-  if (p === "/research" || p.startsWith("/research/")) {
-    document.documentElement.dataset.page = "research";
+  if ((p === "/research" || p.startsWith("/research/")) && !document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "research");
   }
 `;
 var Research_default = (() => Research);

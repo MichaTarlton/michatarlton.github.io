@@ -163,12 +163,15 @@ const Landing: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
-// prescript static: mark landing pages with html[data-page="index"]. Statics are
+// prescript static: seed html[data-page="index"] on landing pages. Statics are
 // collected globally (one prescript for every page), so gate on location.pathname.
+// Seed-only (GR-lane finding 1): never clobber an existing value — the topbar
+// prescript derives data-page from the pathname on every SPA navigation, and an
+// unconditional set here could stomp a fresher value on client-side nav.
 Landing.beforeDOMLoaded = `
   var p = location.pathname || "/";
-  if (p === "/" || p === "/index.html") {
-    document.documentElement.dataset.page = "index";
+  if ((p === "/" || p === "/index.html") && !document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "index");
   }
 `
 

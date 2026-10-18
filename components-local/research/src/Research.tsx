@@ -35,12 +35,14 @@ const Research: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   return <ResearchProject project={project} />
 }
 
-// prescript static: mark research pages with html[data-page="research"]. Statics
+// prescript static: seed html[data-page="research"] on research pages. Statics
 // are collected globally, so gate on location.pathname (hub + project pages).
+// Seed-only (GR-lane finding 1): never clobber an existing value — the topbar
+// prescript derives data-page from the pathname on every SPA navigation.
 Research.beforeDOMLoaded = `
   var p = location.pathname || "/";
-  if (p === "/research" || p.startsWith("/research/")) {
-    document.documentElement.dataset.page = "research";
+  if ((p === "/research" || p.startsWith("/research/")) && !document.documentElement.hasAttribute("data-page")) {
+    document.documentElement.setAttribute("data-page", "research");
   }
 `
 

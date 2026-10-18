@@ -1,32 +1,839 @@
-// Track: Natural — chrome (Task 6: topbar, footer, CV island, prose chrome, TOC/backlinks/search).
-// Minimal stub styling for T2 so the tokens are visible in the build; full chrome lands in T6.
+// Track: Natural — chrome (Task 6): topbar band, footer contact band, prose frame
+// with right margin column, prose typography, CV island, callouts, community
+// chrome (TOC/backlinks/search/dark toggle), 404.
+//
+// Engine CSS (base/callouts/syntax + community component styles) compiles inside
+// @layer quartz-base; this file compiles unlayered from custom.scss, so plain
+// selectors here override the engine without !important — and without editing
+// any engine file (variables/base/callouts/syntax stay untouched).
+//
+// Track rules (brief §5.2): gold as leaf (marks/rules/initial caps only, never
+// text); one hand mark per page minimum; ornament structural; one link colour
+// (lapis, underlined); one accent (gold); radii 4/6/pill; soft shadows allowed
+// on community chrome and cards.
+@use "./variables.scss" as *; // breakpoints: $mobile / $tablet / $desktop
 
-// Topbar: sentence-case nav; active state gets the gold underline (brief §5.3).
+// Prose contexts: content/folder/tag/404 pages (cv, writing, wiki, tags, 404…).
+// html[data-page] is set pre-render by the topbar prescript (refreshed on every
+// SPA navigation); body[data-slug] covers the static first paint.
+$prose: 'html[data-page]:not([data-page="index"]):not([data-page="research"])';
+
+// ── header frame zero-out (engine's 6rem offset + header margins) ──────────
+.page-header {
+  margin-top: 0;
+}
+
+header {
+  margin: 0;
+  gap: var(--nat-space-5);
+}
+
+// ── topbar band ────────────────────────────────────────────────────────────
 .nat-topbar {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--nat-space-5);
   align-items: baseline;
+  gap: var(--nat-space-4) var(--nat-space-6);
+  min-width: 0;
+  padding: var(--nat-space-4) 0;
 }
 
+// Hand mark in the top band: the notebook sprig (same primitive vocabulary as
+// landing's marks.tsx; inlined in Topbar.tsx so the topbar bundle stays
+// self-contained).
+.nat-topbar__mark {
+  flex: 0 0 auto;
+  align-self: center;
+  display: inline-flex;
+
+  .nat-handmark--sprig {
+    width: 22px;
+    height: 22px;
+    color: var(--nat-ink);
+    opacity: 0.75;
+  }
+}
+
+// Sentence-case Fraunces nav (brief §5.3: "nav: unchanged sentence-case").
 .nat-topbar-link {
-  font-family: var(--bodyFont);
+  font-family: var(--headerFont);
   font-size: var(--nat-text-base);
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   color: var(--nat-gray);
   text-decoration: none;
-  padding-bottom: var(--nat-space-1);
-  border-bottom: 2px solid transparent;
+  padding-bottom: 6px;
   transition:
     color 0.15s ease,
-    border-color 0.15s ease;
+    opacity 0.15s ease;
 
   &:hover {
     color: var(--nat-ink);
   }
 
+  // Active state: hand-drawn gold underline (wobble variant). The stroke is a
+  // leaf-gold mark (accent-mark #a97b1f, 3.34:1 on paper — non-text mark), not
+  // a text colour. Solid accent-mark underline stays as the fallback paint.
   &.active {
     color: var(--nat-ink);
-    border-bottom-color: var(--nat-accent-mark);
+    border-bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 4' preserveAspectRatio='none'%3E%3Cpath d='M1 2.6 C 6 1.4, 12 3.6, 20 2.2 S 33 1.6, 39 2.8' fill='none' stroke='%23a97b1f' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 28px 4px;
+    background-position: 0 100%;
+  }
+}
+
+// Mobile stacked band (<800px): topbar takes the full row, toolbar group below.
+@media all and ($mobile) {
+  .page-header > header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--nat-space-4);
+  }
+
+  .nat-topbar {
+    width: 100%;
+    gap: var(--nat-space-3) var(--nat-space-5);
+  }
+}
+
+// ── prose pages: header row, beforeBody block ──────────────────────────────
+// (The Header component's own css is not emitted by the frames in this fork,
+// so the row layout is asserted here.)
+#{$prose} .page-header > header {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-bottom: var(--nat-space-3);
+  border-bottom: 1px solid var(--nat-rule);
+
+  > .nat-topbar {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: var(--nat-space-4) 0 0;
+  }
+
+  > .flex-component {
+    flex: 0 0 auto;
+    align-items: center;
+  }
+}
+
+// beforeBody (breadcrumbs / title / meta / tags) opens on a hairline under the
+// top band, aligned to the article measure.
+#{$prose} .page-header > .popover-hint {
+  max-width: var(--nat-measure);
+  padding: var(--nat-space-7) 0 var(--nat-space-4);
+}
+
+// ── page meta: breadcrumbs / article title / content meta / tags ───────────
+.breadcrumb-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nat-space-1) var(--nat-space-2);
+  margin: 0 0 var(--nat-space-5);
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-xs);
+  letter-spacing: 0.06em;
+  color: var(--nat-gray);
+}
+
+.breadcrumb-element {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--nat-space-2);
+
+  p {
+    margin: 0;
+    color: var(--nat-gray);
+  }
+
+  a {
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-weight: 400;
+  }
+}
+
+#{$prose} .article-title {
+  margin: 0 0 var(--nat-space-3);
+  font-family: var(--headerFont);
+  font-weight: 400;
+  font-size: var(--nat-text-3xl);
+  line-height: 1.1;
+  color: var(--nat-ink);
+}
+
+#{$prose} .content-meta {
+  margin: 0;
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-xs);
+  letter-spacing: 0.06em;
+  color: var(--nat-gray);
+}
+
+#{$prose} .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nat-space-3);
+  margin: var(--nat-space-4) 0 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    font-family: var(--codeFont);
+    font-size: var(--nat-text-xs);
+    letter-spacing: 0.06em;
+  }
+}
+
+// ── prose frame: article on paper + right margin column at >=800px ─────────
+// The notebook sheet: main column carries header/article/listing/footer band;
+// the right column is the reserved marginalia track (a hairline margin rule,
+// structural ornament). Collapses to a single column on mobile.
+#{$prose} .center {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--nat-margin-col);
+  column-gap: var(--nat-space-7);
+  align-items: start;
+
+  // Neutralize the engine frame's grid-area leftovers (`.page-header {
+  // grid-area: grid-header }` names a line that doesn't exist in this grid and
+  // otherwise reorders the header to the BOTTOM — GR-lane finding 3 family).
+  > * {
+    grid-area: auto;
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  > .page-header {
+    grid-area: auto;
+    grid-column: 1 / -1;
+  }
+
+  @media all and ($mobile) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media all and not ($mobile) {
+  // The notebook margin rule: vertical hairline at the column boundary.
+  #{$prose} .center::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: var(--nat-space-8);
+    left: calc(100% - var(--nat-margin-col) - var(--nat-space-7) / 2);
+    width: 1px;
+    background: var(--nat-rule);
+    pointer-events: none;
+  }
+}
+
+#{$prose} article {
+  max-width: var(--nat-measure);
+  padding: var(--nat-space-7) 0 var(--nat-space-5);
+}
+
+// The frame's <hr/> between article and footer band: the band carries its own
+// hairline top rule; one rule is enough. (Prose only: landing/research style or
+// hide their own rules in their partials; display:none must not leak there.)
+#{$prose} .center > hr {
+  display: none;
+}
+
+// Empty folder listings (e.g. /cv/) are noise, not data.
+#{$prose} .page-listing:has(.section-ul:empty) {
+  display: none;
+}
+
+// ── writing/wiki folder listings: hairline rules, mono meta, no cards ──────
+.page-listing {
+  max-width: var(--nat-measure);
+  padding: var(--nat-space-7) 0;
+
+  > p {
+    margin: 0 0 var(--nat-space-6);
+    font-family: var(--codeFont);
+    font-size: var(--nat-text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nat-gray);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.page-listing .section {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: var(--nat-space-6);
+  padding: var(--nat-space-5) 0;
+  border-top: 1px solid var(--nat-rule);
+
+  @media all and ($mobile) {
+    grid-template-columns: 1fr;
+    gap: var(--nat-space-2);
+  }
+}
+
+.page-listing .section-li:last-of-type .section {
+  border-bottom: 1px solid var(--nat-rule);
+}
+
+.page-listing .meta {
+  margin: 0;
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-xs);
+  letter-spacing: 0.06em;
+  color: var(--nat-gray);
+}
+
+.page-listing .desc {
+  min-width: 0;
+
+  h3 {
+    margin: 0;
+    font-family: var(--headerFont);
+    font-weight: 400;
+    font-size: var(--nat-text-lg);
+    line-height: 1.25;
+    color: var(--nat-ink);
+  }
+}
+
+.page-listing .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nat-space-3);
+  margin: var(--nat-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+
+  a,
+  li {
+    font-family: var(--codeFont);
+    font-size: var(--nat-text-xs);
+    letter-spacing: 0.06em;
+  }
+}
+
+// ── footer contact band (our component, afterBody non-index) ───────────────
+// Italic voice note + links on a hairline top rule, hand-mark sketch stroke.
+// The band sits in .center's main column (prose grid) so it aligns to the
+// article measure; the engine's `#quartz-body footer` grid/min-width rules only
+// match the engine's <footer> element, not this div band (finding 3).
+.nat-footer {
+  padding: var(--nat-space-8) 0 var(--nat-space-7);
+  border-top: 1px solid var(--nat-rule);
+  max-width: var(--nat-measure);
+}
+
+.nat-footer__note {
+  margin: 0 0 var(--nat-space-5);
+  font-size: var(--nat-text-lg);
+  line-height: 1.5;
+  color: var(--nat-ink);
+  max-width: 46ch;
+}
+
+.nat-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nat-space-5) var(--nat-space-6);
+}
+
+.nat-footer-link {
+  font-size: var(--nat-text-sm);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration-color: color-mix(in srgb, var(--nat-link) 35%, transparent);
+}
+
+.nat-footer .nat-footer__stroke {
+  margin-top: var(--nat-space-6);
+  width: 120px;
+  max-width: 120px;
+  height: 8px;
+  color: var(--nat-ink);
+  opacity: 0.5;
+}
+
+// On prose pages the footer band already carries Email/LinkedIn/GitHub; the
+// engine footer's copy of those three is redundant (finding 2). Hide just
+// those (RSS and the "Created with Quartz" credit stay); index/research keep
+// the full engine footer.
+#{$prose} #quartz-body > footer ul li:has(a[href^="mailto:"]),
+#{$prose} #quartz-body > footer ul li:has(a[href*="linkedin.com"]),
+#{$prose} #quartz-body > footer ul li:has(a[href*="github.com"]) {
+  display: none;
+}
+
+// ── engine footer block (#quartz-body > footer) ────────────────────────────
+#quartz-body > footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nat-space-2) var(--nat-space-6);
+  margin-bottom: 0;
+  padding: var(--nat-space-5) 0 var(--nat-space-7);
+  border-top: 1px solid var(--nat-rule);
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-xs);
+  letter-spacing: 0.06em;
+  opacity: 1;
+  color: var(--nat-gray);
+
+  p {
+    margin: 0;
+    color: var(--nat-gray);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--nat-space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    font-size: inherit;
+    letter-spacing: inherit;
+    font-weight: 400;
+  }
+}
+
+// ── prose typography ───────────────────────────────────────────────────────
+article {
+  // body copy: Instrument Sans (engine --bodyFont), ink-gray tone.
+  color: var(--nat-darkgray);
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--headerFont);
+    font-weight: 400;
+    color: var(--nat-ink);
+  }
+
+  h1 {
+    font-size: var(--nat-text-2xl);
+    margin: 0 0 var(--nat-space-5);
+  }
+
+  // Section heads: gilded initial cap (ornament wash, ink letter) + hairline.
+  h2 {
+    font-size: var(--nat-text-xl);
+    margin: var(--nat-space-8) 0 var(--nat-space-5);
+    padding-bottom: var(--nat-space-3);
+    border-bottom: 1px solid var(--nat-rule);
+
+    &::first-letter {
+      font-family: var(--headerFont);
+      font-size: 1.45em;
+      line-height: 1;
+      color: var(--nat-ink); // letter stays ink; gilding is a background wash
+      background: color-mix(in srgb, var(--nat-ornament-gold) 16%, var(--nat-surface));
+      border-radius: var(--nat-radius-sm);
+      padding: 0.04em 0.1em;
+      margin-right: 0.06em;
+    }
+  }
+
+  h3 {
+    font-size: var(--nat-text-lg);
+    margin: var(--nat-space-7) 0 var(--nat-space-3);
+  }
+
+  // Voice ledes (author's register) and marginalia.
+  .voice {
+    font-family: var(--headerFont);
+    font-style: italic;
+    font-weight: 300;
+    font-variation-settings:
+      "WONK" 1,
+      "SOFT" 60;
+  }
+
+  // Mono for dates/venues where the markup is semantic.
+  time {
+    font-family: var(--codeFont);
+    font-size: var(--nat-text-sm);
+    letter-spacing: 0.04em;
+  }
+
+  // Authored horizontal rules: paper hairlines.
+  hr {
+    height: 1px;
+    background-color: var(--nat-rule);
+  }
+
+  blockquote {
+    border-left: 2px solid var(--nat-accent-mark);
+    padding-left: var(--nat-space-4);
+    color: var(--nat-darkgray);
+  }
+
+  .footnotes {
+    margin-top: var(--nat-space-8);
+    border-top: 1px solid var(--nat-rule);
+  }
+}
+
+// Code blocks: soft paper card with hairline border; engine syntax highlighting
+// (shiki token colors) stays untouched.
+pre {
+  background-color: var(--nat-surface);
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  padding: var(--nat-space-4) var(--nat-space-4);
+  box-shadow: var(--nat-shadow-sm);
+}
+
+figure[data-rehype-pretty-code-figure] > [data-rehype-pretty-code-title] {
+  background-color: var(--nat-surface);
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-xs);
+}
+
+code {
+  border-radius: var(--nat-radius-sm);
+}
+
+// Tables: hairline rules.
+th {
+  border-bottom: 1px solid var(--nat-rule);
+}
+
+td {
+  border-bottom: 1px solid color-mix(in srgb, var(--nat-rule) 60%, transparent);
+}
+
+// Images: soft card corners.
+img {
+  border-radius: var(--nat-radius-md);
+}
+
+// ── CV island (content untouched; styling only) ────────────────────────────
+// .cv-header: functional label + CV download row on a hairline rule.
+.cv-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nat-space-5);
+  padding-bottom: var(--nat-space-4);
+  margin-bottom: var(--nat-space-7);
+  border-bottom: 1px solid var(--nat-rule);
+}
+
+// Restyled as a functional mono label (it names the document type).
+.micro-label.section-eyebrow {
+  margin: 0;
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nat-gray);
+}
+
+// Gilded-underline soft button (same track button as landing's .nat-cta),
+// gentle hover. Content-owned class names (cta cta-primary).
+a.cta.cta-primary {
+  margin-left: auto;
+  display: inline-block;
+  padding: var(--nat-space-2) var(--nat-space-4);
+  border: 1px solid var(--nat-accent-mark);
+  border-radius: var(--nat-radius-md);
+  background: var(--nat-surface);
+  box-shadow: var(--nat-shadow-sm);
+  font-family: var(--bodyFont);
+  font-size: var(--nat-text-sm);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--nat-accent-text); // accent-text role (5.0:1 on paper)
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--nat-accent-text);
+    box-shadow: var(--nat-shadow-md);
+    color: var(--nat-accent-text);
+    text-decoration: none;
+  }
+}
+
+// ── callouts: soft paper card with gilded left edge ────────────────────────
+// The engine callout rules (callouts.scss) stay untouched; being unlayered,
+// these plain selectors beat the layered per-type [data-callout="…"] variants.
+.callout {
+  // hex literals mirror _tokens.scss (no Sass vars in this track's token sheet):
+  --color: #22243a; // ink — title + icon stay ink; gilding is the left edge (a mark)
+  --border: #e7ddc6; // --nat-rule
+  --bg: #fcf8f0; // --nat-surface
+  border: 1px solid var(--nat-rule);
+  border-left: 3px solid var(--nat-ornament-gold);
+  border-radius: var(--nat-radius-md);
+  background-color: var(--nat-surface);
+  box-shadow: var(--nat-shadow-sm);
+  padding: 0 var(--nat-space-5);
+}
+
+.callout-title {
+  padding: var(--nat-space-4) 0 var(--nat-space-2);
+  color: var(--nat-ink);
+
+  .callout-title-inner {
+    font-family: var(--headerFont);
+    font-weight: 400;
+    font-size: var(--nat-text-lg);
+    color: var(--nat-ink);
+  }
+}
+
+.callout > .callout-content {
+  padding-bottom: var(--nat-space-4);
+  color: var(--nat-darkgray);
+}
+
+// ── community chrome: TOC / backlinks / explorer ───────────────────────────
+// Note: with the full-width frame (quartz.config.yaml, unchanged from T1) the
+// sidebars do not currently render on content pages; these rules style them
+// whenever the frame places them, kept in track tokens (soft radii, soft
+// shadows, gilded accents).
+.toc,
+.backlinks {
+  max-width: 20rem;
+  padding: var(--nat-space-4) 0;
+
+  summary,
+  > h3 {
+    margin: 0 0 var(--nat-space-4);
+    font-family: var(--codeFont);
+    font-size: var(--nat-text-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nat-gray);
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--nat-rule);
+  }
+
+  li {
+    border-bottom: 1px solid var(--nat-rule);
+  }
+
+  a {
+    display: block;
+    padding: var(--nat-space-2) 0;
+    font-size: var(--nat-text-sm);
+    font-weight: 400;
+    color: var(--nat-darkgray);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--nat-link);
+      text-decoration: underline;
+      text-decoration-color: var(--nat-link);
+    }
+  }
+}
+
+.toc ul a::before {
+  content: "·";
+  margin-right: var(--nat-space-2);
+  color: var(--nat-accent-text); // accent-text role gilded tick
+}
+
+.explorer {
+  font-family: var(--codeFont);
+  font-size: var(--nat-text-sm);
+
+  .title-button {
+    font-family: var(--headerFont);
+    font-size: var(--nat-text-base);
+    color: var(--nat-ink);
+  }
+
+  .folder-container,
+  .nav-file-title {
+    padding: var(--nat-space-1) 0;
+  }
+
+  a {
+    color: var(--nat-darkgray);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--nat-link);
+      text-decoration: underline;
+      text-decoration-color: var(--nat-link);
+    }
+  }
+}
+
+// ── community chrome: search ───────────────────────────────────────────────
+.search > .search-button {
+  height: auto;
+  padding: var(--nat-space-2) var(--nat-space-4);
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  background-color: var(--nat-surface);
+  box-shadow: var(--nat-shadow-sm);
+  font-size: var(--nat-text-sm);
+  color: var(--nat-ink);
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+
+  p {
+    margin: 0;
+    font-family: var(--bodyFont);
+  }
+
+  svg .search-path {
+    stroke: var(--nat-ink);
+    transition: stroke 0.15s ease;
+  }
+
+  &:hover {
+    border-color: var(--nat-accent-mark);
+    box-shadow: var(--nat-shadow-md);
+
+    svg .search-path {
+      stroke: var(--nat-link);
+    }
+  }
+}
+
+.search > .search-container {
+  background-color: rgb(34 36 58 / 28%); // ink scrim, paper sheet below
+  backdrop-filter: none;
+
+  > .search-space > *:not(.ghost-text):not(.tag-suggestions) {
+    border-radius: var(--nat-radius-md);
+    background: var(--nat-surface);
+    box-shadow: var(--nat-shadow-md);
+  }
+
+  > .search-space > input {
+    border: 1px solid var(--nat-rule);
+    border-radius: var(--nat-radius-md);
+    font-family: var(--bodyFont);
+    background-color: var(--nat-surface);
+  }
+
+  > .search-space > .search-layout {
+    border: 1px solid var(--nat-rule);
+    border-radius: var(--nat-radius-md);
+    background-color: var(--nat-surface);
+
+    > div {
+      border-radius: var(--nat-radius-md);
+    }
+
+    & > .results-container {
+      .result-card {
+        transition: background-color 0.15s ease;
+
+        &:hover,
+        &:focus,
+        &.focus {
+          background: color-mix(in srgb, var(--nat-ornament-gold) 12%, var(--nat-surface));
+        }
+
+        > ul > li > p {
+          border-radius: var(--nat-radius-sm);
+        }
+      }
+    }
+
+    .highlight {
+      background: rgb(201 162 39 / 28%); // ornament gold as a mark, never text
+      border-radius: 2px;
+    }
+  }
+
+  > .search-space > .tag-suggestions {
+    border: 1px solid var(--nat-rule);
+    border-radius: var(--nat-radius-md);
+    box-shadow: var(--nat-shadow-md);
+  }
+}
+
+.search-scroll-target {
+  border-radius: var(--nat-radius-sm);
+}
+
+// ── community chrome: darkmode / reader-mode toolbar icons ─────────────────
+.darkmode,
+.readermode {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: var(--nat-space-2);
+
+  svg {
+    fill: var(--nat-ink);
+    transition: fill 0.15s ease;
+  }
+
+  &:hover svg {
+    fill: var(--nat-link);
+  }
+}
+
+// ── popovers (link previews) ───────────────────────────────────────────────
+.popover {
+  border: 1px solid var(--nat-rule);
+  border-radius: var(--nat-radius-md);
+  background: var(--nat-surface);
+  box-shadow: var(--nat-shadow-md);
+}
+
+// ── 404 ────────────────────────────────────────────────────────────────────
+body[data-slug="404"] {
+  article {
+    h1 {
+      font-family: var(--headerFont);
+      font-size: var(--nat-text-3xl);
+      color: var(--nat-ink);
+      margin-bottom: var(--nat-space-4);
+    }
+
+    p {
+      font-family: var(--headerFont);
+      font-style: italic;
+      font-weight: 300;
+      font-size: var(--nat-text-lg);
+      color: var(--nat-gray);
+      margin-bottom: var(--nat-space-6);
+    }
   }
 }

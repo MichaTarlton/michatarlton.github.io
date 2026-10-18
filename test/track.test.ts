@@ -450,3 +450,140 @@ test("built research pages keep the hand mark and no legacy classes", () => {
     }
   }
 })
+
+// ============================================================================
+// Task 6 — prose chrome, CV island, topbar/footer, 404
+// ============================================================================
+
+import TopbarComp from "../components-local/topbar/src/Topbar"
+import FooterComp from "../components-local/footer/src/Footer"
+
+const Topbar = TopbarComp()
+const Footer = FooterComp()
+
+test("topbar renders sentence-case nav + hand mark sprig in the band", () => {
+  const html = renderToString(
+    Topbar({ fileData: { slug: "cv/index", frontmatter: {} } } as unknown as QuartzComponentProps),
+  )
+  assert.ok(html.includes('class="nat-topbar"'))
+  assert.ok(html.includes('class="nat-topbar-link active"'), "CV link active on /cv/")
+  assert.ok(html.includes("Index") && html.includes("Wiki"))
+  // hand mark in the top band (brief §5.2 guideline 2)
+  assert.ok(html.includes("nat-topbar__mark"))
+  assert.ok(html.includes('class="nat-handmark nat-handmark--sprig"'))
+})
+
+test("footer band: voice note, contact links, sketch stroke", () => {
+  const html = renderToString(Footer({} as unknown as QuartzComponentProps))
+  assert.ok(html.includes('class="nat-footer"'))
+  assert.ok(html.includes("nat-footer__note voice"))
+  assert.ok(html.includes("mailto:M@Tarlton.info"))
+  assert.ok(html.includes("https://www.linkedin.com/in/m-tarlton/"))
+  assert.ok(html.includes("https://github.com/MichaTarlton"))
+  assert.ok(html.includes("nat-footer__stroke"), "hand mark on the footer band")
+})
+
+// -- data-page contract (GR-lane findings 1 & 4: pins target component statics,
+//    not built HTML, because the setter is bundled into a hashed prescript) ---
+
+test("data-page: landing/research statics only SEED the attribute (no clobber)", () => {
+  for (const [name, src] of [
+    ["Landing", Landing.beforeDOMLoaded as string],
+    ["Research", Research.beforeDOMLoaded as string],
+  ]) {
+    assert.ok(
+      src.includes('hasAttribute("data-page")'),
+      `${name} prescript must check for an existing data-page before seeding`,
+    )
+    assert.ok(
+      !/dataset\.page\s*=/.test(src),
+      `${name} prescript must not unconditionally assign data-page`,
+    )
+  }
+})
+
+test("data-page: topbar prescript derives from pathname and REFRESHES stale values", () => {
+  const src = Topbar.beforeDOMLoaded as string
+  assert.ok(src.includes("location.pathname"), "pathname-derived")
+  // must overwrite when the computed value differs (SPA /research/ -> /cv/),
+  // i.e. must NOT be seed-only like landing/research
+  assert.ok(
+    src.includes('getAttribute("data-page")') && src.includes('setAttribute("data-page"'),
+    "topbar must compare-and-set so stale values refresh on SPA nav",
+  )
+})
+
+test("built /cv/index.html: cta island markup intact (href + download), no legacy", () => {
+  const html = read("cv/index.html")
+  // engine may rewrite /attachments/ as ../attachments — accept both
+  assert.match(
+    html,
+    /class="[^"]*\bcta\b[^"]*\bcta-primary\b[^"]*"[^>]*href="(\.\.\/|\/)attachments\/tarlton-cv\.pdf"[^>]*download/,
+    "cta-primary must keep tarlton-cv.pdf href + download attr",
+  )
+  assert.ok(html.includes('class="micro-label section-eyebrow"'))
+  assert.ok(html.includes('class="cv-header"'))
+  assert.ok(html.includes('data-callout="abstract"'), "abstract callout present")
+  // topbar chrome + footer band + prose frame markers
+  assert.ok(html.includes("nat-topbar"))
+  assert.ok(html.includes("nat-footer"))
+  for (const forbidden of ["r-card", "a-hero", "a-cards", "theme-a", "site-nav-link"]) {
+    assert.ok(!html.includes(forbidden), `built /cv/ still contains "${forbidden}"`)
+  }
+})
+
+test("built /writing/ and /wiki/: topbar chrome, footer band, folder listings, no legacy", () => {
+  for (const rel of ["writing/index.html", "wiki/index.html"]) {
+    const html = read(rel)
+    assert.ok(html.includes("nat-topbar"), `${rel}: topbar chrome`)
+    assert.ok(html.includes("nat-footer"), `${rel}: footer contact band`)
+    assert.ok(html.includes("page-listing"), `${rel}: folder listing rendered`)
+    for (const forbidden of ["r-card", "a-hero", "a-cards", "theme-a", "site-nav-link"]) {
+      assert.ok(!html.includes(forbidden), `${rel} still contains "${forbidden}"`)
+    }
+  }
+})
+
+test("public/404.html exists with track marker", () => {
+  const html = read("404.html")
+  assert.ok(html.includes("nat-topbar"), "404 carries the track topbar marker")
+})
+
+test("gold-never-text pin extended to ALL track partials (ornament + accent mark)", () => {
+  const offenders: string[] = []
+  for (const file of trackPartials) {
+    const src = fs.readFileSync(path.join(stylesDir, file), "utf-8")
+    src.split("\n").forEach((line, i) => {
+      if (
+        /(^|[;{\s])color:\s*[^;]*(#c9a227|#a97b1f|var\(--nat-ornament-gold\)|var\(--nat-accent-mark\))/i.test(
+          line,
+        )
+      ) {
+        offenders.push(`${file}:${i + 1}: ${line.trim()}`)
+      }
+    })
+  }
+  assert.deepEqual(offenders, [], "gilding used as text color in track partials")
+})
+
+test("no legacy classes anywhere under public/ (sweep)", () => {
+  const legacy = ["r-card", "a-hero", "a-cards", "theme-a", "site-nav-link"]
+  const offenders: string[] = []
+  const walk = (dir: string) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) {
+        walk(full)
+      } else if (/\.(html|css|js)$/.test(entry.name)) {
+        const content = fs.readFileSync(full, "utf-8")
+        for (const needle of legacy) {
+          if (content.includes(needle)) {
+            offenders.push(`${path.relative(publicDir, full)}: ${needle}`)
+          }
+        }
+      }
+    }
+  }
+  walk(publicDir)
+  assert.deepEqual(offenders, [], "legacy classes found in built output")
+})
